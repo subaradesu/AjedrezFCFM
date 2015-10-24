@@ -34,6 +34,7 @@
 	include ("logpanel.html");
 	}
 	else{
+	$s = $_SESSION["sex"]==2 ? 'Bienvenida, ' : 'Bienvenido, ';
 	echo '
 	<div id="content">
 		<div class=page-header>
@@ -41,7 +42,7 @@
 		</div>
 	<div>
 	<div>
-		<p>Bienvenido ' . $_SESSION["username"] . '. Disfruta tu estadía.</p>
+		<p>'. $s . $_SESSION["first_name"].' '.$_SESSION["last_name"]. '. Disfruta tu estadía.</p>
 	</div>
 	';
 	}

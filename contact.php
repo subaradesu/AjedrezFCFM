@@ -13,6 +13,9 @@
 	<!-- Ensures proper rendering on touch zooming -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
+	<!-- General Custom Style -->
+	<link href="default.css" rel="stylesheet">
+	
 	<?php require_once 'utils.php';?>
 	<?php checkPermission(false);?>
 </head>

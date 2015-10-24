@@ -19,12 +19,39 @@ function checkPermission($needsPermission){
 }
 
 function userLogin(){
+	//si recibí datos de login
 	if(isset($_POST["user"]) && isset($_POST["pass"])){
-		$_SESSION["loggedin"] = $_POST["user"] == "user" && $_POST["pass"] == "pass";
-		if($_SESSION["loggedin"]){
-			$_SESSION["username"] = $_POST["user"];
+		
+		//me conecto a la base de datos
+		$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
+	
+		//si no me pude conectar tiro error
+		if(!$link){
+			echo "Error: Unable to connect to MySQL." . PHP_EOL;
+			echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+			echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+			exit;
 		}
-	}
+	
+		//defino la query para buscar si se encuentra el registro en la base de datos.
+		$sql ="	SELECT *
+			FROM user
+			WHERE username = '".$_POST["user"]."' AND password = '".$_POST["pass"]."'";
+	
+		//realizo la query
+		$query = mysqli_query($link, $sql);
+			
+		$result = mysqli_fetch_assoc($query);
+		
+		//si el registro existe en la base de datos loggeo al usuario
+		if(count($result)>0){
+			$_SESSION["loggedin"] = true;
+			$_SESSION["username"] = $result["username"];
+			$_SESSION["first_name"] = $result["first_name"];
+			$_SESSION["last_name"] = $result["last_name"];
+			$_SESSION["sex"] = $result["sex"];
+		}
+		}
 }
 
 function isLogged(){

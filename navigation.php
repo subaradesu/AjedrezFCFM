@@ -26,8 +26,9 @@
 						<li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Registrarse</a></li>';
 				}
 				else{
+					$s = $_SESSION["sex"]==2 ? 'a' : 'o';
 					echo '
-						<li><a>Bievenido, ' . $_SESSION["username"] . '.</a></li>
+						<li><a>Bievenid'. $s . ', ' . $_SESSION["first_name"] . '.</a></li>
 						<li><a href="myaccount.php"><span class="glyphicon glyphicon-cog"></span> Mi Cuenta</a></li>
 						<li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>';
 				}
