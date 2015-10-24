@@ -35,6 +35,12 @@
 		<dt>Entrenamiento Rama:</dt>
 		<dd>Martes y Jueves: 14:00 - 16:00</dd>
 	</dl>
+	
+	
+	
 </div>
+
+<?php addFooter();?>
+
 </body>
 </html>

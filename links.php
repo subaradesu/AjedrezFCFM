@@ -112,6 +112,11 @@
 		  </div>
 	</div>
 	
+	
 </div>
+
+<?php addFooter();?>
+
+
 </body>
 </html>
