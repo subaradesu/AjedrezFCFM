@@ -12,8 +12,14 @@ function addLoremIpsum() {
 	echo "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 }
 
-function checkPermission($needsPermission){
-	if($needsPermission && !isLogged()){
+function checkPermission($permissionNeeded){
+	if($permissionNeeded>0 && !isLogged()){
+		header("Location: /AjedrezFCFM/accessDenied.php");
+	}
+	if($permissionNeeded==3 && $_SESSION["permission"]<3){
+		header("Location: /AjedrezFCFM/accessDenied.php");
+	}
+	if($permissionNeeded==1 && $_SESSION["permission"]==2){
 		header("Location: /AjedrezFCFM/accessDenied.php");
 	}
 }
@@ -43,13 +49,14 @@ function userLogin(){
 			
 		$result = mysqli_fetch_assoc($query);
 		
-		//si el registro existe en la base de datos loggeo al usuario
+		//si el registro existe en la base de datos loggeo al usuario e importo variables
 		if(count($result)>0){
 			$_SESSION["loggedin"] = true;
 			$_SESSION["username"] = $result["username"];
 			$_SESSION["first_name"] = $result["first_name"];
 			$_SESSION["last_name"] = $result["last_name"];
 			$_SESSION["sex"] = $result["sex"];
+			$_SESSION["permission"] = $result["userStatus"];
 		}
 		}
 }

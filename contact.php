@@ -17,7 +17,7 @@
 	<link href="default.css" rel="stylesheet">
 	
 	<?php require_once 'utils.php';?>
-	<?php checkPermission(false);?>
+	<?php checkPermission(0);?>
 </head>
 
 <body>
