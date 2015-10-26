@@ -43,6 +43,10 @@ function addKarma($value){
 	//TODO: modifica el karma de una publicación en la db
 }
 
+function cambio(){
+	
+}
+
 function genericInsertQuery($sql){
 	
 	$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
@@ -71,7 +75,7 @@ function checkPermission($permissionNeeded){
 	if(!isLogged()){
 		//Si necesito permisos y no estoy loggeado
 		if($permissionNeeded>0){
-			header("Location: /AjedrezFCFM/accessDenied.php");
+			header("Location: accessDenied.php");
 		}
 	}
 	//si estoy loggeado
@@ -84,7 +88,7 @@ function checkPermission($permissionNeeded){
 		//si necesito permisos de administrador pero no lo soy
 		if($permissionNeeded==3 && $_SESSION["permission"]<3){
 			//acceso denegado
-			header("Location: /AjedrezFCFM/accessDenied.php");
+			header("Location: accessDenied.php");
 		}
 	}
 	//si llegué acá es porque tengo permisos
