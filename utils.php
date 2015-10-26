@@ -61,6 +61,36 @@ function userLogin(){
 		}
 }
 
+function userRegister(){
+	$r = false;
+	$errno = -1;
+	if(isset($_POST["user"]) && isset($_POST["pass"]) && isset($_POST["email"])
+			&& isset($_POST["first_name"]) && isset($_POST["last_name"])){
+		//me conecto a la base de datos
+		$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
+		//si no me pude conectar tiro error
+		if(!$link){
+			echo "Error: Unable to connect to MySQL." . PHP_EOL;
+			echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+			echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+			exit;
+		}
+		//defino la query para agregar el usuario a la db
+		$sql = "INSERT INTO user (username, password, first_name, last_name, email, sex, userStatus)
+				VALUES ('".$_POST["user"]."', '".$_POST["pass"]."', '".$_POST["first_name"]."', '".$_POST["last_name"]. "', '".
+		$_POST["email"]."', '0', '1')";
+		
+		$r = mysqli_query($link, $sql);
+		
+		if(!$r){
+			$errno = mysqli_errno($link);
+		}
+		
+		mysqli_close($link);
+	}
+	return array($r, $errno);
+}
+
 function isLogged(){
 	return isset($_SESSION['loggedin']) && $_SESSION["loggedin"];
 }

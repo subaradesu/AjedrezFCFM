@@ -16,6 +16,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<?php require_once 'utils.php';?>
+	<?php checkPermission(0);?>
 </head>
 
 <body>
@@ -24,7 +25,7 @@
 <div class="container">
 	<div id="content">
 		<div class=page-header>
-			<h1>Registro de Usuario</h1>
+			<h1>¡Acceso Denegado!</h1>
 		</div>
 		<div>
 			<p>¡Oops! La página a la que estás intentando acceder requiere permisos adicionales.</p>

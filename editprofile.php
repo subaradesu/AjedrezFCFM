@@ -16,7 +16,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<?php require_once 'utils.php';?>
-	<?php checkPermission(true)?>
+	<?php checkPermission(1)?>
 </head>
 
 <body>

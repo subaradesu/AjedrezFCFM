@@ -15,7 +15,15 @@
 	<!-- Ensures proper rendering on touch zooming -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
+	<!-- General Custom Style -->
+	<link href="default.css" rel="stylesheet">
+	
+	<!-- login Style -->
+	<link href="login.css" rel="stylesheet">
+	
 	<?php require_once 'utils.php';?>
+	<?php checkPermission(0);?>
+	<?php list($registerSuccess, $errno) = userRegister();?>
 </head>
 
 <body>
@@ -23,13 +31,29 @@
 	
 <div class="container">
 	<div id="content">
-		<div class=page-header>
-			<h1>Registro de Usuario</h1>
-		</div>
-		<div>
-			<p>Lo sentimos. En estos momentos no estamos aceptando nuevos registros</p>
-			<p>¿Ya estás registrado? <a href="login.php">Ingresa aquí.</a></p>
-		</div>
+		<?php
+		if(!$registerSuccess){
+		//el registro falló
+			if($errno == -1){
+				//No hay nada extraño, no traté de registrar
+			}
+			elseif($errno == 1062){
+				//1062 = registro duplicado en la db (username repetido)
+				echo '<div class="alert alert-warning">
+						<em>Lo sentimos. El nombre de usuario ingresado no se encuentra disponible. Intenta utilizando uno nuevo</em>.
+					  </div>';
+			}
+			else{
+				//no tengo idea que pasó pero no debería haber pasado.
+				echo "Sucedió algo inesperado en el proceso de registro. Por favor inténtalo de nuevo.";
+			}
+			include("registerpanel.html");
+		}
+		else{
+		//registro exitoso!
+			echo '<div class="alert alert-success">¡El registro se ha llevado a cabo con éxito! Ahora puedes ingresar al sitio haciendo <a href="login.php">click aquí</a></div>'; 
+		//TODO: 
+		}?>
 	</div>
 </div>
 
