@@ -29,8 +29,18 @@
 					$s = $_SESSION["sex"]==2 ? 'a' : 'o';
 					echo '
 						<li><a>Bievenid'. $s . ', ' . $_SESSION["first_name"] . '.</a></li>
-						<li><a href="myaccount.php"><span class="glyphicon glyphicon-cog"></span> Mi Cuenta</a></li>
-						<li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>';
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Mi Cuenta
+							<span class="glyphicon glyphicon-cog"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="news.php">Mi Perfil</a></li>
+							<li class="disabled"><a href="#">Notificaciones(0)</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="disabled"><a>Administrar</a></li>
+							<li class="disabled"><a>Publicar</a></li>
+						</ul>'.
+						//<li><a href="myaccount.php"><span class="glyphicon glyphicon-cog"></span> Mi Cuenta</a></li>
+						'<li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>';
 				}
 				?>
 			</ul>

@@ -21,7 +21,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<?php require_once 'utils.php';?>
-	<?php userLogin();?>
+	<?php $logtry = userLogin();?>
 </head>
 
 <body>
@@ -31,7 +31,15 @@
 <div class="container">
 	<?php 
 	if(!isLogged()){
-	include ("logpanel.html");
+		if($logtry > 0){
+			echo '<div class="alert alert-warning">
+					<em>Nombre de Usuario y/o Contraseña incorrecto. Inténtalo de nuevo.</em>.
+				  </div>';
+		}
+		elseif($logtry > 2){
+			//TODO: mensaje de muchos reintentos.
+		}
+		include ("logpanel.html");
 	}
 	else{
 	$s = $_SESSION["sex"]==2 ? 'Bienvenida, ' : 'Bienvenido, ';

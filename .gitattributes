@@ -3,9 +3,9 @@
 
 # Explicitly declare text files you want to always be normalized and converted
 # to native line endings on checkout.
-*.php text eol=lf encoding=UTF-8
-*.css text eol=lf encoding=UTF-8
-*.html text eol=lf encoding=UTF-8
+*.php text eol=crlf encoding=UTF-8
+*.css text eol=crlf encoding=UTF-8
+*.html text eol=crlf encoding=UTF-8
 
 # Denote all files that are truly binary and should not be modified.
 *.png binary
