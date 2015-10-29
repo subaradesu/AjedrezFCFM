@@ -1,9 +1,15 @@
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
+			<button type="button" align="left" class="btn pull-left navbar-toggle" data-toggle="collapse" 
+	    			data-target=".navbar-collapse"> <!-- You had ID from the docs example -->
+	        	<span class="icon-bar"></span>
+        		<span class="icon-bar"></span>
+        		<span class="icon-bar"></span> 
+      		</button>
 			<a class="navbar-brand" href="index.php">Inicio</a>
 		</div>
-		<div>
+		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Noticias
@@ -17,6 +23,11 @@
 				<li><a href="about.php">Historia</a>
 				<li><a href="links.php">Enlaces</a>
 				<li><a href="contact.php">Contacto</a>
+				<?php if(isLogged() && $_SESSION["permission"]==3):?>
+				<li><a href="publish.php">Publicar</a>
+				<li><a href="create_event.php">Crear Evento</a>
+				<?php endif;?>
+				<li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<?php if(!isLogged()) : ?>
