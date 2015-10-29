@@ -62,8 +62,6 @@ function genericInsertQuery($sql){
 	//realizo la query
 	$query = mysqli_query($link, $sql);
 	
-	$result = mysqli_fetch_assoc($query);
-	
 	//cierro la conexión a la db
 	mysqli_close($link);
 	return $query;

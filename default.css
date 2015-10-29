@@ -7,6 +7,10 @@ html {
 	min-height: 100%;
 }
 
+textarea {
+	resize: vertical;
+}
+
 .footer {
 	position: absolute;
 	bottom: 0;
@@ -17,4 +21,8 @@ html {
 
 .navbar .container{
 	width: auto;
+}
+
+.red-text{
+	color: #ff0000;
 }

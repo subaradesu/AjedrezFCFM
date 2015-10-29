@@ -52,7 +52,6 @@
 		else{
 		//registro exitoso!
 			echo '<div class="alert alert-success">¡El registro se ha llevado a cabo con éxito! Ahora puedes ingresar al sitio haciendo <a href="login.php">click aquí</a></div>'; 
-		//TODO: 
 		}?>
 	</div>
 </div>
