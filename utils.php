@@ -23,14 +23,6 @@ function absoluteURI(){
 	//TODO: crea la URI absoluta a partir de una relativa. See php reference header
 }
 
-function createANew($publisher, $content){
-	//TODO: agrega una noticia
-}
-
-function createEvent($publisher, $visibility, $invitedUsers ){
-	//TODO: crea un evento en la db.
-}
-
 function createComment($publisher, $idPublication, $content, $taggedUsers){
 	//TODO: agrega un comentario en la publiacion con id $idPublication
 }

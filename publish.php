@@ -22,6 +22,7 @@
 	<?php checkPermission(3);?>
 	
 	<?php 
+	$new_published = false;
 	if(isset($_POST["title"]) && isset($_POST["image"]) && isset($_POST["content"]) && isset($_POST["category"])){
 		//me conecto a la db
 		$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
@@ -33,7 +34,7 @@
 			exit;
 		}
 		
-		//se usa begin y commit pues no queremos que las transacciones se realicen juntas.
+		//se usa begin y commit pues queremos que las transacciones sólo se realicen juntas.
 		//agregar nueva publicacion, asociar al usuario con la publicacion y asociar la noticia con la publicacion
 		$sql = "BEGIN;
 				INSERT INTO publication
@@ -47,10 +48,10 @@
 				COMMIT;";
 		
 		//realizo la query
-		$query = mysqli_multi_query($link, $sql);
+		$new_published = mysqli_multi_query($link, $sql);
 		
-		if(!$query){
-			echo 'error: '.mysqli_errno($link);
+		if(!$new_published){
+			echo 'error: '.mysqli_error().' '.mysqli_errno($link);
 		}
 		
 		//cierro la conexión a la db
@@ -64,11 +65,20 @@
 
 <?php addNavBar();?>
 	
-<div class="container">
+<div class="container main-content">
 	<div id="content">
 		<div class=page-header>
 			<h1>Publicar Noticias:</h1>
 		</div>
+		<?php if(isset($_POST["title"]) && !$new_published) : ?>
+		<div class="alert alert-warning">
+			La noticia no pudo ser publicada, inténtalo de nuevo más tarde.
+		</div>
+		<?php elseif(isset($_POST["title"]) && $new_published) : ?>
+		<div class="alert alert-success">
+			<strong>¡La noticia fue publicada con éxito!</strong> Puedes verla en la pestaña de Noticias.
+		</div>
+		<?php endif;?>
 		<div>
 			<p>Acá puedes publicar noticias para que sean visibles por cualquiera que acceda a la página.</p>
 			<p>Los campos con <span class="red-text">*</span> son obligatorios.</p>
@@ -84,7 +94,7 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="image">Portada<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="url" name="image" class="form-control" id="image" placeholder="El enlace a la imagen que hará de portada para la publicación. Ej: goo.gl/1qaKqa." required>
+						<input type="text" name="image" class="form-control" id="image" placeholder="El enlace a la imagen que hará de portada para la publicación. Ej: goo.gl/1qaKqa." required>
 					</div>
 				</div>
 				<div class="form-group">
