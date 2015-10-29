@@ -22,10 +22,15 @@
 				</li>
 				<li><a href="about.php">Historia</a>
 				<li><a href="links.php">Enlaces</a>
-				<li><a href="contact.php">Contacto</a>
 				<?php if(isLogged() && $_SESSION["permission"]==3):?>
-				<li><a href="publish.php">Publicar</a>
-				<li><a href="create_event.php">Crear Evento</a>
+				<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="publish.php">Publicar
+						<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="publish.php">Noticia</a></li>
+						<li><a href="create_event.php">Evento</a></li>
+						
+					</ul>
 				<?php endif;?>
 				<li>
 			</ul>
