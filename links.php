@@ -101,10 +101,10 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h4 class="panel-title">
-				<a data-toggle="collapse" href="#collapse4">Software Ajedrez</a>
+				<a data-toggle="collapse" href="#collapse5">Software Ajedrez</a>
 		      	</h4>
 		    </div>
-		    <div id="collapse4" class="panel-collapse collapse">
+		    <div id="collapse5" class="panel-collapse collapse">
 		      <ul class="list-group">
 		        <li class="list-group-item"><a href="https://stockfishchess.org/">Stockfish</a></li>
 		      </ul>

@@ -28,7 +28,7 @@
 <body>
 <?php addNavBar();?>
 	
-<div class="container">
+<div class="container main-content">
 	<div id="content">
 		<div class=page-header>
 			<h1>Bienvenido al portal de Ajedrez Fcfm</h1>
