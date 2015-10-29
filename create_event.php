@@ -55,8 +55,6 @@
 		
 		$sql = $sql ."COMMIT;";
 		
-		echo $sql;
-		
 		//realizo la query
 		$event_created = mysqli_multi_query($link, $sql);
 		

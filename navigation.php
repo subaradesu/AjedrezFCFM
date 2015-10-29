@@ -23,11 +23,6 @@
 				<li><a href="about.php">Historia</a>
 				<li><a href="links.php">Enlaces</a>
 				<li><a href="contact.php">Contacto</a>
-				<?php if(isLogged() && $_SESSION["permission"]==3):?>
-				<li><a href="publish.php">Publicar</a>
-				<li><a href="create_event.php">Crear Evento</a>
-				<?php endif;?>
-				<li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<?php if(!isLogged()) : ?>
