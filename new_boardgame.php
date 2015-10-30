@@ -22,7 +22,7 @@
 	<?php checkPermission(3);?>
 	
 	<?php 
-	if(isset($_POST["title"]) && isset($_POST["content"]) && isset($_POST["category"])){
+	if(isset($_POST["title"]) && isset($_POST["content"]) && isset($_POST["category"]) && (isset($_POST["fileToUpload"]) || isset($_POST["textToUpload"]))){
 		//me conecto a la db
 		$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
 		//si no me pude conectar tiro error
@@ -135,7 +135,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-2" for="category">Formato Partida:<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="format">Formato Partida:<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
 						<select name="format" class="form-control" id="format" onchange="javascript:change_upload();">
 							<option value="PGN">Archivo PGN</option>
@@ -144,13 +144,13 @@
 					</div>
 				</div>
 				<div class="form-group" id="fileload" display="block">
-					<label class="control-label col-sm-2" for="content">Archivo<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="fileToUpload">Archivo<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
 						<input type="file" name="fileToUpload" id="fileToUpload" required>
 					</div>
 				</div>
 				<div class="form-group" id="stringload" style="display:none">
-					<label class="control-label col-sm-2" for="content">String PGN<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="textToUpload">String PGN<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
 						<input type="textarea" name="textToUpload" id="textToUpload" class="form-control" rows="4" placeholder="Contenido de la partida">
 					</div>
