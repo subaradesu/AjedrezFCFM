@@ -61,7 +61,10 @@
 							<li><a href="create_event.php">Crear Evento</a></li>
 							<?php endif;?>
 						</ul>
-						<li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+						<li><a href="logout.php">
+							<span class="glyphicon glyphicon-off"></span> 
+							Cerrar Sesión</a>
+						</li>
 				<?php endif; ?>
 			</ul>
 		</div>
