@@ -61,7 +61,6 @@
 		if(!$event_created){
 			echo 'error: '.mysqli_error().' '.mysqli_errno($link);
 		}
-		
 		//cierro la conexión a la db
 		mysqli_close($link);
 	}
