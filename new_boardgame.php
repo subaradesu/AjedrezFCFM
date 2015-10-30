@@ -63,6 +63,27 @@
 <body>
 
 <?php addNavBar();?>
+
+<script type="text/javascript">
+	
+	function change_upload(){
+		f = document.getElementById("format");
+		if(f.selectedIndex == 0){
+			document.getElementById("fileload").style.display="block";
+			document.getElementById("fileToUpload").required = true;
+			document.getElementById("stringload").style.display="none";
+			document.getElementById("textToUpload").required = false;
+			document.getElementById("textToUpload").value=null;
+		}
+		else {
+			document.getElementById("fileload").style.display="none";
+			document.getElementById("fileToUpload").required = false;
+			document.getElementById("fileToUpload").value=null;
+			document.getElementById("stringload").style.display="block";
+			document.getElementById("textToUpload").required = true;
+		}
+	};
+</script>
 	
 <div class="container">
 	<div id="content">
@@ -78,13 +99,19 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="text" name="title" class="form-control" id="title" placeholder="El título de tu publicación. Ej: Clase 1: Capablanca vs Sparsky." required>
+						<input type="text" name="title" class="form-control" id="title" placeholder="El título de tu publicación. Ej: Clase 1: Aperturas" required>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-2" for="image">Portada<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="image">Blancas<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="url" name="image" class="form-control" id="image" placeholder="El enlace a la imagen que hará de portada para la publicación. Ej: goo.gl/1qaKqa." required>
+						<input type="text" name="white" class="form-control" id="white" placeholder="Juega con blancas" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="image">Negras<span class="red-text">*</span>:</label>
+					<div class="col-sm-8">
+						<input type="text" name="black" class="form-control" id="black" placeholder="Juega con negras" required>
 					</div>
 				</div>
 				<div class="form-group">
@@ -102,15 +129,30 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-2" for="content">Contenido<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="content">Detalles<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
 						<textarea name="content" class="form-control" rows="4" id="content" placeholder="El contenido de la publicación." required></textarea>
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label col-sm-2" for="category">Formato Partida:<span class="red-text">*</span>:</label>
+					<div class="col-sm-8">
+						<select name="format" class="form-control" id="format" onchange="javascript:change_upload();">
+							<option value="PGN">Archivo PGN</option>
+							<option value="String" class="disabled">String PGN</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group" id="fileload" display="block">
 					<label class="control-label col-sm-2" for="content">Archivo<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="file" name="fileToUpload" id="fileToUpload">
+						<input type="file" name="fileToUpload" id="fileToUpload" required>
+					</div>
+				</div>
+				<div class="form-group" id="stringload" style="display:none">
+					<label class="control-label col-sm-2" for="content">String PGN<span class="red-text">*</span>:</label>
+					<div class="col-sm-8">
+						<input type="textarea" name="textToUpload" id="textToUpload" class="form-control" rows="4" placeholder="Contenido de la partida">
 					</div>
 				</div>
 				<div class="form-group">

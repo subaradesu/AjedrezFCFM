@@ -20,8 +20,8 @@
 						<li class="disabled"><a>Noticias Mundo</a></li>
 					</ul>
 				</li>
-				<li><a href="about.php">Historia</a>
-				<li><a href="links.php">Enlaces</a>
+				<li><a href="about.php">Historia</a></li>
+				<li><a href="links.php">Enlaces</a></li>
 				<?php if(isLogged() && $_SESSION["permission"]==3):?>
 				<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="publish.php">Publicar
@@ -29,7 +29,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="publish.php">Noticia</a></li>
 						<li><a href="create_event.php">Evento</a></li>
-						
+						<li><a href="new_boardgame.php">Partida</a></li>
 					</ul>
 				<?php endif;?>
 				<li>
