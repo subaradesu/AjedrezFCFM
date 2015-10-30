@@ -22,47 +22,48 @@
 	<?php checkPermission(1);?>
 	
 	<?php
+	$id_user;
 	if(isset($_GET['id_user'])){
-		
-		//conexión a la db
-		$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
-	
-		//si no me pude conectar tiro error
-		if(!$link){
-			echo "Error: Unable to connect to MySQL." . PHP_EOL;
-			echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-			echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-			exit;
-		}
-	
-		//defino la query para obtener los datos del perfil
-		$sql ="	SELECT username, first_name, last_name, sex, avatar, userStatus
-				FROM user
-				WHERE username = '".$_GET["id_user"]."'";
-		
-	
-		//realizo la query
-		$query = mysqli_query($link, $sql);
-		
-		//guardo el resultado de la query, es a lo más una fila porque user es llave primaria
-		$result = mysqli_fetch_assoc($query);
-		
-		//si el usuario existe importo sus datos para usarlos en el perfil
-		if(count($result)>0){
-			$user = $result["username"];
-			$first_name = $result["first_name"];
-			$last_name = $result["last_name"];
-			$sex = $result["sex"];
-			$avatar = $result["avatar"];
-			$status = $result["userStatus"];
-		}
-		
-		mysqli_close($link);
-		
+		$id_user = $_GET['id_user'];
 	}
 	else{
-		//redirigir o hacer magia
+		$id_user=$_SESSION["username"];
 	}
+	//conexión a la db
+	$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
+	
+	//si no me pude conectar tiro error
+	if(!$link){
+		echo "Error: Unable to connect to MySQL." . PHP_EOL;
+		echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+		echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+		exit;
+	}
+	
+	//defino la query para obtener los datos del perfil
+	$sql ="	SELECT username, first_name, last_name, sex, avatar, userStatus
+				FROM user
+				WHERE username = '".$id_user."'";
+	
+	
+	//realizo la query
+	$query = mysqli_query($link, $sql);
+	
+	//guardo el resultado de la query, es a lo más una fila porque user es llave primaria
+	$result = mysqli_fetch_assoc($query);
+	
+	//si el usuario existe importo sus datos para usarlos en el perfil
+	if(count($result)>0){
+		$user = $result["username"];
+		$first_name = $result["first_name"];
+		$last_name = $result["last_name"];
+		$sex = $result["sex"];
+		$avatar = $result["avatar"];
+		$status = $result["userStatus"];
+	}
+	
+	mysqli_close($link);
+	
 	?>
 	
 </head>
@@ -89,7 +90,15 @@
 			<img alt="avatar" src="<?php echo getAvatarLocation($avatar);?>">
 			<p>Esta es el perfil de <?php echo $user;?>. Mire que hermoso.</p>
 		</div>
+		
+		<?php if($id_user == $_SESSION["username"]) : ?>
+		<div>
+			<p><a class="btn btn-lg btn-primary" href="editprofile.php" role="button">Editar mi información</a></p>
+		</div>
+		<?php endif;?>
 	</div>
+	
+	
 </div>
 
 <?php addFooter();?>
