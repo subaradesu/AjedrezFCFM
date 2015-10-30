@@ -22,6 +22,7 @@
 				</li>
 				<li><a href="about.php">Historia</a></li>
 				<li><a href="links.php">Enlaces</a></li>
+				<li><a href="buscador.php">Buscar Usuario</a></li>
 				<?php if(isLogged() && $_SESSION["permission"]==3):?>
 				<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="publish.php">Publicar
