@@ -22,7 +22,7 @@
 	<?php checkPermission(3);?>
 	
 	<?php 
-	if(isset($_POST["title"]) && isset($_POST["image"]) && isset($_POST["content"]) && isset($_POST["category"])){
+	if(isset($_POST["title"]) && isset($_POST["content"]) && isset($_POST["category"])){
 		//me conecto a la db
 		$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
 		//si no me pude conectar tiro error
@@ -70,7 +70,7 @@
 			<h1>Nueva Partida:</h1>
 		</div>
 		<div>
-			<p>Acá puedes publicar noticias para que sean visibles por cualquiera que acceda a la página.</p>
+			<p>Acá puedes publicar partidas para que sean visibles por cualquiera que esté inscrito en la página.</p>
 			<p>Los campos con <span class="red-text">*</span> son obligatorios.</p>
 		</div>
 		<div class="col-sm-12">
@@ -115,7 +115,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-default">Publicar Noticia</button>
+					<button type="submit" class="btn btn-default">Publicar Partida</button>
 					</div>
 				</div>
 			</form>
