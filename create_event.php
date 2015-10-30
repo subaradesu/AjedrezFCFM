@@ -52,6 +52,14 @@
 						 VALUES (@publication_id,'".$selectedOption."','Por Confirmar.','1');";
 			}
 		}
+		else{
+			//TODO: buscar una forma limpia de hacer esto
+			$queryAux = mysqli_query($link, "SELECT username FROM user");
+			while($aUser = mysqli_fetch_assoc($queryAux)){
+				$sql = $sql.	"INSERT INTO invitedList
+						 		 VALUES (@publication_id,'".$aUser["username"]."','Por Confirmar.','1');";
+			}
+		}
 		
 		$sql = $sql ."COMMIT;";
 		
@@ -61,7 +69,6 @@
 		if(!$event_created){
 			echo 'error: '.mysqli_error().' '.mysqli_errno($link);
 		}
-		
 		//cierro la conexión a la db
 		mysqli_close($link);
 	}
@@ -150,7 +157,6 @@
 								echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
 								exit;
 							}
-							
 							$sql = "SELECT username,first_name,last_name
 									FROM user
 									WHERE username <> '".$_SESSION["username"]."'

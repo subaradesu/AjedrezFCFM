@@ -21,19 +21,103 @@
 	<?php require_once 'utils.php';?>
 	<?php checkPermission(1);?>
 	
+	<?php 
+	if(isset($_GET["id_event"]) && isset($_GET["r"])){
+		$sql = "REPLACE INTO invitedList VALUES ('".$_GET["id_event"]."', '".$_SESSION["username"]."','".$_GET["r"]."','0')";
+		genericInsertQuery($sql);
+	}
+	?>
+	
 </head>
 
 <body>
 
 <?php addNavBar();?>
 	
-<div class="container">
+<div class="container main-content">
 	<div id="content">
 		<div class=page-header>
 			<h1>Mis Eventos:</h1>
 		</div>
 		<div>
 			<p>Acá puedes ver tus eventos.</p>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>Eventos Privados:</h2>
+				<?php
+				//me conecto a la db
+				$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
+				//si no me pude conectar tiro error
+				if(!$link){
+					echo "Error: Unable to connect to MySQL." . PHP_EOL;
+					echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+					echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+					exit;
+				}
+				$sql = "SELECT 	event.publication_idPublication AS id_event, event.title AS title, event.description AS description, event.date AS date, event.time AS time,
+								event.place AS location, event.visibility AS visibility, il.show_notification AS notification, il.assistance AS assistance
+						FROM invitedList AS il, event
+						WHERE il.invited_username='".$_SESSION["username"]."' AND il.idevent=event.publication_idPublication AND visibility='private'";
+				
+				
+				$query = mysqli_query($link, $sql);
+				
+				if(!$query){
+					echo mysqli_error($link);
+				}
+				
+				while($result = mysqli_fetch_assoc($query)) : ?>
+				<div class="alert alert-success">
+					<p><strong><?php echo $result["title"];?></strong></p>
+					<p><?php echo "El ".$result["date"]." en ".$result["location"]." a las ".$result["time"]; ?></p>
+					<p><?php echo $result["description"];?></p>
+					<p>Confirmar Asistencia.<p>
+				</div>
+				<?php
+				endwhile;
+				//cierro la conexión a la db
+				mysqli_close($link);
+				?>
+			</div>
+			<div class="col-sm-6">
+				<h2>Eventos Públicos:</h2>
+				<?php
+				//me conecto a la db
+				$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
+				//si no me pude conectar tiro error
+				if(!$link){
+					echo "Error: Unable to connect to MySQL." . PHP_EOL;
+					echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+					echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+					exit;
+				}
+				$sql = "SELECT 	event.publication_idPublication AS id_event, event.title AS title, event.description AS description, event.date AS date, event.time AS time,
+								event.place AS location, event.visibility AS visibility, il.show_notification AS notification, il.assistance AS assistance
+						FROM invitedList AS il, event
+						WHERE il.invited_username='".$_SESSION["username"]."' AND il.idevent=event.publication_idPublication AND visibility='public'";
+				$query = mysqli_query($link, $sql);
+				
+				if(!$query){
+					echo mysqli_error($link);
+				}
+				
+				while($result = mysqli_fetch_assoc($query)) : ?>
+				<div class="alert alert-success">
+					<p><strong><a href="viewevent.php?id_event=<?php echo $result["id_event"];?>"><?php echo $result["title"];?></a></strong></p>
+					<p><?php echo "El ".$result["date"]." en ".$result["location"]." a las ".$result["time"]; ?></p>
+					<p><?php echo $result["description"];?></p>
+					<p>
+						<a href="myevents.php?<?php echo "id_event=".$result["id_event"]."&r=Asistiré";?>">Asistiré</a> 
+						<a href="myevents.php?<?php echo "id_event=".$result["id_event"]."&r=No+Asistiré";?>">No Asistiré</a>
+					<p>
+				</div>
+				<?php
+				endwhile;
+				//cierro la conexión a la db
+				mysqli_close($link);
+				?>
+			</div>
 		</div>
 	</div>
 </div>
