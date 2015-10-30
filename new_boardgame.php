@@ -47,14 +47,15 @@
 			$filename = $link->real_escape_string(basename($_FILES["fileToUpload"]["name"]));
 			$uploadOk = 1;
 			$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
-			echo $_FILES["fileToUpload"]["tmp_name"]
+			echo $_FILES["fileToUpload"]["tmp_name"];
 			// Check if file is an actual or fake png
 			if(isset($_POST["submit"])){
 			    $check = filesize($_FILES["fileToUpload"]["tmp_name"]);
 			    if($check !== false) {
 			        echo "Origin file exists";
 			        $uploadOk = 1;
-			    } else {
+			    }
+			    else {
 			        echo "File doesn't exist in origin.";
 			        $uploadOk = 0;
 			    }
@@ -89,7 +90,7 @@
 			}
 		}
 		else{
-			$stringpgn = $link->real_escape_string($_POST["textToUpload"];
+			$stringpgn = $link->real_escape_string($_POST["textToUpload"]);
 		}
 
 		//se usa begin y commit pues no queremos que las transacciones se realicen juntas.
