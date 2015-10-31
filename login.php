@@ -60,7 +60,7 @@
 		<?php $s = $_SESSION["sex"]==2 ? 'Bienvenida, ' : 'Bienvenido, ';?>
 		<div id="content">
 			<div class="alert alert-success">
-				<strong>Ingreso Exitoso!</strong> <?php echo $s. $_SESSION["first_name"].' '.$_SESSION["last_name"]. '. Disfruta tu estadía.'?>
+				<strong>Ingreso Exitoso!</strong> <?php echo $s. $_SESSION["first_name"].' '.$_SESSION["last_name"].'. No te veíamos desde '.$_SESSION["last_log"].'. Disfruta tu estadía.'?>
 			</div>
 		</div>
 	<?php endif;?>
