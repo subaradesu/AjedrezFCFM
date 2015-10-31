@@ -43,6 +43,7 @@
 			</tr>
 		</thead>
 		<tbody>
+		
 	<?php
 		//me conecto a la db
 		$link = mysqli_connect('localhost', 'root','','ajedrezfcfm');
@@ -71,8 +72,8 @@
 		<?php endwhile;?>
 		
 		</tbody>
+	</table>
 	</div>
-	
 	<?php else : ?>
 	<div id="content">
 		<div class=page-header>
@@ -104,9 +105,9 @@
 			  	</div>
 			</form>
 		</div>
-		<?php endif;?>
 	</div>
-	
+	<?php endif;?>
+</div>
 </div>
 
 <?php addFooter();?>
