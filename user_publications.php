@@ -19,7 +19,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<?php require_once 'utils.php';?>
-	<?php checkPermission(3);?>
+	<?php checkPermission(1);?>
 	
 	<?php
 		$this_user;
@@ -63,7 +63,9 @@
 					<th>Titulo Publicación</th>
 					<th>Descripción</th>
 					<th>Fecha de Publicación</th>
+					<?php if($_SESSION["permission"] == 3) : ?>
 					<th>Acción</th>
+					<?php endif;?>
 				</tr>
 			</thead>
 			<tbody>
@@ -96,7 +98,9 @@
 					<th><?php echo $result2["title"];?></th>
 					<th><?php echo $result2["content"];?></th>
 					<th><?php echo $result2["date"];?></th>
+					<?php if($_SESSION["permission"] == 3) : ?>
 					<th><a class="btn btn-lg btn-primary" href="user_publications.php?id_publication=<?php echo $result2["idNew"];?>"role="button">Borrar</a></th>
+					<?php endif; ?>
 					</tr>
 				<?php
 				endwhile;

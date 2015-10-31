@@ -88,7 +88,8 @@
 		</div>
 		<div>
 			<img alt="avatar" src="<?php echo getAvatarLocation($avatar);?>">
-			<p>Esta es el perfil de <?php echo $user;?>. Mire que hermoso.</p>
+			<p>Esta es el perfil de <?php echo $user;?>.</p>
+			<p><a href="user_publications.php?id_user=<?php echo $id_user;?>">Ver Publicaciones.</a></p>
 		</div>
 		
 		<?php if($id_user == $_SESSION["username"]) : ?>
@@ -97,7 +98,6 @@
 		</div>
 		<?php endif;?>
 	</div>
-	
 	
 </div>
 
