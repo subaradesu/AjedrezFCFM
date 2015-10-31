@@ -101,9 +101,9 @@ function userLogin(){
 		}
 	
 		//defino la query para buscar si se encuentra el registro en la base de datos.
-		$sql ="	SELECT *
-			FROM user
-			WHERE username = '".$_POST["user"]."' AND password = '".$_POST["pass"]."'";
+		$sql ="	SELECT user.username AS username, user.first_name AS first_name, user.last_name AS last_name, user.sex AS sex, user.userStatus AS userStatus, timestamps.update_time AS update_time
+				FROM user, timestamps
+				WHERE user.username = '".$_POST["user"]."' AND user.password = '".$_POST["pass"]."' AND user.username=timestamps.username";
 	
 		//realizo la query
 		$query = mysqli_query($link, $sql);
@@ -118,8 +118,16 @@ function userLogin(){
 			$_SESSION["last_name"] = $result["last_name"];
 			$_SESSION["sex"] = $result["sex"];
 			$_SESSION["permission"] = $result["userStatus"];
-		}
-		
+			$_SESSION["last_log"] = $result["update_time"];
+			
+			//actualizo el timestamp
+			
+			$sql2= "UPDATE timestamps
+					SET create_time=NOW()
+					WHERE username='".$_SESSION["username"]."'";
+			
+			mysqli_query($link,$sql2);
+		}		
 		mysqli_close($link);
 		}
 		return $try;
@@ -139,10 +147,14 @@ function userRegister(){
 			echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
 			exit;
 		}
-		//defino la query para agregar el usuario a la db
-		$sql = "INSERT INTO user (username, password, first_name, last_name, email, sex, avatar, userStatus)
+		//defino la query para agregar el usuario a la db y crear el timestamp asociado
+		$sql = "BEGIN;
+				INSERT INTO user (username, password, first_name, last_name, email, sex, avatar, userStatus)
 				VALUES ('".$_POST["user"]."', '".$_POST["pass"]."', '".$_POST["first_name"]."', '".$_POST["last_name"]. "', '".
-		$_POST["email"]."', '0','defaultAvatar.jpg', '1')";
+		$_POST["email"]."', '0','defaultAvatar.jpg', '1');
+				INSERT INTO timestamps
+				VALUES ('".$_POST["user"]."',NOW(),NOW());
+				COMMIT;";
 		
 		$r = mysqli_query($link, $sql);
 		
