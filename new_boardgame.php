@@ -41,7 +41,7 @@
 		$filename = $_POST["fileToUpload"];
 		$stringpgn = $_POST["textToUpload"];
 		$format = $_POST["format"];
-/*		if($format == 0){
+		if($format == 0){
 			print_r($_FILES);
 			print_r($_POST);
 			$target_dir = "boards/";
@@ -95,7 +95,7 @@
 		}
 		else{
 			$stringpgn = $link->real_escape_string($_POST["textToUpload"]);
-		}*/
+		}
 
 		//se usa begin y commit pues no queremos que las transacciones se realicen juntas.
 		//agregar nueva publicacion, asociar al usuario con la publicacion y asociar la noticia con la publicacion
