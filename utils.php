@@ -61,11 +61,12 @@ function genericInsertQuery($sql){
 
 
 //redirige a la página adecuada si el usuario no tiene los permisos
-function checkPermission($permissionNeeded){
+function checkPermission($permissionNeeded){	
 	if(!isLogged()){
 		//Si necesito permisos y no estoy loggeado
 		if($permissionNeeded>0){
 			header("Location: accessDenied.php");
+			exit;
 		}
 	}
 	//si estoy loggeado
@@ -74,11 +75,13 @@ function checkPermission($permissionNeeded){
 		if($_SESSION["permission"]==2){ //&& $permissionNeeded!= 2
 			//redirigir a página de banneados
 			header("Location: banned.php");
+			exit;
 		}
 		//si necesito permisos de administrador pero no lo soy
 		if($permissionNeeded==3 && $_SESSION["permission"]<3){
 			//acceso denegado
 			header("Location: accessDenied.php");
+			exit;
 		}
 	}
 	//si llegué acá es porque tengo permisos
