@@ -38,16 +38,19 @@
 			echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
 			exit;
 		}
-		$filename = NULL;
-		$stringpgn = NULL;
+		$filename = $_POST["fileToUpload"];
+		$stringpgn = $_POST["textToUpload"];
 		$format = $_POST["format"];
-		if($format == 0){
+/*		if($format == 0){
+			print_r($_FILES);
+			print_r($_POST);
 			$target_dir = "boards/";
 			$target_fullpath = $target_dir . $link->real_escape_string(basename($_FILES["fileToUpload"]["name"]));
 			$filename = $link->real_escape_string(basename($_FILES["fileToUpload"]["name"]));
 			$uploadOk = 1;
 			$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 			echo $_FILES["fileToUpload"]["tmp_name"];
+			echo $fileType;
 			// Check if file is an actual or fake png
 			if(isset($_POST["submit"])){
 			    $check = filesize($_FILES["fileToUpload"]["tmp_name"]);
@@ -73,6 +76,7 @@
 			// Allow certain file formats
 			if($fileType != "pgn") {
 			    echo "Sorry, only PGN files are allowed.";
+			    echo $fileType;
 			    $uploadOk = 0;
 			}
 			// Check if $uploadOk is set to 0 by an error
@@ -91,15 +95,15 @@
 		}
 		else{
 			$stringpgn = $link->real_escape_string($_POST["textToUpload"]);
-		}
+		}*/
 
 		//se usa begin y commit pues no queremos que las transacciones se realicen juntas.
 		//agregar nueva publicacion, asociar al usuario con la publicacion y asociar la noticia con la publicacion
 		$sql = "BEGIN;
-				INSERT INTO matchBoard(white_player, black_player, match_origin, details, format, pgn_board, pgn_string)
-				VALUES ('".$_POST["white"]."', '".$_POST["black"]."', '".$_POST["origin"]."', '".$_POST["content"]."', '".$_POST["format"]."', '".$filename."', '".$_POST["textToUpload"]."');
+				INSERT INTO matchBoard (white_player, black_player, match_origin, details, format, pgn_board, pgn_string)
+				VALUES ('".$_POST["white"]."', '".$_POST["black"]."', '".$_POST["origin"]."', '".$_POST["content"]."', '".$_POST["format"]."', '".$filename."', '".$stringpgn."');
 				COMMIT;";
-		
+		echo $sql;
 		//realizo la query
 		$query = mysqli_multi_query($link, $sql);
 		
@@ -192,8 +196,8 @@
 					<label class="control-label col-sm-2" for="format">Formato Partida:<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
 						<select name="format" class="form-control" id="format" onchange="javascript:change_upload();">
-							<option value="PGN">Archivo PGN</option>
-							<option value="String" class="disabled">String PGN</option>
+							<option value="0">Archivo PGN</option>
+							<option value="1" class="disabled">String PGN</option>
 						</select>
 					</div>
 				</div>
