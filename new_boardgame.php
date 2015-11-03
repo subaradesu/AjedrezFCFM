@@ -153,7 +153,7 @@
 			<p>Los campos con <span class="red-text">*</span> son obligatorios.</p>
 		</div>
 		<div class="col-sm-12">
-			<form class="form-horizontal" role="form" method="POST" encytype="multipart/form-data">
+			<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
