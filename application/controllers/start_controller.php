@@ -6,7 +6,6 @@ class start_controller extends CI_Controller{
 		parent::__construct();
 		$this->load->helper('html');
 		$this->load->helper('url');
-		$this->load->library('sesion');
 	}
 	
 	public function index(){
