@@ -1,5 +1,5 @@
 	<div id="content">
-		<form class="form-signin" action="" method="POST">
+		<?php echo form_open('main_controller/user_register', array('class' => 'form-signin'));?>
 			<h2 class="form-signin-header"> Registrar Usuario </h2>
 			
 			<label for="inputUsername" class="sr-only">Nombre de Usuario</label>

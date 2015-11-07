@@ -130,9 +130,28 @@ class main_controller extends CI_Controller{
 	}
 	
 	public function user_register(){
-		$this->load->view('header_log_reg');
-		$this->load->view('navbar');
-		$this->load->view('register_pane');
+		$this->load->library('form_validation');
+		
+		$this->load->view('header_log_reg', array('title' => 'Ingresar'));
+		
+		//form rules
+		$this->form_validation->set_rules('user', 'Nombre de Usuario', 'required');
+		$this->form_validation->set_rules('pass', 'Contraseña', 'required');
+		
+		if($this->form_validation->run()){
+			if($register = $this->logging->userRegister()){
+				//agregué al usuario
+			}
+			else{
+				//no pude agregar al usuario
+				$this->load->view('navbar');
+				$this->load->view('register_pane');
+			}
+		}
+		else{
+			$this->load->view('navbar');
+			$this->load->view('register_pane');
+		}
 		$this->load->view('footer');
 	}
 	
