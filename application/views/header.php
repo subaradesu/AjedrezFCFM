@@ -5,7 +5,10 @@
 	<!--Sets the page encoding-->
 	<meta charset="UTF-8">
 	<!-- page title -->
-	<title>Ajedrez Fcfm</title>
+	<title>Ajedrez Fcfm - <?php echo $title;?></title>
+	
+	<!-- Ensures proper rendering on touch zooming -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<!-- Latest compiled and minified CSS (Bootstrap)-->
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -18,18 +21,9 @@
 	<!-- ChessBoard Style -->
 	<?php echo link_tag('css/chessboard.css');?>
 	
-	<!-- Ensures proper rendering on touch zooming -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<?php echo link_tag('css/log-register.css');?>
 	
-	<?php
-	//cargar utilidades
-	//require_once 'utils.php';
-	?>
 	
-	<?php
-	//Comprobar si tengo permisos para ingresar a esta página
-	//checkPermission(0);
-	?>
 	
 </head>
 

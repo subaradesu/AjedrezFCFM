@@ -23,14 +23,6 @@ Class logging extends CI_model{
 		}
 	}
 	
-	function updateTimestamp($username){
-		
-	}
-	
-	function userLogout(){
-		
-	}
-	
 	function userRegister(){
 		
 	}
