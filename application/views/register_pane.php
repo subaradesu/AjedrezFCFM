@@ -18,6 +18,6 @@
 				</label>
 			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Registrar</button>
-			<p>¿Ya estás registrado? <a href="login.php">Ingresa aquí.</a></p>
+			<p>¿Ya estás registrado? <?php echo anchor("/main_controller/user_login", "Ingresa aquí.");?></p>
 		</form>
 	</div>

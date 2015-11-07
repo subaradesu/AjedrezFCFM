@@ -18,12 +18,8 @@
 	<!-- General Custom Style -->
 	<?php echo link_tag('css/default.css');?>
 	
-	<!-- ChessBoard Style -->
-	<?php echo link_tag('css/chessboard.css');?>
-	
+	<!-- Login/Register Style -->
 	<?php echo link_tag('css/log-register.css');?>
-	
-	
 	
 </head>
 
