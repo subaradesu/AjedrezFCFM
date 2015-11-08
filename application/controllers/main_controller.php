@@ -8,7 +8,7 @@ class main_controller extends CI_Controller{
 		$this->load->model('logging');
 		$this->load->helper('html');
 		$this->load->helper('url');
-		//$this->session->__set('isLogged','0');
+		$this->load->helper('general_helper');
 	}
 	
 	public function index(){
@@ -17,8 +17,6 @@ class main_controller extends CI_Controller{
 		$this->load->view('navbar');
 		$this->load->view('home');
 		$this->load->view('footer');
-// 		echo "<pre>";
-// 		die(print_r($this->session, TRUE));
 	}
 	
 	public function contact(){
@@ -137,14 +135,27 @@ class main_controller extends CI_Controller{
 		//form rules
 		$this->form_validation->set_rules('user', 'Nombre de Usuario', 'required');
 		$this->form_validation->set_rules('pass', 'Contraseña', 'required');
+		$this->form_validation->set_rules('first_name', 'Nombre', 'required');
+		$this->form_validation->set_rules('last_name', 'Apellido', 'required');
+		$this->form_validation->set_rules('email', 'Corrreo Electrónico', 'required');
 		
 		if($this->form_validation->run()){
-			if($register = $this->logging->userRegister()){
+			$user = $this-> input ->post('user');
+			$pass = $this-> input ->post('pass');
+			$first_name = $this-> input ->post('first_name');
+			$last_name = $this-> input ->post('last_name');
+			$email = $this-> input ->post('email');
+			
+			if($register = $this->logging->userRegister($user, $pass, $first_name, $last_name, $email)){
 				//agregué al usuario
+				$this->load->view('navbar');
+				$this->load->view('simple_success', array(	'heading' => '¡Usuario registrado con éxito!',
+															'message' => 'Puedes hacer ingreso al sistema con tu nombre de usuario y contraseña.'));
 			}
 			else{
 				//no pude agregar al usuario
 				$this->load->view('navbar');
+				//mensaje de qué pasó
 				$this->load->view('register_pane');
 			}
 		}
@@ -155,9 +166,23 @@ class main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function user_profile(){
-		$this->load->view('header_general');
+	public function user_profile($id_user = 0){
+		//defino los datos que usarán las vistas
+		$profile_data = $this->logging->getProfileData($id_user);
+		$header_data = array('title' => 'Ver Perfil - '.$profile_data["first_name"].' '.$profile_data["last_name"]);
+		
+		//cargo las vistas
+		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
+		if(!$profile_data){
+			//TODO: perfil no existe, hacer algo
+			$this->load->view('simple_danger', array('heading' => '¡El perfil solicitado no existe!', 'message' => ''));
+		}
+		else{
+			//si el usuario tiene un perfil asociado lo muestro
+			$profile_data["avatar"] = getAvatarPath($profile_data["avatar"]);
+			$this->load->view('profile',$profile_data);
+		}
 		$this->load->view('footer');
 	}
 	
@@ -167,8 +192,9 @@ class main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	
-	
+	/*Debug artesanal - Copy Paste el código siguiente para ver la variable*/
+	// 		echo "<pre>";
+	// 		die(print_r($this->session, TRUE));
 }
 
 ?>

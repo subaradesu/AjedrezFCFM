@@ -52,7 +52,7 @@
 								<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Mi Cuenta
 								<span class="glyphicon glyphicon-cog"></span></a>
 							<ul class="dropdown-menu">
-								<li><?php echo anchor("/main_controller/user_profile", "Mi Perfil");?></li>
+								<li><?php echo anchor("/main_controller/user_profile/".$_SESSION['username'], "Mi Perfil");?></li>
 								<li class="disabled"><a>Preferencias</a></li>
 								<li class="disabled"><a>Historial</a></li>
 								<?php if($this->session->permission!=2) : ?>

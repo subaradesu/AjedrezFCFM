@@ -76,13 +76,11 @@
 	
 <div class="container">
 	<div id="content">
-		<?php 
-		if($status == 2){
-			echo '<div class="alert alert-danger">
+		<?php if($status == 2) : ?> 
+			<div class="alert alert-danger">
 				<strong>El dueño de esta cuenta se encuentra baneado!</strong> si lo conoces pídele que se contacte con nosotros para solucionar su situación.
-			</div>';
-		}
-		?>
+			</div>;
+		<?php endif;?>
 		<div class=page-header>
 			<h1>Perfil de <?php echo $first_name.' '.$last_name;?>:</h1>
 		</div>

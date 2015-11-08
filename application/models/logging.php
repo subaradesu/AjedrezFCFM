@@ -6,6 +6,17 @@ Class logging extends CI_model{
 		$this->load->database();
 	}
 	
+	function getProfileData($id_user){
+		//retorno los datos del perfil del usuario id_user si existe, si no retorno 0.
+		$sql ="	SELECT username, first_name, last_name, sex, avatar, userStatus
+				FROM user
+				WHERE username = '".$id_user."'";
+		
+		$result = $this->db->query($sql);
+
+		return $result->num_rows() == 1? $result->first_row('array') : 0;
+	}
+	
 	function userLogin($username, $password){
 		$result;
 		//busco el registro en la base de datos
@@ -18,12 +29,10 @@ Class logging extends CI_model{
 		
 		if($query->num_rows() == 1){
 			$result = $query->first_row();
-			
 			//si me logeo actualizo los timestamps
 			$sql2= "UPDATE timestamps
-					SET create_time=NOW()
-					WHERE username='".$result->username."'";
-			
+					SET update_time=NOW()
+					WHERE username='".$result->username."';";
 			if($this->db->simple_query($sql2)){
 				//Todo Ok
 			}
@@ -38,8 +47,20 @@ Class logging extends CI_model{
 		return $result;
 	}
 	
-	function userRegister(){
+	function userRegister($user, $pass, $first_name, $last_name, $email){
+		//comenzar transacción
+		$this->db->trans_start();
+		//agrega el usuario a la tabla usuario
+		$this->db->query(	"INSERT INTO user (username, password, first_name, last_name, email, sex, avatar, userStatus)
+							VALUES ('".$user."', '".$pass."', '".$first_name."', '".$last_name. "', '".$email."', '0','defaultAvatar.jpg', '1');");
+		//crea la entrada en timestamps del usuario
+		$this->db->query("INSERT INTO timestamps
+						  VALUES ('".$user."',NOW(),NOW());");
+		//termina la transacción
+		$this->db->trans_complete();
 		
+		//falso si falló la transacción.
+		return $this -> db -> trans_status();
 	}
 	
 }
