@@ -28,7 +28,7 @@
 		    </div>
 		    <div id="collapse2" class="panel-collapse collapse">
 		      <ul class="list-group">
-		        <li class="list-group-item"><a href="www.chessclub.com/">Internet Chess Club (ICC)</a></li>
+		        <li class="list-group-item"><a href="http://www.chessclub.com/">Internet Chess Club (ICC)</a></li>
 		        <li class="list-group-item"><a href="http://www.chess.com">Chess.com </a></li>
 		      </ul>
 		    </div>

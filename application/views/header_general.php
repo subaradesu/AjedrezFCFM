@@ -21,4 +21,4 @@
 </head>
 
 <body>
-<div class="container main-content">
+<div class="container IKUSABA">

@@ -20,35 +20,40 @@ class main_controller extends CI_Controller{
 	}
 	
 	public function contact(){
-		$this->load->view('header_general');
+		$header_data = array('title' => 'Contacto');
+		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('contact');
 		$this->load->view('footer');
 	}
 	
 	public function news(){
-		$this->load->view('header_general');
+		$header_data = array('title' => 'Noticias');
+		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('news');
 		$this->load->view('footer');
 	}
 	
 	public function about(){
-		$this->load->view('header_general');
+		$header_data = array('title' => 'Historia');
+		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('about');
 		$this->load->view('footer');
 	}
 	
 	public function links(){
-		$this->load->view('header_general');
+		$header_data = array('title' => 'Enlaces');
+		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('links');
 		$this->load->view('footer');
 	}
 	
 	public function search_user($data = false){
-		$this->load->view('header_general');
+		$header_data = array('title' => 'Buscar Usuario');
+		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
 		if(!$data){
 			$this->load->view('search_user_panel');
@@ -174,6 +179,7 @@ class main_controller extends CI_Controller{
 		//cargo las vistas
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
+		
 		if(!$profile_data){
 			//TODO: perfil no existe, hacer algo
 			$this->load->view('simple_danger', array('heading' => '¡El perfil solicitado no existe!', 'message' => ''));
@@ -181,7 +187,12 @@ class main_controller extends CI_Controller{
 		else{
 			//si el usuario tiene un perfil asociado lo muestro
 			$profile_data["avatar"] = getAvatarPath($profile_data["avatar"]);
-			$this->load->view('profile',$profile_data);
+			if($_SESSION["username"]==$profile_data["username"]){
+				$this->load->view('edit_profile',$profile_data);
+			}
+			else{
+				$this->load->view('profile',$profile_data);
+			}
 		}
 		$this->load->view('footer');
 	}
