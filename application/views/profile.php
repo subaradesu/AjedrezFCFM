@@ -10,7 +10,7 @@
 		<div>
 			<img alt="avatar" src="<?php echo $avatar;?>">
 			<p>Esta es el perfil de <?php echo $username;?>.</p>
-			<p><a href="#">Ver Publicaciones.</a></p>
+			<p><?php echo anchor('main_controller/user_publications/'.$username,'Ver Publicaciones.');?></p>
 		</div>
 		
 		<?php if($username == $_SESSION["username"]) : ?>
