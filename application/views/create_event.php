@@ -7,7 +7,7 @@
 			<p>Los campos con <span class="red-text">*</span> son obligatorios.</p>
 		</div>
 		<div class="col-sm-12">
-			<form class="form-horizontal" role="form" method="POST">
+			<?php echo form_open('main_controller/publish_event/', array('class' => 'form-horizontal'));?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
@@ -40,13 +40,13 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="visibility">Tipo de Evento<span class="red-text">*</span>:</label>
-					<label class="control-label col-sm-2" for="visibility">Público</label>
-					<div class="col-sm-1">
-						<input type="radio" name="visibility" class="form-control" id="visibility" value="public" checked="checked">
-					</div>
 					<label class="control-label col-sm-2" for="visibility">Privado</label>
 					<div class="col-sm-1">
 						<input type="radio" name="visibility" class="form-control" id="visibility" value="private">
+					</div>
+					<label class="control-label col-sm-2" for="visibility">Público</label>
+					<div class="col-sm-1">
+						<input type="radio" name="visibility" class="form-control" id="visibility" value="public" checked="checked">
 					</div>
 				</div>
 				
@@ -54,7 +54,9 @@
 					<label class="control-label col-sm-2" for="invited[]">Invitados<span class="red-text"></span>:</label>
 					<div class="col-sm-8">
 						<select name="invited[]" multiple>
-							<option value="user01">Hibiki Tachibana</option>
+							<?php foreach ($users as $user_row) : ?>
+							<option value="<?php echo $user_row["username"];?>"><?php echo $user_row["first_name"].' '.$user_row["last_name"];?></option>
+							<?php endforeach;?>
 						</select>
 					</div>
 				</div>

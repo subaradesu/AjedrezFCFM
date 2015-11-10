@@ -72,22 +72,76 @@ class main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function publish_new($data = false){
-		$this->load->view('header_general');
+	public function publish_new(){
+		$this->load->library('form_validation');
+		$header_data = array('title' => 'Crear Noticia');
+		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
-		$this->load->view('create_new');
+	
+		$this->form_validation->set_rules('title', 'Título', 'required');
+		$this->form_validation->set_rules('image', 'Portada', 'required');
+		$this->form_validation->set_rules('category', 'Categoría', 'required');
+		$this->form_validation->set_rules('content', 'Contenido', 'required');
+		if($this->form_validation->run()){
+			$title = $this->input->post('title');
+			$image = $this->input->post('image');
+			$category = $this->input->post('category');
+			$content = $this->input->post('content');
+			if($publish_try = $this->logging->createNew($_SESSION["username"],$title,$content, $image,$category)){
+				$this->load->view('simple_success', array ('heading' => '¡La noticia fue subida con éxito!', 'message' => 'Ahora es visible en la pestaña de noticias'));
+			}
+			else{
+				//la publicación no se realizó con éxito
+				$this->load->view('simple_danger', array('heading' => 'La noticia no se pudo publicar', 'message' => ''));
+				$this->load->view('create_new');
+			}
+		}
+		else{
+			$this->load->view('create_new');
+		}
 		$this->load->view('footer');
 	}
 	
-	public function publish_event($data = false){
-		$this->load->view('header_general');
+	public function publish_event(){
+		$this->load->library('form_validation');
+		$header_data = array('title' => 'Crear Evento');
+		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
-		$this->load->view('create_event');
+		
+		$this->form_validation->set_rules('title', 'Título', 'required');
+		$this->form_validation->set_rules('date', 'Portada', 'required');
+		$this->form_validation->set_rules('location', 'Categoría', 'required');
+		$this->form_validation->set_rules('time', 'Contenido', 'required');
+		$this->form_validation->set_rules('description', 'Contenido', 'required');
+		$this->form_validation->set_rules('visibility', 'Contenido', 'required');
+		if($this->form_validation->run()){
+			$title = $this->input->post('title');
+			$date = $this->input->post('title');
+			$location = $this->input->post('title');
+			$time = $this->input->post('title');
+			$description = $this->input->post('title');
+			$visibility = $this->input->post('title');
+			$invited_list = $this->input->post('invited');
+			if($publish_try = $this->logging->createEvent($_SESSION["username"],$title, $date, $location, $time, $description, $visibility, $invited_list)){
+				$this->load->view('simple_success', array ('heading' => '¡El evento fue creado con éxito!', 'message' => 'Los usuarios invitados recibirán una notificación'));
+			}
+			else{
+				$this->load->view('simple_danger', array('heading' => 'El evento no pudo ser creado', 'message' => ''));
+				$this->load->view('create_event', array('users' => $this->logging->getUsers()));
+			}
+		}
+		else{
+			$this->load->view('create_event', array('users' => $this->logging->getUsers()));
+		}
 		$this->load->view('footer');
 	}
 	
-	public function publish_game($data = false){
-		$this->load->view('header_general');
+	public function publish_game(){
+		$this->load->library('form_validation');
+		
+		$header_data = array('title' => 'Crear Partida');
+	
+		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
 		$this->load->view('create_game');
 		$this->load->view('footer');
@@ -132,9 +186,6 @@ class main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-// 	echo "<pre>";
-// 	die(print_r($this->session, TRUE));
-	
 	public function user_logout(){
 		session_destroy();
 		redirect('main_controller/index');
@@ -143,15 +194,17 @@ class main_controller extends CI_Controller{
 	public function user_register(){
 		$this->load->library('form_validation');
 		
-		$this->load->view('header_log_reg', array('title' => 'Ingresar'));
+		$this->load->view('header_log_reg', array('title' => 'Registro'));
+		$this->load->view('navbar');
 		
-		//form rules
+		//reglas para el registro de usuario
 		$this->form_validation->set_rules('user', 'Nombre de Usuario', 'required');
 		$this->form_validation->set_rules('pass', 'Contraseña', 'required');
 		$this->form_validation->set_rules('first_name', 'Nombre', 'required');
 		$this->form_validation->set_rules('last_name', 'Apellido', 'required');
 		$this->form_validation->set_rules('email', 'Corrreo Electrónico', 'required');
 		
+		//si recibo todos los datos para el registro
 		if($this->form_validation->run()){
 			$user = $this-> input ->post('user');
 			$pass = $this-> input ->post('pass');
@@ -161,19 +214,18 @@ class main_controller extends CI_Controller{
 			
 			if($register = $this->logging->userRegister($user, $pass, $first_name, $last_name, $email)){
 				//agregué al usuario
-				$this->load->view('navbar');
+				
 				$this->load->view('simple_success', array(	'heading' => '¡Usuario registrado con éxito!',
 															'message' => 'Puedes hacer ingreso al sistema con tu nombre de usuario y contraseña.'));
 			}
 			else{
 				//no pude agregar al usuario
-				$this->load->view('navbar');
 				//mensaje de qué pasó
+				$this->load->view('simple_danger',array('heading' => 'Ocurrio un error al crear la cuenta', 'message' => ' Inténtelo de nuevo mas tarde'));
 				$this->load->view('register_pane');
 			}
 		}
 		else{
-			$this->load->view('navbar');
 			$this->load->view('register_pane');
 		}
 		$this->load->view('footer');
@@ -209,12 +261,23 @@ class main_controller extends CI_Controller{
 		$header_data = array('title' => 'Ver Publicaciones');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
+		//TODO: Cargar publicaciones del usuario, pasarlas a la vista. Si el usuario no existe mostrar algo.
 		$this->load->view('footer');
 	}
 	
-	public function user_events(){
-		$this->load->view('header_general');
+	public function my_events(){
+		$header_data = array('title' => 'Mis Eventos');
+		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
+		//TODO: Cargar Eventos del usuario actual, pasarlos a la vista de eventos.
+		$this->load->view('footer');
+	}
+	
+	public function view_event($id_event){
+		$header_data = array('title' => 'Ver Evento');
+		$this->load->view('header_general',$header_data);
+		$this->load->view('navbar');
+		//TODO: Visualizar la información del evento $id_event
 		$this->load->view('footer');
 	}
 	

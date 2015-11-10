@@ -57,7 +57,7 @@
 								<li class="disabled"><a>Historial</a></li>
 								<?php if($this->session->permission!=2) : ?>
 								<li role="separator" class="divider"></li>
-								<li><?php echo anchor("/main_controller/user_events", "Mis Eventos");?></li>
+								<li><?php echo anchor("/main_controller/my_events", "Mis Eventos");?></li>
 								<?php endif;?>
 							</ul>
 							<li>
