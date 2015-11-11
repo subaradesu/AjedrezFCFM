@@ -2,6 +2,10 @@
 
 /*general style*/
 
+body {
+	/* background-image: url("http://localhost/AjedrezFCFM/img/resources/chessbg1.png"); */
+}
+
 html {
 	position: relative;
 	min-height: 100%;
@@ -19,8 +23,8 @@ textarea {
 	background-color: #f5f5f5;
 }
 .nav li a{
-		padding-left: 10px;
-		padding-right: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .navbar .container{
@@ -28,6 +32,7 @@ textarea {
 }
 
 .IKUSABA {
+	/* background: #fff; */
 	margin-bottom: 60px;
 }
 

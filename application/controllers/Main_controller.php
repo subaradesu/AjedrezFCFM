@@ -238,7 +238,7 @@ class Main_controller extends CI_Controller{
 		$header_data = array('title' => 'Ver Perfil - '.$profile_data["first_name"].' '.$profile_data["last_name"]);
 		
 		//cargo las vistas
-		$this->load->view('header_general', $header_data);
+		$this->load->view('header_profile', $header_data);
 		$this->load->view('navbar');
 		
 		if(!$profile_data){
@@ -248,12 +248,7 @@ class Main_controller extends CI_Controller{
 		else{
 			//si el usuario tiene un perfil asociado lo muestro
 			$profile_data["avatar"] = getAvatarPath($profile_data["avatar"]);
-			if($_SESSION["username"]==$profile_data["username"]){
-				$this->load->view('edit_profile',$profile_data);
-			}
-			else{
-				$this->load->view('profile',$profile_data);
-			}
+			$this->load->view('profile',$profile_data);
 		}
 		$this->load->view('footer');
 	}
