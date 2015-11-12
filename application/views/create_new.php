@@ -7,7 +7,7 @@
 			<p>Los campos con <span class="red-text">*</span> son obligatorios.</p>
 		</div>
 		<div class="col-sm-12">
-			<?php echo form_open('main_controller/publish_new/', array('class' => 'form-horizontal'));?>
+			<?php echo form_open_multipart('main_controller/publish_new/', array('class' => 'form-horizontal'));?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
@@ -16,7 +16,7 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="image">Portada<span class="red-text">*</span>:</label>
-					<input type="file" name="image" class="col-sm-8" id="image" placeholder="El enlace a la imagen que hará de portada para la publicación. Ej: goo.gl/1qaKqa." required>
+					<input type="file" name="image" class="col-sm-8" id="image" required>
 <!-- 						<div class="btn btn-default btn-file form-control"> -->
 <!-- 							Seleccionar... <input type="file" name="image" id="image" placeholder="Seleccione la imagen que desea utilizar." required> -->
 <!-- 						</div> -->

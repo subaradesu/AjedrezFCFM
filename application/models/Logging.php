@@ -60,7 +60,7 @@ Class logging extends CI_model{
 		//termina la transacción
 		$this->db->trans_complete();
 		
-		return $this->db->trans_status();
+		$this->db->trans_status() ? $this->db->insert_id() : 0;
 	}
 
 	
