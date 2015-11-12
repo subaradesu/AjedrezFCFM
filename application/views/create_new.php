@@ -11,14 +11,15 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="text" name="title" class="form-control" id="title" placeholder="El título de tu publicación. Ej: 5° Torneo Internacional Beauchef." required>
+						<input type="text" name="title" class="form-control" id="title" placeholder="El título de la Noticia. Ej: 5° Torneo Internacional Beauchef 851." required>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="image">Portada<span class="red-text">*</span>:</label>
-					<div class="col-sm-8">
-						<input type="text" name="image" class="form-control" id="image" placeholder="El enlace a la imagen que hará de portada para la publicación. Ej: goo.gl/1qaKqa." required>
-					</div>
+					<input type="file" name="image" class="col-sm-8" id="image" placeholder="El enlace a la imagen que hará de portada para la publicación. Ej: goo.gl/1qaKqa." required>
+<!-- 						<div class="btn btn-default btn-file form-control"> -->
+<!-- 							Seleccionar... <input type="file" name="image" id="image" placeholder="Seleccione la imagen que desea utilizar." required> -->
+<!-- 						</div> -->
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="category">Tipo de Publicacion:<span class="red-text">*</span>:</label>

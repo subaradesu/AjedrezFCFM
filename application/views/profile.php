@@ -26,7 +26,7 @@
 								<i class="glyphicon glyphicon-home"></i> Ver Perfil
 								</a>
 							</li>
-							<?php if($username == $_SESSION["username"]) : ?>
+							<?php if(isset($_SESSION["username"]) && $username == $_SESSION["username"]) : ?>
 							<li class="#">
 								<a href="#">
 								<i class="glyphicon glyphicon-edit"></i> Editar Información

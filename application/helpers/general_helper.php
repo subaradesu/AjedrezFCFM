@@ -8,7 +8,7 @@ function getAvatarPath($avatarFilename){
 /*Muestra en pantalla el valor de la variable en el momento del llamado (bota la aplicacion, usar con cuidado)*/
 function debug_var($var){
 		echo "<pre>";
-		die(print_r($this->session, TRUE));
+		die(print_r($var, TRUE));
 }
 
 ?>

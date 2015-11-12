@@ -27,6 +27,14 @@ Class logging extends CI_model{
 		return $this->db->trans_status();
 	}
 	
+	function getNew($idNew){
+		return $this->db->query("SELECT * FROM news WHERE idNew='".$idNew."'")->first_row('array');
+	}
+	
+	function getNews(){
+		return $this->db->query("SELECT * FROM news;")->result_array();
+	}
+	
 	function createEvent($publisher, $title, $date, $location, $time, $description, $visibility, $invited_list){
 		//comenzar transacción
 		$this->db->trans_start();

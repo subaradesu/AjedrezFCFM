@@ -33,7 +33,7 @@ class Main_controller extends CI_Controller{
 		$header_data = array('title' => 'Noticias');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
-		$this->load->view('news');
+		$this->load->view('news',array('publications' => $this->logging->getNews()));
 		$this->load->view('footer');
 	}
 	
@@ -269,11 +269,27 @@ class Main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function view_event($id_event){
+	public function view_event($id_event = 0){
 		$header_data = array('title' => 'Ver Evento');
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
 		//TODO: Visualizar la información del evento $id_event
+		
+		$this->load->view('footer');
+	}
+	
+	public function view_new($id_new = 0){
+		$header_data = array('title' => 'Ver Evento');
+		$this->load->view('header_general',$header_data);
+		$this->load->view('navbar');
+		//TODO: Visualizar la información de la noticia $id_new
+		if($data_new = $this->logging->getNew($id_new)){
+			$this->load->view('view_new', array('data_new' => $data_new));
+		}
+		else{
+			$this->load->view('simple_danger', array('heading' => '¡La noticia solicitada no existe!', 'message' => ''));
+		}
+			
 		$this->load->view('footer');
 	}
 	

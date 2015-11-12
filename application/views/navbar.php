@@ -29,7 +29,7 @@
 					<li><?php echo anchor("/main_controller/search_user", "Buscar Usuario");?></li>
 					<?php if($this->session->isLogged && $this->session->permission==3):?>
 					<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="publish.php">Publicar
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Publicar
 							<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><?php echo anchor("/main_controller/publish_new", "Noticia");?></li>
