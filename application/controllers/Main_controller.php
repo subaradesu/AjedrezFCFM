@@ -83,25 +83,30 @@ class Main_controller extends CI_Controller{
 		$this->form_validation->set_rules('category', 'Categoría', 'required');
 		$this->form_validation->set_rules('content', 'Contenido', 'required');
 		if($this->form_validation->run()){
+			//la direccion donde se almacena el archivo, FCPATH es la carpeta base de CI
 			$target_dir = FCPATH."img/news_cover/";
 			
-			$target_file = $target_dir . basename($_FILES["image"]["name"]);
 			$uploadOk = 1;
-			$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+			
+			$imageFileType = pathinfo($_FILES["image"]["name"],PATHINFO_EXTENSION);
+			
+			//checkeo a la mala si es una imagen y está subido
 			$check = getimagesize($_FILES["image"]["tmp_name"]);
+			
 			if(!$check){
 				//TODO: Mostrar error
 				$this->load->view('simple_danger', array('heading' => 'No se pudo subir el archivo', 'message' => 'No era una imagen'));
 			}
 			else{
 				//El archivo se subió correctamente
-				move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
-				
+
 				$title = $this->input->post('title');
-				$image = $target_file;
+				$imageType = $imageFileType;
 				$category = $this->input->post('category');
 				$content = $this->input->post('content');
-				if($publish_try = $this->logging->createNew($_SESSION["username"],$title,$content, $image,$category)){
+				if($image_name = $this->logging->createNew($_SESSION["username"],$title,$content, $imageType,$category)){
+					$target_file = $target_dir . $image_name;
+					move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
 					$this->load->view('simple_success', array ('heading' => '¡La noticia fue subida con éxito!', 'message' => 'Ahora es visible en la pestaña de noticias'));
 				}
 				else{

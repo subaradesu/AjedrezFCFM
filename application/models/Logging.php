@@ -6,12 +6,14 @@ Class logging extends CI_model{
 		$this->load->database();
 	}
 	
-	function createNew($publisher, $title, $content, $image, $category){
+	function createNew($publisher, $title, $content, $imageType, $category){
 		//comenzar transacción
 		$this->db->trans_start();
 		//Creo una nueva publicacion
 		$this->db->query(	"INSERT INTO publication
 							VALUES (null);");
+		$imageFilename = $this->db->insert_id().'.'.$imageType;
+		
 		//guardo la ID en @publication_id
 		$this->db->query("	SELECT LAST_INSERT_ID()
 							INTO @publication_id;");
@@ -20,11 +22,11 @@ Class logging extends CI_model{
 							VALUES ('".$publisher."', @publication_id);");
 		//inserto la noticia con la id de publicación obtenida
 		$this->db->query("	INSERT INTO news (idNew, title, date, content, image_url, category)
-							VALUES (@publication_id, '".$title."', NOW(), '".$content."', '".$image."', '".$category."');");
+							VALUES (@publication_id, '".$title."', NOW(), '".$content."', '".$imageFilename."', '".$category."');");
 		//termina la transacción
 		$this->db->trans_complete();
 		
-		return $this->db->trans_status();
+		return $this->db->trans_status() ? $imageFilename : 0;
 	}
 	
 	function getNew($idNew){
