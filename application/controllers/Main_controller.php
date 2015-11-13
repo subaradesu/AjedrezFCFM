@@ -487,6 +487,20 @@ class Main_controller extends CI_Controller{
 		
 		$this->load->view('footer');
 	}
+
+	public function view_boardgame($id_boardgame = 0){
+		checkPermission(1);
+		$header_data = array('title' => 'Ver Evento');
+		$this->load->view('header_general',$header_data);
+		$this->load->view('navbar');
+		if($data_boardgame = $this->logging->getBoardgame($id_boardgame)){
+			$this->load->view('view_boardgame', array('data_boardgame' => $data_boardgame));
+		}
+		else{
+			$this->load->view('simple_danger', array('heading' => '¡La partida solicitada no existe!', 'message' => ''));
+		}
+		$this->load->view('footer');
+	}
 	
 	public function view_new($id_new = 0){
 		checkPermission(0);
