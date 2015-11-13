@@ -64,6 +64,32 @@ Class logging extends CI_model{
 		
 		return $this->db->trans_status();
 	}
+
+	function createGame($publisher, $title, $white, $black, $origin, $content, $format, $filename, $stringpgn){
+		//comenzar transacción
+		$title = $this->db->escape_str($title);
+		$game_attr = array(
+			$this->db->escape_str($white), 
+			$this->db->escape_str($black), 
+			$this->db->escape_str($origin), 
+			$this->db->escape_str($content),
+			$this->db->escape_str($format),
+			$this->db->escape_str($filename),
+			$this->db->escape_str($stringpgn));
+		$this->db->trans_start();
+		//Creo una nueva publicacion
+		$this->db->query("INSERT INTO matchboard (white_player,
+											black_player, 
+											match_origin, 
+											details, 
+											format, 
+											pgn_board, 
+											pgn_string)
+						VALUES (?,?,?,?,?,?,?);", $game_attr);
+		//termina la transacción
+		$this->db->trans_complete();	
+		return $this->db->trans_status();
+	}
 	
 	function updateProfileData($id_user, $update_data){
 		if($update_data == null){

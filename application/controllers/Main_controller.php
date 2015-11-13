@@ -181,12 +181,84 @@ class Main_controller extends CI_Controller{
 	public function publish_game(){
 		checkPermission(3);
 		$this->load->library('form_validation');
-		
 		$header_data = array('title' => 'Crear Partida');
-	
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
-		$this->load->view('create_game');
+
+		$this->form_validation->set_rules('title', 'Título', 'required');
+		$this->form_validation->set_rules('white', 'Blancas', 'required');
+		$this->form_validation->set_rules('black', 'Negras', 'required');
+		$this->form_validation->set_rules('origin', 'Origen', 'required');
+		$this->form_validation->set_rules('content', 'Detalles', 'required');
+		$this->form_validation->set_rules('format', 'Formato', 'required');
+		if($this->form_validation->run()){
+			$title = $this->input->post('title');
+			$white = $this->input->post('white');
+			$black = $this->input->post('black');
+			$origin = $this->input->post('origin');
+			$content = $this->input->post('content');
+			$format = $this->input->post('format');
+			$filename="";
+			$stringpgn="";
+			if($format == 0 && !empty($_FILES['fileToUpload']['name'])){
+				$target_dir = "boards/";
+				$target_fullpath = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+				$filename = basename($_FILES['fileToUpload']['name']);
+				$uploadOk = 1;
+				$fileType = pathinfo($target_fullpath,PATHINFO_EXTENSION);
+				// Check if file is an actual or fake png
+				if(isset($_POST["submit"])){
+				    $check = filesize($_FILES["fileToUpload"]["tmp_name"]);
+				    if($check !== false) {
+				        //echo "Origin file exists";
+				        $uploadOk = 1;
+				    }
+				    else {
+				        $uploadOk = 0;
+				    }
+				}
+				// Check if file already exists
+				if (file_exists($target_fullpath)) {
+				    $uploadOk = 0;
+				}
+				// Check file size
+				if ($_FILES["fileToUpload"]["size"] > 500000) {
+				    $uploadOk = 0;
+				}
+				// Allow certain file formats
+				if($fileType != "pgn") {
+				    $uploadOk = 0;
+				}
+				// Check if $uploadOk is set to 0 by an error
+				if ($uploadOk == 0) {
+				    echo "Sorry, your file was not uploaded.";
+				// if everything is ok, try to upload file
+			}
+			else{
+			    if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_fullpath)) {
+			        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+			    }
+			    else {
+			        echo "Sorry, there was an error uploading your file.";
+			    }
+			}
+		}
+			else {
+				$stringpgn = $this->input->post('textToUpload');
+			}
+			if($publish_try = $this->logging->createGame($_SESSION["username"],$title, $white, $black, $origin, $content, $format, $filename, $stringpgn)){
+				$this->load->view('simple_success', array ('heading' => '¡La partida fue creada con éxito!', 'message' => 'Puedes ver la partida aquí'));
+				//$this->output->set_header('refresh:5;url='.$this->);
+			}
+			else{
+				$this->load->view('simple_danger', array('heading' => 'La partida no pudo ser creada', 'message' => ''));
+				$this->load->view('create_game', array('users' => $this->logging->getUsers()));
+			}
+		}
+		else{
+			$this->load->view('create_game', array('users' => $this->logging->getUsers()));
+		}
+		//$this->load->view('create_game');
 		$this->load->view('footer');
 	}
 	
