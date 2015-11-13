@@ -63,6 +63,7 @@
 						
 						<li role="separator" class="divider"></li>
 						<li><?php echo anchor("/main_controller/admin", "Administrar");?></li>
+						<li><?php echo anchor("/main_controller/close", "Cerrar Acceso");?></li>
 						<?php endif;?>
 						
 					</ul>

@@ -1,6 +1,11 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+define("MAX_AVATARSIZE", 1000000); //1MB limit
+define("MAX_AVATARWIDTH", 600);
+define("MAX_AVATARHEIGHT", 600);
+
+
 class Main_controller extends CI_Controller{
 	
 	function __construct(){
@@ -325,9 +330,17 @@ class Main_controller extends CI_Controller{
 					//Si se subió una imagen
 					//checkeo a la mala si es una imagen y está subido
 					if(isset($_FILES["avatar"])){
-						if(!getimagesize($_FILES["avatar"]["tmp_name"])){
+						if(!($check = getimagesize($_FILES["avatar"]["tmp_name"]))){
 							//no era imagen, mostrar error
 							$this->load->view('simple_danger', array('heading' => 'No se pudo subir el archivo', 'message' => 'No era una imagen'));
+						}
+						elseif ($_FILES["avatar"]["size"] > MAX_AVATARSIZE){
+							//TODO: hacer algo para que no se suba la imagen
+							debug_var("ARCHIVO MUY GRANDE!");
+						}
+						elseif ($check[0] > MAX_AVATARWIDTH || $check[1] > MAX_AVATARHEIGHT){
+							//TODO: hacer algo para que no se suba bla bla
+							debug_var("IMAGEN MUY GRANDE!");
 						}
 						else{
 							//la direccion donde se almacena el archivo, FCPATH es la carpeta base de CI
@@ -419,6 +432,34 @@ class Main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
+	public function close(){
+		checkPermission(3);
+		$header_data = array('title' => 'Denegar Acceso');
+		$this->load->view('header_general',$header_data);
+		$this->load->view('navbar');
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('cause', 'Razón', 'required');
+		$this->form_validation->set_rules('description', 'Descripción', 'required');
+		$this->form_validation->set_rules('datefrom', 'Fecha cierre', 'required');
+		$this->form_validation->set_rules('dateuntil', 'Fecha re-apertura', 'required');
+		if($this->form_validation->run()){
+			$date_pattern = '[\d{4}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3(0|1))]';
+			if($valid_datefrom = preg_match($this->input->post('datefrom'),$date_pattern)){
+				
+				debug_var('dateok!');
+			}
+			if($valid_datefrom = checkdate()){
+				
+			}
+		}
+		else{
+			//$this->load->view('simple_danger', array('heading' => 'Error en el formulario','message' => 'Revisa los datos e inténtalo de nuevo'));
+			$this->load->view('close_platform');
+		}
+		
+		$this->load->view('footer');
+	}
+	
 	public function access_denied($accessNeeded){
 		$header_data = array('title' => 'Acceso denegado');
 		$this->load->view('header_general',$header_data);
@@ -444,14 +485,11 @@ class Main_controller extends CI_Controller{
 				break;
 			default:
 				//Esto no debería suceder
+				debug_var("El mono se quemó");
 		}
 		$this->load->view('access_denied',$data);
 		$this->load->view('footer');
 	}
-	
-	/*Debug artesanal - Copy Paste el código siguiente para ver la variable*/
-	// 		echo "<pre>";
-	// 		die(print_r($this->session, TRUE));
 }
 
 ?>
