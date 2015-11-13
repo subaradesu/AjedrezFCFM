@@ -49,9 +49,8 @@
 					<strong>El dueño de esta cuenta se encuentra baneado!</strong> si lo conoces pídele que se contacte con nosotros para solucionar su situación.
 				</div>
 				<?php endif;?>
-		    	<div class="profile-content">
+				<div class="profile-content">
 		    		<?php echo ($profile_content);?>
-					<?php echo anchor('main_controller/user_publications/'.$profile_data["username"],'Ver Publicaciones.');?>
 				</div>
 			</div>
 		</div>

@@ -64,11 +64,20 @@ Class logging extends CI_model{
 		
 		return $this->db->trans_status();
 	}
+	
+	function updateProfileData($id_user, $update_data){
+		if($update_data == null){
+			return false;
+		}
+		$where = "user.username='".$id_user."'";
+		$sql = $this->db->update_string('user',$update_data,$where);
+		return $this->db->simple_query($sql);
+	}
 
 	
 	function getProfileData($id_user){
 		//retorno los datos del perfil del usuario id_user si existe, si no retorno 0.
-		$sql ="	SELECT username, first_name, last_name, sex, avatar, userStatus
+		$sql ="	SELECT username, first_name, last_name, sex, avatar, userStatus, email
 				FROM user
 				WHERE username = '".$id_user."'";
 		

@@ -93,8 +93,6 @@ class Main_controller extends CI_Controller{
 			//la direccion donde se almacena el archivo, FCPATH es la carpeta base de CI
 			$target_dir = FCPATH."img/news_cover/";
 			
-			$uploadOk = 1;
-			
 			$imageFileType = pathinfo($_FILES["image"]["name"],PATHINFO_EXTENSION);
 			
 			//checkeo a la mala si es una imagen y está subido
@@ -106,7 +104,6 @@ class Main_controller extends CI_Controller{
 			}
 			else{
 				//El archivo se subió correctamente
-
 				$title = $this->input->post('title');
 				$imageType = $imageFileType;
 				$category = $this->input->post('category');
@@ -279,7 +276,7 @@ class Main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function user_profile($id_user = 0, $profile_section = 1){
+	public function user_profile($id_user = 0, $profile_section = 1, $action = 'none'){
 		checkPermission(1);
 		//defino los datos que usarán las vistas
 		$profile_data = $this->logging->getProfileData($id_user);
@@ -301,10 +298,75 @@ class Main_controller extends CI_Controller{
 			$data['profile_section'] = $profile_section;
 			//define el contenido del perfil
 			switch ($profile_section){
+				case 1:
+					//TODO: Mostrar información del perfil
+					$data['profile_content'] = $this->load->view('profile_overview', NULL, TRUE);
+					break;
 				case 2:
-					$data['profile_content'] = $this->load->view('edit_profile', array('username' => $id_user), TRUE);
+					//TODO: Editar Información Perfil
+					//TODO: Esto es super sucio, revisar
+					$update_data = null;
+					if(($name = $this->input->post('name')) != null){
+						$update_data["first_name"]=$name;
+					}
+					if(($lastname = $this->input->post('lastname')) != null){
+						$update_data["last_name"]=$lastname;
+					}
+					if(($email = $this->input->post('email')) != null){
+						$update_data["email"]=$email;
+					}
+					if(($sex = $this->input->post('sex')) != null && $sex != $profile_data["sex"]){
+						$update_data["sex"]=$sex;
+					}
+					if(($password = $this->input->post('password')) != null){
+						//TODO: revisar restricciones para la nueva contraseña (?)
+						$update_data["email"]=$password;
+					}
+					//Si se subió una imagen
+					//checkeo a la mala si es una imagen y está subido
+					if(isset($_FILES["avatar"])){
+						if(!getimagesize($_FILES["avatar"]["tmp_name"])){
+							//no era imagen, mostrar error
+							$this->load->view('simple_danger', array('heading' => 'No se pudo subir el archivo', 'message' => 'No era una imagen'));
+						}
+						else{
+							//la direccion donde se almacena el archivo, FCPATH es la carpeta base de CI
+							$target_dir = FCPATH."img/avatar/";
+							$imageFileType = pathinfo($_FILES["avatar"]["name"],PATHINFO_EXTENSION);
+							$filename = $id_user.$imageFileType;
+							$target_file = $target_dir .$filename;
+							move_uploaded_file($_FILES["avatar"]["tmp_name"], $target_file);
+							$update_data["avatar"] = $filename;
+						}
+					}
+					
+					//reviso si estoy tratando de actualizar
+					if($update_data != null){
+						if($update = $this->logging->updateProfileData($id_user, $update_data)){
+							$data['profile_content'] = $this->load->view('simple_success', array('heading' => 'Actualización realizada con éxito', 'message' => ''), TRUE);
+						}
+						else{
+							//TODO: traté de updatear y no funcó, mostrar error
+						}
+					}
+					else{
+						$data['profile_content'] = $this->load->view('profile_edit', $profile_data, TRUE);
+					}
+					break;
+				case 3:
+					//TODO: Enviar Mensaje
+					$data['profile_content'] ;
+					break;
+				case 4:
+					//TODO: Ver Publicaciones
+					$data['profile_content'] = $this->load->view('user_publications', NULL, TRUE);
+					break;
+				case 5:
+					//TODO: Ver Estadísticas
+					$data['profile_content'] ;
 					break;
 				default:
+					//TODO: Mensaje de error, esto no debería pasar
 					$data['profile_content'] = $this->load->view('about', NULL, TRUE);
 			}
 			$this->load->view('profile',$data);
@@ -317,6 +379,7 @@ class Main_controller extends CI_Controller{
 		$header_data = array('title' => 'Ver Publicaciones');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
+		//echo anchor('main_controller/user_publications/'.$profile_data["username"],'Ver Publicaciones.');
 		//TODO: Cargar publicaciones del usuario, pasarlas a la vista. Si el usuario no existe mostrar algo.
 		$this->load->view('footer');
 	}
