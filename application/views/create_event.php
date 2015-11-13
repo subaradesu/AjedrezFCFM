@@ -42,11 +42,11 @@
 					<label class="control-label col-sm-2" for="visibility">Tipo de Evento<span class="red-text">*</span>:</label>
 					<label class="control-label col-sm-2" for="visibility">Privado</label>
 					<div class="col-sm-1">
-						<input type="radio" name="visibility" class="form-control" id="visibility" value="private">
+						<input type="radio" name="visibility" class="form-control" id="visibility" value="private" data-toggle="tooltip" title="Se notificará sólo a los usuarios seleccionados.">
 					</div>
 					<label class="control-label col-sm-2" for="visibility">Público</label>
 					<div class="col-sm-1">
-						<input type="radio" name="visibility" class="form-control" id="visibility" value="public" checked="checked">
+						<input type="radio" name="visibility" class="form-control" id="visibility" value="public" checked="checked" data-toggle="tooltip" title="Se notificará a todos los usuarios.">
 					</div>
 				</div>
 				
