@@ -164,9 +164,9 @@
 							
 							$query = mysqli_query($link, $sql);
 							
-							while($result = mysqli_fetch_assoc($query)) :
+							while($user_found = mysqli_fetch_assoc($query)) :
 							?>
-							<option value="<?php echo $result["username"];?>"><?php echo $result["first_name"].' '.$result["last_name"]?></option>
+							<option value="<?php echo $user_found["username"];?>"><?php echo $user_found["first_name"].' '.$user_found["last_name"]?></option>
 							<?php
 							endwhile;
 							mysqli_close($link);

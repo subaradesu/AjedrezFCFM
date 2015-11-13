@@ -85,8 +85,15 @@ Class logging extends CI_model{
 		return $this->db->query($sql)->result_array();
 	}
 	
-	function getUsers(){
+	function getUsers($info = 'basic'){
+		if($info == 'admin'){
+			return $this->db->query("SELECT username, first_name, last_name, email, userStatus FROM user ORDER BY user.username ASC")->result_array();
+		}
 		return $this->db->query("SELECT username,first_name, last_name FROM user;")->result_array();
+	}
+	
+	function changeStatus($id_user, $new_status){
+		return $this->db->simple_query("UPDATE user SET userStatus='".$new_status."' WHERE user.username='".$id_user."'");
 	}
 	
 	function userLogin($username, $password){

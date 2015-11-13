@@ -14,6 +14,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function index(){
+		checkPermission(0);		
 		$data = array('title' => 'Inicio');
 		$this->load->view('header_board',$data);
 		$this->load->view('navbar');
@@ -22,6 +23,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function contact(){
+		checkPermission(0);
 		$header_data = array('title' => 'Contacto');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
@@ -30,6 +32,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function news(){
+		checkPermission(0);
 		$header_data = array('title' => 'Noticias');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
@@ -38,6 +41,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function about(){
+		checkPermission(0);
 		$header_data = array('title' => 'Historia');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
@@ -46,6 +50,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function links(){
+		checkPermission(0);
 		$header_data = array('title' => 'Enlaces');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
@@ -54,6 +59,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function search_user(){
+		checkPermission(1);
 		//TODO: revisar como hacer la búsqueda con GET
 		$this->load->library('form_validation');
 		$header_data = array('title' => 'Buscar Usuario');
@@ -74,6 +80,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function publish_new(){
+		checkPermission(3);
 		$this->load->library('form_validation');
 		$header_data = array('title' => 'Crear Noticia');
 		$this->load->view('header_general',$header_data);
@@ -123,7 +130,24 @@ class Main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
+	public function admin($action = 'none', $id_user = 0){
+		checkPermission(3);
+		$header_data = array('title' => 'Administrar');
+		$this->load->view('header_general',$header_data);
+		$this->load->view('navbar');
+		if($action == 'ban'){
+			$this->logging->changeStatus($id_user, 2);
+		}
+		elseif($action == 'unban'){
+			$this->logging->changeStatus($id_user, 1);
+		}
+		//TODO: Cargar vista de administración
+		$this->load->view('admin',array('users' => $this->logging->getUsers('admin')));
+		$this->load->view('footer');
+	}
+	
 	public function publish_event(){
+		checkPermission(3);
 		$this->load->library('form_validation');
 		$header_data = array('title' => 'Crear Evento');
 		$this->load->view('header_general',$header_data);
@@ -158,6 +182,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function publish_game(){
+		checkPermission(3);
 		$this->load->library('form_validation');
 		
 		$header_data = array('title' => 'Crear Partida');
@@ -169,6 +194,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function user_login(){
+		checkPermission(-1);
 		$data = array('title' => 'Ingresar');
 		$this->load->library('form_validation');
 		
@@ -213,6 +239,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function user_register(){
+		checkPermission(-1);
 		$this->load->library('form_validation');
 		
 		$this->load->view('header_log_reg', array('title' => 'Registro'));
@@ -253,6 +280,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function user_profile($id_user = 0, $profile_section = 1){
+		checkPermission(1);
 		//defino los datos que usarán las vistas
 		$profile_data = $this->logging->getProfileData($id_user);
 		$header_data = array('title' => 'Ver Perfil - '.$profile_data["first_name"].' '.$profile_data["last_name"]);
@@ -285,6 +313,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function user_publications($id_user = 0){
+		checkPermission(1);
 		$header_data = array('title' => 'Ver Publicaciones');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
@@ -293,6 +322,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function my_events(){
+		checkPermission(1);
 		$header_data = array('title' => 'Mis Eventos');
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
@@ -301,6 +331,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function view_event($id_event = 0){
+		checkPermission(1);
 		$header_data = array('title' => 'Ver Evento');
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
@@ -310,6 +341,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function view_new($id_new = 0){
+		checkPermission(0);
 		$header_data = array('title' => 'Ver Evento');
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
@@ -321,6 +353,36 @@ class Main_controller extends CI_Controller{
 			$this->load->view('simple_danger', array('heading' => '¡La noticia solicitada no existe!', 'message' => ''));
 		}
 			
+		$this->load->view('footer');
+	}
+	
+	public function access_denied($accessNeeded){
+		$header_data = array('title' => 'Acceso denegado');
+		$this->load->view('header_general',$header_data);
+		$this->load->view('navbar');
+		$data['title'] = '';
+		$data['message'] = '';
+		switch ($accessNeeded){
+			case -1:
+				$data['title'] = '¡Oops! Por alguna razón estás tratando de ingresar o registrarte cuando ya tienes una cuenta.';
+				$data['link1'] =  '<em>Why would you do that?</em>';
+				break;
+			case 1:
+				$data['title'] = '¡Oops! La página a la cual estás intentando acceder requiere una cuenta de usuario.';
+				$data['link1'] =  anchor("main_controller/user_register","Haz click aquí"). 'para crear una cuenta.';
+				break;
+			case 2:
+				$data['title'] = '¡Oops! La página solicitada no está disponible para ti pues te encuentras baneado.';
+				$data['link1'] =  anchor("main_controller/contact","Haz click aquí"). 'para contactar a los administradores y solucionar tu situación.';
+				break;
+			case 3:
+				$data['title'] = '¡Oops! La página a la que estás intentando acceder requiere permisos de administrador.';
+				$data['link1'] =  anchor("main_controller/user_login","Haz click aquí"). 'para acceder utilizando tu cuenta.';
+				break;
+			default:
+				//Esto no debería suceder
+		}
+		$this->load->view('access_denied',$data);
 		$this->load->view('footer');
 	}
 	

@@ -89,20 +89,20 @@
 			
 			$query = mysqli_query($link,$sql);
 			
-			while ($result = mysqli_fetch_assoc($query)) : ?>
+			while ($user_found = mysqli_fetch_assoc($query)) : ?>
 			
 			<tr>
-				<th><?php echo $result["username"];?></th>
-				<th><?php echo $result["first_name"];?></th>
-				<th><?php echo $result["last_name"];?></th>
-				<th><?php echo $result["email"];?></th>
-				<th><?php if ($result["userStatus"]==1){echo "Usuario Registrado";} elseif ($result["userStatus"]==2){echo "Usuario Baneado";} else {echo "Usuario Administrador";}?></th>
+				<th><?php echo $user_found["username"];?></th>
+				<th><?php echo $user_found["first_name"];?></th>
+				<th><?php echo $user_found["last_name"];?></th>
+				<th><?php echo $user_found["email"];?></th>
+				<th><?php if ($user_found["userStatus"]==1){echo "Usuario Registrado";} elseif ($user_found["userStatus"]==2){echo "Usuario Baneado";} else {echo "Usuario Administrador";}?></th>
 				
-				<th><a class="btn btn-lg btn-primary" href="profile.php<?php echo "?id_user=".$result["username"];?>">Perfil</a></th>
+				<th><a class="btn btn-lg btn-primary" href="profile.php<?php echo "?id_user=".$user_found["username"];?>">Perfil</a></th>
 				
-				<th><a class="btn btn-lg btn-primary" role="button" <?php echo $result["userStatus"]==2 ?  "Disabled" : 'href="admin.php?id_user='.$result["username"].'"';?>>Banear</a></th>
+				<th><a class="btn btn-lg btn-primary" role="button" <?php echo $user_found["userStatus"]==2 ?  "Disabled" : 'href="admin.php?id_user='.$user_found["username"].'"';?>>Banear</a></th>
 				
-				<th><a class="btn btn-lg btn-primary" href="user_publications.php?id_user=<?php echo $result["username"];?>" role="button">Publicaciones</a></th>
+				<th><a class="btn btn-lg btn-primary" href="user_publications.php?id_user=<?php echo $user_found["username"];?>" role="button">Publicaciones</a></th>
 			</tr>
 			
 			<?php endwhile;

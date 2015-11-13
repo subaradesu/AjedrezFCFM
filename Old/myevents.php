@@ -67,11 +67,11 @@
 					echo mysqli_error($link);
 				}
 				
-				while($result = mysqli_fetch_assoc($query)) : ?>
+				while($user_found = mysqli_fetch_assoc($query)) : ?>
 				<div class="alert alert-success">
-					<p><strong><?php echo $result["title"];?></strong></p>
-					<p><?php echo "El ".$result["date"]." en ".$result["location"]." a las ".$result["time"]; ?></p>
-					<p><?php echo $result["description"];?></p>
+					<p><strong><?php echo $user_found["title"];?></strong></p>
+					<p><?php echo "El ".$user_found["date"]." en ".$user_found["location"]." a las ".$user_found["time"]; ?></p>
+					<p><?php echo $user_found["description"];?></p>
 					<p>Confirmar Asistencia.<p>
 				</div>
 				<?php
@@ -102,14 +102,14 @@
 					echo mysqli_error($link);
 				}
 				
-				while($result = mysqli_fetch_assoc($query)) : ?>
+				while($user_found = mysqli_fetch_assoc($query)) : ?>
 				<div class="alert alert-success">
-					<p><strong><a href="viewevent.php?id_event=<?php echo $result["id_event"];?>"><?php echo $result["title"];?></a></strong></p>
-					<p><?php echo "El ".$result["date"]." en ".$result["location"]." a las ".$result["time"]; ?></p>
-					<p><?php echo $result["description"];?></p>
+					<p><strong><a href="viewevent.php?id_event=<?php echo $user_found["id_event"];?>"><?php echo $user_found["title"];?></a></strong></p>
+					<p><?php echo "El ".$user_found["date"]." en ".$user_found["location"]." a las ".$user_found["time"]; ?></p>
+					<p><?php echo $user_found["description"];?></p>
 					<p>
-						<a href="myevents.php?<?php echo "id_event=".$result["id_event"]."&r=Asistiré";?>">Asistiré</a> 
-						<a href="myevents.php?<?php echo "id_event=".$result["id_event"]."&r=No+Asistiré";?>">No Asistiré</a>
+						<a href="myevents.php?<?php echo "id_event=".$user_found["id_event"]."&r=Asistiré";?>">Asistiré</a> 
+						<a href="myevents.php?<?php echo "id_event=".$user_found["id_event"]."&r=No+Asistiré";?>">No Asistiré</a>
 					<p>
 				</div>
 				<?php

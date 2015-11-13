@@ -50,16 +50,16 @@
 	$query = mysqli_query($link, $sql);
 	
 	//guardo el resultado de la query, es a lo más una fila porque user es llave primaria
-	$result = mysqli_fetch_assoc($query);
+	$user_found = mysqli_fetch_assoc($query);
 	
 	//si el usuario existe importo sus datos para usarlos en el perfil
-	if(count($result)>0){
-		$user = $result["username"];
-		$first_name = $result["first_name"];
-		$last_name = $result["last_name"];
-		$sex = $result["sex"];
-		$avatar = $result["avatar"];
-		$status = $result["userStatus"];
+	if(count($user_found)>0){
+		$user = $user_found["username"];
+		$first_name = $user_found["first_name"];
+		$last_name = $user_found["last_name"];
+		$sex = $user_found["sex"];
+		$avatar = $user_found["avatar"];
+		$status = $user_found["userStatus"];
 	}
 	
 	mysqli_close($link);

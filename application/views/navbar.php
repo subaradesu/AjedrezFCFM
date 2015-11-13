@@ -59,6 +59,12 @@
 						<li><?php echo anchor("/main_controller/my_events", "Mis Eventos");?></li>
 						<?php endif;?>
 						
+						<?php if($this->session->isLogged && $this->session->permission==3) : ?>
+						
+						<li role="separator" class="divider"></li>
+						<li><?php echo anchor("/main_controller/admin", "Administrar");?></li>
+						<?php endif;?>
+						
 					</ul>
 					<li>
 						<?php echo anchor("/main_controller/user_logout", '<span class="glyphicon glyphicon-off"></span> Cerrar Sesión');?>

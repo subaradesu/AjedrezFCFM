@@ -63,10 +63,10 @@
 		
 		$query = mysqli_query($link,$sql);
 		
-		while ($result = mysqli_fetch_assoc($query)) : ?>
+		while ($user_found = mysqli_fetch_assoc($query)) : ?>
 		
 		<tr>
-			<th><a href="profile.php<?php echo "?id_user=".$result["username"];?>"><?php echo $result["first_name"].' '.$result["last_name"];?></a></th>
+			<th><a href="profile.php<?php echo "?id_user=".$user_found["username"];?>"><?php echo $user_found["first_name"].' '.$user_found["last_name"];?></a></th>
 		</tr>
 		
 		<?php endwhile;?>
