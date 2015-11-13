@@ -163,11 +163,11 @@ class Main_controller extends CI_Controller{
 		$this->form_validation->set_rules('visibility', 'Contenido', 'required');
 		if($this->form_validation->run()){
 			$title = $this->input->post('title');
-			$date = $this->input->post('title');
-			$location = $this->input->post('title');
-			$time = $this->input->post('title');
-			$description = $this->input->post('title');
-			$visibility = $this->input->post('title');
+			$date = $this->input->post('date');
+			$location = $this->input->post('location');
+			$time = $this->input->post('time');
+			$description = $this->input->post('description');
+			$visibility = $this->input->post('visibility');
 			$invited_list = $this->input->post('invited');
 			if($publish_try = $this->logging->createEvent($_SESSION["username"],$title, $date, $location, $time, $description, $visibility, $invited_list)){
 				$this->load->view('simple_success', array ('heading' => '¡El evento fue creado con éxito!', 'message' => 'Los usuarios invitados recibirán una notificación'));
@@ -401,7 +401,7 @@ class Main_controller extends CI_Controller{
 					}
 					//Si se subió una imagen
 					//checkeo a la mala si es una imagen y está subido
-					if(isset($_FILES["avatar"])){
+					if(isset($_FILES["avatar"]["tmp_name"]) && file_exists($_FILES["avatar"]["tmp_name"])){
 						if(!($check = getimagesize($_FILES["avatar"]["tmp_name"]))){
 							//no era imagen, mostrar error
 							$this->load->view('simple_danger', array('heading' => 'No se pudo subir el archivo', 'message' => 'No era una imagen'));
@@ -418,13 +418,13 @@ class Main_controller extends CI_Controller{
 							//la direccion donde se almacena el archivo, FCPATH es la carpeta base de CI
 							$target_dir = FCPATH."img/avatar/";
 							$imageFileType = pathinfo($_FILES["avatar"]["name"],PATHINFO_EXTENSION);
-							$filename = $id_user.$imageFileType;
+							$filename = $id_user.'.'.$imageFileType;
 							$target_file = $target_dir .$filename;
 							move_uploaded_file($_FILES["avatar"]["tmp_name"], $target_file);
 							$update_data["avatar"] = $filename;
 						}
+						
 					}
-					
 					//reviso si estoy tratando de actualizar
 					if($update_data != null){
 						if($update = $this->logging->updateProfileData($id_user, $update_data)){
@@ -440,15 +440,15 @@ class Main_controller extends CI_Controller{
 					break;
 				case 3:
 					//TODO: Enviar Mensaje
-					$data['profile_content'] ;
+					$data['profile_content'] = $this->load->view('simple_danger', array('heading' => '¡Lo sentimos!', 'message' => 'Por el momento esta sección no se encuentra implementada.'), TRUE);
 					break;
 				case 4:
 					//TODO: Ver Publicaciones
-					$data['profile_content'] = $this->load->view('user_publications', NULL, TRUE);
+					$data['profile_content'] = $this->load->view('simple_danger', array('heading' => '¡Lo sentimos!', 'message' => 'Por el momento esta sección no se encuentra implementada.'), TRUE);;
 					break;
 				case 5:
 					//TODO: Ver Estadísticas
-					$data['profile_content'] ;
+					$data['profile_content'] = $this->load->view('simple_danger', array('heading' => '¡Lo sentimos!', 'message' => 'Por el momento esta sección no se encuentra implementada.'), TRUE);;
 					break;
 				default:
 					//TODO: Mensaje de error, esto no debería pasar
@@ -475,6 +475,7 @@ class Main_controller extends CI_Controller{
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
 		//TODO: Cargar Eventos del usuario actual, pasarlos a la vista de eventos.
+		$this->load->view('my_events',$this->logging->getEvents($_SESSION["username"]));
 		$this->load->view('footer');
 	}
 	
@@ -484,7 +485,6 @@ class Main_controller extends CI_Controller{
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
 		//TODO: Visualizar la información del evento $id_event
-		
 		$this->load->view('footer');
 	}
 	

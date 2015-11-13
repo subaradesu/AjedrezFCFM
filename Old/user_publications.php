@@ -86,11 +86,11 @@
 				
 				$query = mysqli_query($link,$sql);
 				
-				while($user_found = mysqli_fetch_assoc($query)) :
+				while($private_event = mysqli_fetch_assoc($query)) :
 					//reviso cuales de estas publicaciones son noticias
 					$sql2 = "SELECT idNew, title, content, date
 						 	 FROM news
-						 	 WHERE idNew='".$user_found["id"]."'";
+						 	 WHERE idNew='".$private_event["id"]."'";
 					$query2=mysqli_query($link,$sql2);
 					//agrego cada noticia a la tabla
 					while($result2 = mysqli_fetch_assoc($query2)) : ?>

@@ -43,15 +43,15 @@
 		$query = mysqli_query($link, $sql);
 		
 		//guardo el resultado de la query, es a lo más una fila porque user es llave primaria
-		$user_found = mysqli_fetch_assoc($query);
+		$private_event = mysqli_fetch_assoc($query);
 		
 		//si el evento existe guardo sus datos
-		if(count($user_found)>0){
-			$title = $user_found["title"];
-			$description = $user_found["description"];
-			$date = $user_found["date"];
-			$time = $user_found["time"];
-			$location = $user_found["location"];
+		if(count($private_event)>0){
+			$title = $private_event["title"];
+			$description = $private_event["description"];
+			$date = $private_event["date"];
+			$time = $private_event["time"];
+			$location = $private_event["location"];
 		}
 		
 		mysqli_close($link);
@@ -106,11 +106,11 @@
 				//realizo la query
 				$query = mysqli_query($link, $sql);
 				
-				while($user_found = mysqli_fetch_assoc($query)) :?>
+				while($private_event = mysqli_fetch_assoc($query)) :?>
 				
 					<tr>
-						<th><a href="profile.php?id_user=<?php echo $user_found["username"];?>"><?php echo $user_found["first_name"].' '.$user_found["last_name"];?></a></th>
-						<th><?php echo $user_found["assistance"];?></th>
+						<th><a href="profile.php?id_user=<?php echo $private_event["username"];?>"><?php echo $private_event["first_name"].' '.$private_event["last_name"];?></a></th>
+						<th><?php echo $private_event["assistance"];?></th>
 					</tr>
 				
 				<?php

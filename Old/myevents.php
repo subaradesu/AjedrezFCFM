@@ -67,11 +67,11 @@
 					echo mysqli_error($link);
 				}
 				
-				while($user_found = mysqli_fetch_assoc($query)) : ?>
+				while($private_event = mysqli_fetch_assoc($query)) : ?>
 				<div class="alert alert-success">
-					<p><strong><?php echo $user_found["title"];?></strong></p>
-					<p><?php echo "El ".$user_found["date"]." en ".$user_found["location"]." a las ".$user_found["time"]; ?></p>
-					<p><?php echo $user_found["description"];?></p>
+					<p><strong><?php echo $private_event["title"];?></strong></p>
+					<p><?php echo "El ".$private_event["date"]." en ".$private_event["location"]." a las ".$private_event["time"]; ?></p>
+					<p><?php echo $private_event["description"];?></p>
 					<p>Confirmar Asistencia.<p>
 				</div>
 				<?php
@@ -102,14 +102,14 @@
 					echo mysqli_error($link);
 				}
 				
-				while($user_found = mysqli_fetch_assoc($query)) : ?>
+				while($private_event = mysqli_fetch_assoc($query)) : ?>
 				<div class="alert alert-success">
-					<p><strong><a href="viewevent.php?id_event=<?php echo $user_found["id_event"];?>"><?php echo $user_found["title"];?></a></strong></p>
-					<p><?php echo "El ".$user_found["date"]." en ".$user_found["location"]." a las ".$user_found["time"]; ?></p>
-					<p><?php echo $user_found["description"];?></p>
+					<p><strong><a href="viewevent.php?id_event=<?php echo $private_event["id_event"];?>"><?php echo $private_event["title"];?></a></strong></p>
+					<p><?php echo "El ".$private_event["date"]." en ".$private_event["location"]." a las ".$private_event["time"]; ?></p>
+					<p><?php echo $private_event["description"];?></p>
 					<p>
-						<a href="myevents.php?<?php echo "id_event=".$user_found["id_event"]."&r=Asistiré";?>">Asistiré</a> 
-						<a href="myevents.php?<?php echo "id_event=".$user_found["id_event"]."&r=No+Asistiré";?>">No Asistiré</a>
+						<a href="myevents.php?<?php echo "id_event=".$private_event["id_event"]."&r=Asistiré";?>">Asistiré</a> 
+						<a href="myevents.php?<?php echo "id_event=".$private_event["id_event"]."&r=No+Asistiré";?>">No Asistiré</a>
 					<p>
 				</div>
 				<?php

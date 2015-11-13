@@ -63,10 +63,10 @@
 		
 		$query = mysqli_query($link,$sql);
 		
-		while ($user_found = mysqli_fetch_assoc($query)) : ?>
+		while ($private_event = mysqli_fetch_assoc($query)) : ?>
 		
 		<tr>
-			<th><a href="profile.php<?php echo "?id_user=".$user_found["username"];?>"><?php echo $user_found["first_name"].' '.$user_found["last_name"];?></a></th>
+			<th><a href="profile.php<?php echo "?id_user=".$private_event["username"];?>"><?php echo $private_event["first_name"].' '.$private_event["last_name"];?></a></th>
 		</tr>
 		
 		<?php endwhile;?>

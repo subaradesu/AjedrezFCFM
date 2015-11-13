@@ -89,20 +89,20 @@
 			
 			$query = mysqli_query($link,$sql);
 			
-			while ($user_found = mysqli_fetch_assoc($query)) : ?>
+			while ($private_event = mysqli_fetch_assoc($query)) : ?>
 			
 			<tr>
-				<th><?php echo $user_found["username"];?></th>
-				<th><?php echo $user_found["first_name"];?></th>
-				<th><?php echo $user_found["last_name"];?></th>
-				<th><?php echo $user_found["email"];?></th>
-				<th><?php if ($user_found["userStatus"]==1){echo "Usuario Registrado";} elseif ($user_found["userStatus"]==2){echo "Usuario Baneado";} else {echo "Usuario Administrador";}?></th>
+				<th><?php echo $private_event["username"];?></th>
+				<th><?php echo $private_event["first_name"];?></th>
+				<th><?php echo $private_event["last_name"];?></th>
+				<th><?php echo $private_event["email"];?></th>
+				<th><?php if ($private_event["userStatus"]==1){echo "Usuario Registrado";} elseif ($private_event["userStatus"]==2){echo "Usuario Baneado";} else {echo "Usuario Administrador";}?></th>
 				
-				<th><a class="btn btn-lg btn-primary" href="profile.php<?php echo "?id_user=".$user_found["username"];?>">Perfil</a></th>
+				<th><a class="btn btn-lg btn-primary" href="profile.php<?php echo "?id_user=".$private_event["username"];?>">Perfil</a></th>
 				
-				<th><a class="btn btn-lg btn-primary" role="button" <?php echo $user_found["userStatus"]==2 ?  "Disabled" : 'href="admin.php?id_user='.$user_found["username"].'"';?>>Banear</a></th>
+				<th><a class="btn btn-lg btn-primary" role="button" <?php echo $private_event["userStatus"]==2 ?  "Disabled" : 'href="admin.php?id_user='.$private_event["username"].'"';?>>Banear</a></th>
 				
-				<th><a class="btn btn-lg btn-primary" href="user_publications.php?id_user=<?php echo $user_found["username"];?>" role="button">Publicaciones</a></th>
+				<th><a class="btn btn-lg btn-primary" href="user_publications.php?id_user=<?php echo $private_event["username"];?>" role="button">Publicaciones</a></th>
 			</tr>
 			
 			<?php endwhile;
