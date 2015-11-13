@@ -252,7 +252,7 @@ class Main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function user_profile($id_user = 0){
+	public function user_profile($id_user = 0, $profile_section = 1){
 		//defino los datos que usarán las vistas
 		$profile_data = $this->logging->getProfileData($id_user);
 		$header_data = array('title' => 'Ver Perfil - '.$profile_data["first_name"].' '.$profile_data["last_name"]);
@@ -268,7 +268,18 @@ class Main_controller extends CI_Controller{
 		else{
 			//si el usuario tiene un perfil asociado lo muestro
 			$profile_data["avatar"] = getAvatarPath($profile_data["avatar"]);
-			$this->load->view('profile',$profile_data);
+			$data['profile_data']= $profile_data;
+			//muestra la sección activa del perfil
+			$data['profile_section'] = $profile_section;
+			//define el contenido del perfil
+			switch ($profile_section){
+				case 2:
+					$data['profile_content'] = $this->load->view('edit_profile', array('username' => $id_user), TRUE);
+					break;
+				default:
+					$data['profile_content'] = $this->load->view('about', NULL, TRUE);
+			}
+			$this->load->view('profile',$data);
 		}
 		$this->load->view('footer');
 	}

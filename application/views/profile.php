@@ -4,14 +4,14 @@
 			<div class="col-sm-3">
 				<div class="profile-sidebar">
 					<div class="profile-userAvatar">
-						<img alt="avatar" src="<?php echo $avatar;?>">
+						<img alt="avatar" src="<?php echo $profile_data["avatar"];?>">
 					</div>
 					<div class="profile-userAbout">
 						<div class="profile-userAbout-name">
-							<?php echo $first_name.' '.$last_name;?>
+							<?php echo $profile_data["first_name"].' '.$profile_data["last_name"];?>
 						</div>
 						<div class="profile-userAbout-description">
-							<?php echo $username;?>
+							<?php echo $profile_data["username"];?>
 						</div>
 					</div>
 					<?php if(false) :?>
@@ -21,44 +21,37 @@
 					<?php endif;?>
 					<div class="profile-userMenu">
 						<ul class="nav">
-							<li class="active">
-								<a href="#">
-								<i class="glyphicon glyphicon-home"></i> Ver Perfil
-								</a>
+							<li class="<?php echo ($profile_section == 1 ? 'active' : '#');?>">
+								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/1', '<i class="glyphicon glyphicon-home"></i> Ver Perfil');?>
 							</li>
-							<?php if(isset($_SESSION["username"]) && $username == $_SESSION["username"]) : ?>
-							<li class="#">
-								<a href="#">
-								<i class="glyphicon glyphicon-edit"></i> Editar Información
-								</a>
+							<?php if(isset($_SESSION["username"]) && $profile_data["username"] == $_SESSION["username"]) : ?>
+							<li class="<?php echo ($profile_section == 2 ? 'active' : '#');?>">
+								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/2', '<i class="glyphicon glyphicon-edit"></i> Editar Información');?>
 							</li>
 							<?php else : ?>
-							<li>
-								<a href="#">
-								<i class="glyphicon glyphicon-envelope"></i> Contactar</a>
+							<li class="<?php echo ($profile_section == 3 ? 'active' : '#');?>">
+								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/3', '<i class="glyphicon glyphicon-envelope"></i> Contactar');?>
 							</li>
-							
 							<?php endif;?>
-							<li>
-								<a href="#">
-								<i class="glyphicon glyphicon-flag"></i> Ver Publicaciones</a>
+							<li class="<?php echo ($profile_section == 4 ? 'active' : '#');?>">
+								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/4', '<i class="glyphicon glyphicon-flag"></i> Ver Publicaciones');?>
 							</li>
-							<li>
-								<a href="#">
-								<i class="glyphicon glyphicon-stats"></i> Estadísticas</a>
+							<li class="<?php echo ($profile_section == 5 ? 'active' : '#');?>">
+								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/5', '<i class="glyphicon glyphicon-stats"></i> Estadísticas');?>
 							</li>
 						</ul>
 					</div>
 				</div>
 			</div>
 			<div class="col-sm-9">
-				<?php if($userStatus == 2) : ?>
+				<?php if($profile_data["userStatus"] == 2) : ?>
 				<div class="alert alert-danger">
 					<strong>El dueño de esta cuenta se encuentra baneado!</strong> si lo conoces pídele que se contacte con nosotros para solucionar su situación.
 				</div>
 				<?php endif;?>
 		    	<div class="profile-content">
-					<?php echo anchor('main_controller/user_publications/'.$username,'Ver Publicaciones.');?>
+		    		<?php echo ($profile_content);?>
+					<?php echo anchor('main_controller/user_publications/'.$profile_data["username"],'Ver Publicaciones.');?>
 				</div>
 			</div>
 		</div>
