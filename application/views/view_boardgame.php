@@ -14,7 +14,7 @@
 new PgnViewer({ boardName: "demo",  
     <?php 
     if($data_boardgame["format"]==0){
-    	echo "pgnFile: '/var/www/AjedrezFCFM/boards/".$data_boardgame["pgn_board"]."',";
+    	echo "pgnFile: 'pgn/Kramnik - Annotated Chess Games.pgn',";
     }
     else{
     	echo "pgnString: '".$data_boardgame["pgn_string"]."'";
