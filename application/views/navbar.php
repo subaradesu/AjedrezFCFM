@@ -26,7 +26,7 @@
 					</li>
 					<li><?php echo anchor("/main_controller/about", "Historia");?></li>
 					<li><?php echo anchor("/main_controller/links", "Enlaces");?></li>
-					<li><?php echo anchor("/main_controller/search_user", "Buscar Usuario");?></li>
+					<li><?php echo anchor("/user_controller/search_user", "Buscar Usuario");?></li>
 					<?php if($this->session->isLogged && $this->session->permission==3):?>
 					<li class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Publicar

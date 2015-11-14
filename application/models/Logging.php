@@ -116,14 +116,6 @@ Class logging extends CI_model{
 		return $result->num_rows() == 1? $result->first_row('array') : 0;
 	}
 	
-	function searchUser($search_term, $search_category){
-		$sql = $sql = "	SELECT username, first_name, last_name
-						FROM user
-						WHERE ".$search_category." LIKE '%".$search_term."%'
-						ORDER BY user.".$search_category." ASC";;
-		return $this->db->query($sql)->result_array();
-	}
-	
 	function getUsers($info = 'basic'){
 		if($info == 'admin'){
 			return $this->db->query("SELECT username, first_name, last_name, email, userStatus FROM user ORDER BY user.username ASC")->result_array();

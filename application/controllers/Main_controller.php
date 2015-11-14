@@ -63,27 +63,6 @@ class Main_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function search_user(){
-		checkPermission(1);
-		//TODO: revisar como hacer la búsqueda con GET
-		$this->load->library('form_validation');
-		$header_data = array('title' => 'Buscar Usuario');
-		$this->load->view('header_general', $header_data);
-		$this->load->view('navbar');
-		
-		$this->form_validation->set_rules('search', 'Término de Búsqueda', 'required');
-		if(!$this->form_validation->run()){
-			$this->load->view('search_user_panel');
-		}
-		else{
-			$search_term = $this->input->post('search');
-			$search_category = $this->input->post('searchby');
-			$search_result = $this->logging->searchUser($search_term, $search_category);
-			$this->load->view('search_results', array('search_result' => $search_result));
-		}
-		$this->load->view('footer');
-	}
-	
 	public function publish_new(){
 		checkPermission(3);
 		$this->load->library('form_validation');

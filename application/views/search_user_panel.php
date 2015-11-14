@@ -3,7 +3,7 @@
 			<h1>Buscador:</h1>
 		</div>
 		<div>
-			<?php echo form_open('main_controller/search_user', array('class' => 'form-horizontal'));?>
+			<?php echo form_open('user_controller/search_user', array('class' => 'form-horizontal'));?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="search">Termino</label>
 					<div class="col-sm-10">

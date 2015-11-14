@@ -1,7 +1,6 @@
 	
 	<?php $event = $event[0];?>
-			
-	</div>		
+				
 	<div id="content">
 		<div class=page-header>
 			<h1>Evento "<?php echo $event["title"];?>"</h1>
