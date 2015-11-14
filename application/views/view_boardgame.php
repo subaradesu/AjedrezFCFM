@@ -14,13 +14,13 @@
 new PgnViewer({ boardName: "demo",  
     <?php 
     if($data_boardgame["format"]==0){
-    	echo "pgnFile: 'pgn/Kramnik - Annotated Chess Games.pgn',";
+    	echo "pgnFile: '/AjedrezFCFM/boards/".$data_boardgame["pgn_board"]."',";/*.$data_boardgame["pgn_board"]."',";*/
     }
     else{
     	echo "pgnString: '".$data_boardgame["pgn_string"]."'";
     }
     ?>
-    pieceSet: 'leipzig',   
+    pieceSet: 'kingdom',   
     pieceSize: 46  
   }  
 );  
@@ -54,7 +54,7 @@ new PgnViewer({ boardName: "demo",
 			<tr >
 				<th class"col-sm-offset-2">Tablero:</th>
 				<td><div id="demo-container"></div>  
-				<div id="demo-moves"></div> 
+				<!--div id="demo-moves"></div--> 
 				</td>
 			</tr>	
 
