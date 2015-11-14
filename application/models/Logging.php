@@ -36,10 +36,6 @@ Class logging extends CI_model{
 	function getBoardgame($idBoard){
 		return $this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
 	}
-	
-	function getBoardgame($idBoard){
-		return $this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
-	}
 
 	function getNews(){
 		return $this->db->query("SELECT * FROM news;")->result_array();
