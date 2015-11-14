@@ -47,6 +47,8 @@ class User_controller extends CI_Controller{
 				else{
 					$this->load->view('simple_success', array(	'heading' => '¡Ingreso Exitoso!',
 							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. Disfruta tu estadía.'));
+					$this->load->view('header_board', $data);
+					$this->load->view('home');
 				}
 			}
 			else{
