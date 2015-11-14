@@ -303,8 +303,14 @@ class Main_controller extends CI_Controller{
 				$this->session->last_log = $logtry->update_time;
 				$this->load->view('navbar');
 				//mensaje de bienvenida
-				$this->load->view('simple_success', array(	'heading' => '¡Ingreso Exitoso!',
-															'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. Disfruta tu estadía.'));
+				if($_SESSION["permission"] == 2){
+					$this->load->view('simple_danger', array(	'heading' => 'Ingreso Exitoso...',
+							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. <p>Al parecer tu cuenta se encuentra baneada, contáctate con los administradores para solucionar tu situación. Por ahora tienes acceso limitado al sitio.</p>'));
+				}
+				else{
+					$this->load->view('simple_success', array(	'heading' => '¡Ingreso Exitoso!',
+							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. Disfruta tu estadía.'));
+				}
 			}
 			else{
 				$this->load->view('navbar');
@@ -411,7 +417,7 @@ class Main_controller extends CI_Controller{
 					}
 					if(($password = $this->input->post('password')) != null){
 						//TODO: revisar restricciones para la nueva contraseña (?)
-						$update_data["email"]=$password;
+						$update_data["password"]=$password;
 					}
 					//Si se subió una imagen
 					//checkeo a la mala si es una imagen y está subido
@@ -499,6 +505,12 @@ class Main_controller extends CI_Controller{
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
 		//TODO: Visualizar la información del evento $id_event
+		if($data_event = $this->logging->getEvent($id_event)){
+			$this->load->view('view_event', array('event' => $data_event));
+		}
+		else{
+			$this->load->view('simple_danger', array('heading' => '¡El evento solicitado no existe!', 'message' => ''));
+		}	
 		$this->load->view('footer');
 	}
 	
@@ -513,8 +525,7 @@ class Main_controller extends CI_Controller{
 		}
 		else{
 			$this->load->view('simple_danger', array('heading' => '¡La noticia solicitada no existe!', 'message' => ''));
-		}
-			
+		}	
 		$this->load->view('footer');
 	}
 	

@@ -135,6 +135,10 @@ Class logging extends CI_model{
 		return $this->db->simple_query("UPDATE user SET userStatus='".$new_status."' WHERE user.username='".$id_user."'");
 	}
 	
+	function getEvent($id_event){
+		return $this->db->query("SELECT * FROM event WHERE publication_idPublication='".$id_event."';")->result_array();
+	}
+	
 	function getEvents($id_user){
 		$result['private_events'] = $this->db->query("SELECT * FROM invitedList AS il, event WHERE il.invited_username='".$id_user."' AND il.idevent=event.publication_idPublication")->result_array();
 		$result['public_events'] = $this->db->query("SELECT * FROM event WHERE event.visibility='public'")->result_array();
