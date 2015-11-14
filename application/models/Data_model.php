@@ -72,8 +72,9 @@ Class data_model extends CI_model{
 	
 	function createGame($publisher, $title, $white, $black, $origin, $content, $format, $filename, $stringpgn){
 		//comenzar transacción
-		$title = $this->db->escape_str($title);
 		$game_attr = array(
+				$publisher,
+				$this->db->escape_str($title),
 				$this->db->escape_str($white),
 				$this->db->escape_str($black),
 				$this->db->escape_str($origin),
@@ -83,14 +84,16 @@ Class data_model extends CI_model{
 				$this->db->escape_str($stringpgn));
 		$this->db->trans_start();
 		//Creo una nueva publicacion
-		$this->db->query("INSERT INTO matchboard (white_player,
+		$this->db->query("INSERT INTO matchboard (uploader,
+											title,
+											white_player,
 											black_player,
 											match_origin,
 											details,
 											format,
 											pgn_board,
 											pgn_string)
-						VALUES (?,?,?,?,?,?,?);", $game_attr);
+						VALUES (?,?,?,?,?,?,?,?,?);", $game_attr);
 		//termina la transacción
 		$this->db->trans_complete();
 		return $this->db->trans_status();

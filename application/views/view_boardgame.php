@@ -17,10 +17,10 @@ new PgnViewer({ boardName: "demo",
     	echo "pgnFile: '/AjedrezFCFM/boards/".$data_boardgame["pgn_board"]."',";/*.$data_boardgame["pgn_board"]."',";*/
     }
     else{
-    	echo "pgnString: '".$data_boardgame["pgn_string"]."'";
+    	echo "pgnString: '".$data_boardgame["pgn_string"]."',";
     }
     ?>
-    pieceSet: 'kingdom',   
+    pieceSet: 'merida',   
     pieceSize: 46  
   }  
 );  
@@ -30,10 +30,10 @@ new PgnViewer({ boardName: "demo",
 		<div class=page-header>
 			<h1>Partida:</h1>
 		</div>
-		<table width="100%">
+		<table class="table table-hover">
 			<tr >
 				<th class"col-sm-offset-2">Título:</th>
-				<td class"col-sm-offset-10">Partida de Prueba</td>
+				<td class"col-sm-offset-10"><?php echo($data_boardgame["title"]);?></td>
 			</tr>
 			<tr >
 				<th class"col-sm-offset-2">Blancas:</th>
@@ -45,7 +45,18 @@ new PgnViewer({ boardName: "demo",
 			</tr>
 			<tr >
 				<th class"col-sm-offset-2">Origen:</th>
-				<td class"col-sm-offset-10"><?php echo($data_boardgame["match_origin"]);?></td>
+				<td class"col-sm-offset-10">
+				<?php 
+				switch($data_boardgame["match_origin"]){
+					case 0: echo "Partida didáctica (Libro)"; break;
+					case 1: echo "Campeonato Internacional"; break;
+					case 2: echo "Campeonato Nacional"; break;
+					case 3: echo "TIF Interfacultades"; break;
+					case 4: echo "Torneo FCFM"; break;
+					case 5: echo "Amistoso"; break;
+					case 6: echo "Otro"; break;
+				}?>
+				</td>
 			</tr>	
 			<tr >
 				<th class"col-sm-offset-2">Detalles:</th>
@@ -53,8 +64,8 @@ new PgnViewer({ boardName: "demo",
 			</tr>	
 			<tr >
 				<th class"col-sm-offset-2">Tablero:</th>
-				<td><div id="demo-container"></div>  
-				<!--div id="demo-moves"></div--> 
+				<td class"col-sm-offset-10"><div id="demo-container"></div>  
+				<!--div id="demo-moves"></div--> <?php $data_boardgame["pgn_string"]; ?>
 				</td>
 			</tr>	
 

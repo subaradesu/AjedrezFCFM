@@ -150,28 +150,25 @@ class Publication_controller extends CI_Controller{
 				if($fileType != "pgn") {
 					$uploadOk = 0;
 				}
-				// Check if $uploadOk is set to 0 by an error
-				if ($uploadOk == 0) {
-					echo "Sorry, your file was not uploaded.";
-					// if everything is ok, try to upload file
-				}
+				
 				else{
 					if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_fullpath)) {
-						echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+						$uploadOk = 1;
 					}
 					else {
-						echo "Sorry, there was an error uploading your file.";
+						$uploadOk = 0;
 					}
 				}
 			}
 			else {
 				$stringpgn = $this->input->post('textToUpload');
+				$uploadOk = 1;
 			}
-			if($publish_try = $this->data_model->createGame($_SESSION["username"],$title, $white, $black, $origin, $content, $format, $filename, $stringpgn)){
+			if($uploadOk == 1 && $publish_try = $this->data_model->createGame($_SESSION["username"],$title, $white, $black, $origin, $content, $format, $filename, $stringpgn)){
 				$this->load->view('simple_success', array ('heading' => '¡La partida fue creada con éxito!', 'message' => ''));
 				//$this->output->set_header('refresh:5;url='.$this->);
 			}
-			else{
+			else{// Check if $uploadOk is set to 0 by an error
 				$this->load->view('simple_danger', array('heading' => 'La partida no pudo ser creada', 'message' => ''));
 				$this->load->view('create_game', array('users' => $this->data_model->getUsers()));
 			}
