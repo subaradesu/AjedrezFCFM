@@ -12,7 +12,7 @@
 				<tbody>
 				<?php foreach ($search_result as $user_found) :?>
 					<tr>
-						<th><?php echo anchor('main_controller/user_profile/'.$user_found["username"], $user_found["first_name"].' '.$user_found["last_name"]);?></th>
+						<th><?php echo anchor('user_controller/user_profile/'.$user_found["username"], $user_found["first_name"].' '.$user_found["last_name"]);?></th>
 					</tr>
 				<?php endforeach;?>
 				</tbody>

@@ -32,17 +32,17 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Publicar
 							<span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><?php echo anchor("/main_controller/publish_new", "Noticia");?></li>
-							<li><?php echo anchor("/main_controller/publish_event", "Evento");?></li>
-							<li><?php echo anchor("/main_controller/publish_game", "Partida");?></li>
+							<li><?php echo anchor("/publication_controller/publish_new", "Noticia");?></li>
+							<li><?php echo anchor("/publication_controller/publish_event", "Evento");?></li>
+							<li><?php echo anchor("/publication_controller/publish_game", "Partida");?></li>
 						</ul>
 					<?php endif;?>
 					<li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php if(!$this->session->isLogged) : ?>
-					<li><?php echo anchor("/main_controller/user_login", '<span class="glyphicon glyphicon-log-in"></span> Ingresar');?></li>
-					<li><?php echo anchor("/main_controller/user_register", '<span class="glyphicon glyphicon-user"></span> Registro');?></li>
+					<li><?php echo anchor("/user_controller/user_login", '<span class="glyphicon glyphicon-log-in"></span> Ingresar');?></li>
+					<li><?php echo anchor("/user_controller/user_register", '<span class="glyphicon glyphicon-user"></span> Registro');?></li>
 					<?php else : ?>
 					
 					<li><a>Bievenid<?php echo ($_SESSION["sex"]==2 ? 'a' : 'o').', '.$_SESSION["first_name"];?></a></li>
@@ -50,29 +50,28 @@
 						<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Mi Cuenta
 						<span class="glyphicon glyphicon-cog"></span></a>
 					<ul class="dropdown-menu">
-						<li><?php echo anchor("/main_controller/user_profile/".$_SESSION['username'], "Mi Perfil");?></li>
+						<li><?php echo anchor("/user_controller/user_profile/".$_SESSION['username'], "Mi Perfil");?></li>
 						<li class="disabled"><a>Preferencias</a></li>
 						<li class="disabled"><a>Historial</a></li>
 						<?php if($this->session->permission!=2) : ?>
 						
 						<li role="separator" class="divider"></li>
-						<li><?php echo anchor("/main_controller/my_events", "Mis Eventos");?></li>
+						<li><?php echo anchor("/publication_controller/my_events", "Mis Eventos");?></li>
 						<?php endif;?>
 						
 						<?php if($this->session->isLogged && $this->session->permission==3) : ?>
 						
 						<li role="separator" class="divider"></li>
-						<li><?php echo anchor("/main_controller/admin", "Administrar");?></li>
-						<li><?php echo anchor("/main_controller/close", "Cerrar Acceso");?></li>
+						<li><?php echo anchor("/user_controller/admin", "Administrar");?></li>
+						<li><?php echo anchor("/user_controller/close", "Cerrar Acceso");?></li>
 						<?php endif;?>
 						
 					</ul>
 					<li>
-						<?php echo anchor("/main_controller/user_logout", '<span class="glyphicon glyphicon-off"></span> Cerrar Sesión');?>
+						<?php echo anchor("/user_controller/user_logout", '<span class="glyphicon glyphicon-off"></span> Cerrar Sesión');?>
 						
 					</li>
 					<?php endif; ?>
-					
 				</ul>
 			</div>
 		</div>

@@ -28,16 +28,16 @@
 						<th><?php echo $user_found["email"];?></th>
 						<th><?php if ($user_found["userStatus"]==1){echo "Usuario Registrado";} elseif ($user_found["userStatus"]==2){echo "Usuario Baneado";} else {echo "Usuario Administrador";}?></th>
 						
-						<th><?php echo anchor('main_controller/user_profile/'.$user_found["username"], 'Perfil', array('class' => 'btn btn-lg btn-primary') )?></th>
+						<th><?php echo anchor('user_controller/user_profile/'.$user_found["username"], 'Perfil', array('class' => 'btn btn-lg btn-primary') )?></th>
 						
 						<?php if ($user_found["userStatus"]==2) :?>
-						<th><a class="btn btn-lg btn-primary" role="button" <?php echo 'href="'.base_url('index.php/main_controller/admin/unban').'/'.$user_found["username"].'"';?>>Desbanear</a></th>
+						<th><a class="btn btn-lg btn-primary" role="button" <?php echo 'href="'.base_url('index.php/user_controller/admin/unban').'/'.$user_found["username"].'"';?>>Desbanear</a></th>
 						<?php elseif ($user_found["userStatus"]==1) : ?>
-						<th><a class="btn btn-lg btn-primary" role="button" <?php echo 'href="'.base_url('index.php/main_controller/admin/ban').'/'.$user_found["username"].'"';?>>Banear</a></th>
+						<th><a class="btn btn-lg btn-primary" role="button" <?php echo 'href="'.base_url('index.php/user_controller/admin/ban').'/'.$user_found["username"].'"';?>>Banear</a></th>
 						<?php else : ?>
 						<th></th>
 						<?php endif;?>
-						<th><?php echo anchor('main_controller/user_publications/'.$user_found["username"], 'Ver Publicaciones', array('class' => 'btn btn-lg btn-primary') )?></th>
+						<th><?php echo anchor('user_controller/user_publications/'.$user_found["username"], 'Ver Publicaciones', array('class' => 'btn btn-lg btn-primary') )?></th>
 						
 					</tr>
 			<?php endforeach;?>

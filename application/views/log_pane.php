@@ -1,5 +1,5 @@
 	<div id="content">
-		<?php echo form_open('main_controller/user_login', array('class' => 'form-signin'));?>
+		<?php echo form_open('user_controller/user_login', array('class' => 'form-signin'));?>
 			<h2 class="form-signin-header"> Ingresar </h2>
 			
 			<label for="inputUsername" class="sr-only">Nombre de Usuario</label>
@@ -12,6 +12,6 @@
 				</label>
 			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
-			<p>¿Aún no tienes cuenta? <?php echo anchor("/main_controller/user_register", "Regístrate aquí.");?></p>
+			<p>¿Aún no tienes cuenta? <?php echo anchor("/user_controller/user_register", "Regístrate aquí.");?></p>
 		</form>
 	</div>

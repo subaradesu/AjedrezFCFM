@@ -22,22 +22,22 @@
 					<div class="profile-userMenu">
 						<ul class="nav">
 							<li class="<?php echo ($profile_section == 1 ? 'active' : '#');?>">
-								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/1', '<i class="glyphicon glyphicon-home"></i> Ver Perfil');?>
+								<?php echo anchor('user_controller/user_profile/'.$profile_data["username"].'/1', '<i class="glyphicon glyphicon-home"></i> Ver Perfil');?>
 							</li>
 							<?php if(isset($_SESSION["username"]) && $profile_data["username"] == $_SESSION["username"]) : ?>
 							<li class="<?php echo ($profile_section == 2 ? 'active' : '#');?>">
-								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/2', '<i class="glyphicon glyphicon-edit"></i> Editar Información');?>
+								<?php echo anchor('user_controller/user_profile/'.$profile_data["username"].'/2', '<i class="glyphicon glyphicon-edit"></i> Editar Información');?>
 							</li>
 							<?php else : ?>
 							<li class="<?php echo ($profile_section == 3 ? 'active' : '#');?>">
-								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/3', '<i class="glyphicon glyphicon-envelope"></i> Contactar');?>
+								<?php echo anchor('user_controller/user_profile/'.$profile_data["username"].'/3', '<i class="glyphicon glyphicon-envelope"></i> Contactar');?>
 							</li>
 							<?php endif;?>
 							<li class="<?php echo ($profile_section == 4 ? 'active' : '#');?>">
-								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/4', '<i class="glyphicon glyphicon-flag"></i> Ver Publicaciones');?>
+								<?php echo anchor('user_controller/user_profile/'.$profile_data["username"].'/4', '<i class="glyphicon glyphicon-flag"></i> Ver Publicaciones');?>
 							</li>
 							<li class="<?php echo ($profile_section == 5 ? 'active' : '#');?>">
-								<?php echo anchor('main_controller/user_profile/'.$profile_data["username"].'/5', '<i class="glyphicon glyphicon-stats"></i> Estadísticas');?>
+								<?php echo anchor('user_controller/user_profile/'.$profile_data["username"].'/5', '<i class="glyphicon glyphicon-stats"></i> Estadísticas');?>
 							</li>
 						</ul>
 					</div>

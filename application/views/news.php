@@ -14,7 +14,7 @@
 				<tbody>
 				<?php foreach ($publications as $new) :?>
 					<tr>
-						<th><?php echo anchor('main_controller/view_new/'.$new["idNew"], $new["title"]);?></th>
+						<th><?php echo anchor('publication_controller/view_new/'.$new["idNew"], $new["title"]);?></th>
 						<th><?php echo $new["content"];?></th>
 						<th><?php echo $new["date"];?></th>
 					</tr>

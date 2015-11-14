@@ -28,7 +28,7 @@
 		</div>
 		<div class="col-sm-12">
 			<!--form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data"-->
-			<?php echo form_open_multipart('main_controller/publish_game/', array('class' => 'form-horizontal', 'role' => 'form'));?>
+			<?php echo form_open_multipart('publication_controller/publish_game/', array('class' => 'form-horizontal', 'role' => 'form'));?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">

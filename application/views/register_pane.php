@@ -18,6 +18,6 @@
 			<input type="email" id="inputEmail" name="email" class="form-control" placeholder="Correo Electrónico" required>
 			
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Registrar</button>
-			<p>¿Ya estás registrado? <?php echo anchor("/main_controller/user_login", "Ingresa aquí.");?></p>
+			<p>¿Ya estás registrado? <?php echo anchor("/user_controller/user_login", "Ingresa aquí.");?></p>
 		</form>
 	</div>

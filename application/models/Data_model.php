@@ -1,5 +1,6 @@
 <?php
-Class logging extends CI_model{
+Class data_model extends CI_model{
+	/*Modelo para acceder de manera uniforme a la base de datos.*/
 	
 	function __construct(){
 		parent::__construct();
@@ -13,7 +14,7 @@ Class logging extends CI_model{
 		$this->db->query(	"INSERT INTO publication
 							VALUES (null);");
 		$imageFilename = $this->db->insert_id().'.'.$imageType;
-		
+	
 		//guardo la ID en @publication_id
 		$this->db->query("	SELECT LAST_INSERT_ID()
 							INTO @publication_id;");
@@ -25,20 +26,20 @@ Class logging extends CI_model{
 							VALUES (@publication_id, '".$title."', NOW(), '".$content."', '".$imageFilename."', '".$category."');");
 		//termina la transacción
 		$this->db->trans_complete();
-		
+	
 		return $this->db->trans_status() ? $imageFilename : 0;
 	}
 	
-	function getNew($idNew){
-		return $this->db->query("SELECT * FROM news WHERE idNew='".$idNew."'")->first_row('array');
+	function getPublications($id_user){
+		$result["events"] = $this->db->query("SELECT * FROM event, userpublication WHERE userpublication.user_username='".$id_user."' AND userpublication.publication_idPublication=event.publication_idPublication;")->result_array();
+		$result["news"] = $this->db->query("SELECT * FROM news, userpublication WHERE userpublication.user_username='".$id_user."' AND userpublication.publication_idPublication=news.idNew;")->result_array();
+		//$result["games"] = $this->db->query();
+		//$result["comments"] = $this->db->query();
+		return $result;
 	}
 	
-	function getBoardgame($idBoard){
-		return $this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
-	}
-
-	function getNews(){
-		return $this->db->query("SELECT * FROM news;")->result_array();
+	public function deletePublication($id_publication){
+		return $this->db->simple_query("DELETE FROM publication WHERE idPublication='".$id_publication."';");
 	}
 	
 	function createEvent($publisher, $title, $date, $location, $time, $description, $visibility, $invited_list){
@@ -65,34 +66,61 @@ Class logging extends CI_model{
 		}
 		//termina la transacción
 		$this->db->trans_complete();
-		
+	
 		return $this->db->trans_status();
 	}
-
+	
 	function createGame($publisher, $title, $white, $black, $origin, $content, $format, $filename, $stringpgn){
 		//comenzar transacción
 		$title = $this->db->escape_str($title);
 		$game_attr = array(
-			$this->db->escape_str($white), 
-			$this->db->escape_str($black), 
-			$this->db->escape_str($origin), 
-			$this->db->escape_str($content),
-			$this->db->escape_str($format),
-			$this->db->escape_str($filename),
-			$this->db->escape_str($stringpgn));
+				$this->db->escape_str($white),
+				$this->db->escape_str($black),
+				$this->db->escape_str($origin),
+				$this->db->escape_str($content),
+				$this->db->escape_str($format),
+				$this->db->escape_str($filename),
+				$this->db->escape_str($stringpgn));
 		$this->db->trans_start();
 		//Creo una nueva publicacion
 		$this->db->query("INSERT INTO matchboard (white_player,
-											black_player, 
-											match_origin, 
-											details, 
-											format, 
-											pgn_board, 
+											black_player,
+											match_origin,
+											details,
+											format,
+											pgn_board,
 											pgn_string)
 						VALUES (?,?,?,?,?,?,?);", $game_attr);
 		//termina la transacción
-		$this->db->trans_complete();	
+		$this->db->trans_complete();
 		return $this->db->trans_status();
+	}
+	
+	function searchUser($search_term, $search_category){
+		$sql = $sql = "	SELECT username, first_name, last_name
+						FROM user
+						WHERE ".$search_category." LIKE '%".$search_term."%'
+						ORDER BY user.".$search_category." ASC";;
+		return $this->db->query($sql)->result_array();
+	}
+	
+	function getUsers($info = 'basic'){
+		if($info == 'admin'){
+			return $this->db->query("SELECT username, first_name, last_name, email, userStatus FROM user ORDER BY user.username ASC")->result_array();
+		}
+		return $this->db->query("SELECT username,first_name, last_name FROM user;")->result_array();
+	}
+	
+	function getNew($idNew){
+		return $this->db->query("SELECT * FROM news WHERE idNew='".$idNew."'")->first_row('array');
+	}
+	
+	function getBoardgame($idBoard){
+		return $this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
+	}
+
+	function getNews(){
+		return $this->db->query("SELECT * FROM news;")->result_array();
 	}
 	
 	function updateProfileData($id_user, $update_data){
@@ -114,13 +142,6 @@ Class logging extends CI_model{
 		$result = $this->db->query($sql);
 
 		return $result->num_rows() == 1? $result->first_row('array') : 0;
-	}
-	
-	function getUsers($info = 'basic'){
-		if($info == 'admin'){
-			return $this->db->query("SELECT username, first_name, last_name, email, userStatus FROM user ORDER BY user.username ASC")->result_array();
-		}
-		return $this->db->query("SELECT username,first_name, last_name FROM user;")->result_array();
 	}
 	
 	function changeStatus($id_user, $new_status){

@@ -7,7 +7,7 @@
 			<p>Los campos con <span class="red-text">*</span> son obligatorios.</p>
 		</div>
 		<div class="col-sm-12">
-			<?php echo form_open_multipart('main_controller/publish_new/', array('class' => 'form-horizontal'));?>
+			<?php echo form_open_multipart('publication_controller/publish_new/', array('class' => 'form-horizontal'));?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
