@@ -6,7 +6,7 @@
 			<p>Banear al usuario <?php echo $first_name.' '.$last_name;?> durante cierto periodo.</p>
 		</div>
 		<div class="col-sm-12">
-			<?php echo form_open('main_controller/close/', array('class' => 'form-horizontal'));?>
+			<?php echo form_open('user_controller/ban_user/'.$username, array('class' => 'form-horizontal'));?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="cause">Razón<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
@@ -22,12 +22,12 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="dateuntil">Hasta<span class="red-text">*</span>:</label>
 					<div class="col-sm-8" >
-						<input name="dateuntil" id="dateuntil" type="type" class="form-control" placeholder="Fecha y hora a la cual se abre la plataforma. Formato: dd-MM-yyyy hh:mm">
+						<input name="dateuntil" id="dateuntil" type="type" class="form-control" placeholder="Fecha y hora a la cual termina el baneo. Formato: dd-MM-yyyy hh:mm">
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-default">Cerrar Acceso</button>
+					<button type="submit" class="btn btn-default">Banear</button>
 					</div>
 				</div>
 			</form>

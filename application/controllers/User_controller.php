@@ -280,7 +280,7 @@ class User_controller extends CI_Controller{
 				$this->load->view('simple_success', array('heading' => 'La publicación fue borrada con éxito', 'message' => ''));
 			}
 			else{
-				
+				dangerView('La publicación no se pudo borrar','');
 			}
 		}
 		$this->load->view('user_publications', $this->data_model->getPublications($id_user));
@@ -314,7 +314,10 @@ class User_controller extends CI_Controller{
 		$header_data = array('title' => 'Banear Usuario');
 		$this->load->view('header_general', $header_data);
 		$this->load->view('navbar');
-	
+		
+		$this->form_validation->set_rules('user', 'Nombre de Usuario', 'required');
+		$this->form_validation->set_rules('pass', 'Contraseña', 'required');
+
 		if($user_info = $this->data_model->getUserInfo($id_user)[0]){
 			//TODO: ver que pasa si no encontré al user
 			if($user_info["userStatus"]!=3){

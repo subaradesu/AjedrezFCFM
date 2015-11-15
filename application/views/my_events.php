@@ -16,8 +16,8 @@
 					<p><?php echo "El ".$event["date"]." en ".$event["place"]." a las ".$event["time"]; ?></p>
 					<p><?php echo $event["description"];?></p>
 					<p>
-						<?php echo anchor('publication_controller/view_event/'.$event["idevent"].'/confirm','Asistiré');?>
-						<?php echo anchor('publication_controller/view_event/'.$event["idevent"].'/unconfirm','No Asistiré');?>
+						<?php echo anchor('publication_controller/view_event/'.$event["id_event"].'/confirm','Asistiré');?>
+						<?php echo anchor('publication_controller/view_event/'.$event["id_event"].'/unconfirm','No Asistiré');?>
 					</p>
 				</div>
 				<?php endforeach;?>
@@ -26,7 +26,7 @@
 				<h2>Eventos Públicos:</h2>
 				<?php foreach ($public_events as $event) : ?>
 				<div class="alert alert-success">
-					<p><strong><?php echo anchor('publication_controller/view_event/'.$event["publication_idPublication"].'/confirm',$event["title"]);?></strong></p>
+					<p><strong><?php echo anchor('publication_controller/view_event/'.$event["id_event"].'/confirm',$event["title"]);?></strong></p>
 					<p><?php echo "El ".$event["date"]." en ".$event["place"]." a las ".$event["time"]; ?></p>
 					<p><?php echo $event["description"];?></p>
 					<p>

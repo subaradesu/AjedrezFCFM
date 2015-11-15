@@ -158,7 +158,8 @@ Class data_model extends CI_model{
 		return $result->num_rows() == 1? $result->first_row('array') : 0;
 	}
 	
-	function changeStatus($id_user, $new_status, $ban_date){
+	function changeStatus($id_user, $new_status, $ban_date=''){
+		return $this->db->simple_query("UPDATE user SET userStatus='".$new_status."' WHERE user.username='".$id_user."'");
 		$this->db->trans_start();
 		//cambio el estado del usuario
 		$this->db->simple_query("UPDATE user SET userStatus='".$new_status."' WHERE user.username='".$id_user."'");
@@ -175,6 +176,7 @@ Class data_model extends CI_model{
 			$this->db->simple_query("UPDATE banStatus SET banned=0, ban_until=NOW() WHERE banStatus.id_user='".$id_user."';");
 		}
 		$this->db->trans_complete();
+		
 		return $this->db->trans_status();
 	}
 	
