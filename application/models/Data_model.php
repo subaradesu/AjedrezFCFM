@@ -92,11 +92,12 @@ Class data_model extends CI_model{
 											pgn_board,
 											pgn_string)
 						VALUES (?,?,?,?,?,?,?,?);", $game_attr);
-		$this->db->query("SELECT LAST_INSERT_ID() INTO @mboard_id;");		
+		$id = $this->db->insert_id();
+		$this->db->query("SELECT LAST_INSERT_ID() INTO @mboard_id;");	
 		$this->db->query("INSERT INTO uploadsMatch (user_id, matchboard_id) VALUES (?, @mboard_id);", $publisher);		
 		//termina la transacción
 		$this->db->trans_complete();
-		return $this->db->trans_status();
+		return array("status" => $this->db->trans_status(), "id" => $id);
 	}
 	
 	function searchUser($search_term, $search_category){

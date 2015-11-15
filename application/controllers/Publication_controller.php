@@ -121,6 +121,7 @@ class Publication_controller extends CI_Controller{
 			$format = $this->input->post('format');
 			$filename="";
 			$stringpgn="";
+			$error_message="";
 			if($format == 0 && !empty($_FILES['fileToUpload']['name'])){
 				$target_dir = "boards/";
 				$target_fullpath = $target_dir . basename($_FILES["fileToUpload"]["name"]);
@@ -141,14 +142,17 @@ class Publication_controller extends CI_Controller{
 				// Check if file already exists
 				if (file_exists($target_fullpath)) {
 					$uploadOk = 0;
+					$error_message = "Archivo ya existe";
 				}
 				// Check file size
 				if ($_FILES["fileToUpload"]["size"] > 500000) {
 					$uploadOk = 0;
+					$error_message = "Archivo muy grande";
 				}
 				// Allow certain file formats
 				if($fileType != "pgn") {
 					$uploadOk = 0;
+					$error_message = "Archivo no tiene extensión PGN";
 				}
 				
 				else{
@@ -157,6 +161,7 @@ class Publication_controller extends CI_Controller{
 					}
 					else {
 						$uploadOk = 0;
+						$error_message = "No se pudo guardar archivo";
 					}
 				}
 			}
@@ -164,12 +169,20 @@ class Publication_controller extends CI_Controller{
 				$stringpgn = $this->input->post('textToUpload');
 				$uploadOk = 1;
 			}
-			if($uploadOk == 1 && $publish_try = $this->data_model->createGame($_SESSION["username"],$title, $white, $black, $origin, $content, $format, $filename, $stringpgn)){
-				$this->load->view('simple_success', array ('heading' => '¡La partida fue creada con éxito!', 'message' => ''));
+			if($uploadOk == 1){
+				$publish_try = $this->data_model->createGame($_SESSION["username"],$title, $white, $black, $origin, $content, $format, $filename, $stringpgn);
+				if($publish_try["status"]){
+					$this->load->view('simple_success', array ('heading' => '¡La partida fue creada con éxito!', 
+						'message' => 'Puedes ver la partida '.anchor('publication_controller/view_boardgame/'.$publish_try["id"], 'aquí', 'title="Boardgame'.$publish_try["id"].'"')));
 				//$this->output->set_header('refresh:5;url='.$this->);
+				}
+				else{// Check if $uploadOk is set to 0 by an error
+					$this->load->view('simple_danger', array('heading' => 'La partida no pudo ser creada', 'message' => 'Falló la consulta SQL'));
+					$this->load->view('create_game', array('users' => $this->data_model->getUsers()));
+				}
 			}
 			else{// Check if $uploadOk is set to 0 by an error
-				$this->load->view('simple_danger', array('heading' => 'La partida no pudo ser creada', 'message' => ''));
+				$this->load->view('simple_danger', array('heading' => 'La partida no pudo ser creada', 'message' => $error_message));
 				$this->load->view('create_game', array('users' => $this->data_model->getUsers()));
 			}
 		}
