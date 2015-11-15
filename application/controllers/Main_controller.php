@@ -42,7 +42,15 @@ class Main_controller extends CI_Controller{
 		$this->load->view('news',array('publications' => $this->data_model->getNews()));
 		$this->load->view('footer');
 	}
-	
+	public function boardgames(){
+		checkPermission(0);
+		$header_data = array('title' => 'Partidas');
+		$this->load->view('header_general', $header_data);
+		$this->load->view('navbar');
+		$this->load->view('boardgames',array('boardgames' => $this->data_model->getMatchboards()));
+		$this->load->view('footer');
+	}
+
 	public function about(){
 		checkPermission(0);
 		$header_data = array('title' => 'Historia');

@@ -133,7 +133,9 @@ Class data_model extends CI_model{
 	function getNews(){
 		return $this->db->query("SELECT * FROM news;")->result_array();
 	}
-	
+	function getMatchboards(){
+		return $this->db->query("SELECT * FROM matchboard;")->result_array();
+	}
 	function updateProfileData($id_user, $update_data){
 		if($update_data == null){
 			return false;

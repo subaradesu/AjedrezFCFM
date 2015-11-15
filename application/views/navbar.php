@@ -1,4 +1,3 @@
-
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -10,34 +9,32 @@
 	      		</button>
 	      		<!-- 			<a class="navbar-brand" href="index.php">Inicio</a> -->
 	      		<?php echo anchor("/main_controller/index", "Inicio", array('class' => 'navbar-brand'));?>
-	      		
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Noticias
+						<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Navegar
 						<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 	<!-- 					<li><a href="news.php">Noticias Fcfm</a></li> -->
 							<li><?php echo anchor("/main_controller/news", "Noticias Fcfm");?></li>
-							<li class="disabled"><a>Noticias Chile</a></li>
-							<li class="disabled"><a>Noticias Mundo</a></li>
+							<li class="disabled"><a>Eventos</a></li>
+							<li><?php echo anchor("/main_controller/boardgames", "Partidas publicadas");?></li>
+							<li><?php echo anchor("/main_controller/about", "Historia");?></li>
+							<li><?php echo anchor("/main_controller/links", "Enlaces");?></li>
 						</ul>
 					</li>
-					<li><?php echo anchor("/main_controller/about", "Historia");?></li>
-					<li><?php echo anchor("/main_controller/links", "Enlaces");?></li>
 					<li><?php echo anchor("/user_controller/search_user", "Buscar Usuario");?></li>
 					<?php if($this->session->isLogged && $this->session->permission==3):?>
 					<li class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">Publicar
-							<span class="caret"></span></a>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Publicar<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><?php echo anchor("/publication_controller/publish_new", "Noticia");?></li>
 							<li><?php echo anchor("/publication_controller/publish_event", "Evento");?></li>
 							<li><?php echo anchor("/publication_controller/publish_game", "Partida");?></li>
 						</ul>
+					</li>
 					<?php endif;?>
-					<li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<?php if(!$this->session->isLogged) : ?>
