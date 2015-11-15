@@ -63,7 +63,7 @@
 						
 						<li role="separator" class="divider"></li>
 						<li><?php echo anchor("/user_controller/admin", "Administrar");?></li>
-						<li><?php echo anchor("/user_controller/close", "Cerrar Acceso");?></li>
+<!-- 						<li>echo anchor("/user_controller/close", "Cerrar Acceso");</li> -->
 						<?php endif;?>
 						
 					</ul>
