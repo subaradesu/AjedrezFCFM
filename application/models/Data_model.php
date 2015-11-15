@@ -114,6 +114,10 @@ Class data_model extends CI_model{
 		return $this->db->query("SELECT username,first_name, last_name FROM user;")->result_array();
 	}
 	
+	function getUserInfo($id_user){
+		return $this->db->query("SELECT username,first_name, last_name,userStatus FROM user WHERE username='".$id_user."';")->result_array();
+	}
+	
 	function getNew($id_new){
 		return $this->db->query("SELECT * FROM news WHERE id_new='".$id_new."'")->first_row('array');
 	}

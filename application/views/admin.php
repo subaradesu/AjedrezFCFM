@@ -33,7 +33,7 @@
 						<?php if ($user_found["userStatus"]==2) :?>
 						<th><a class="btn btn-lg btn-primary" role="button" <?php echo 'href="'.base_url('index.php/user_controller/admin/unban').'/'.$user_found["username"].'"';?>>Desbanear</a></th>
 						<?php elseif ($user_found["userStatus"]==1) : ?>
-						<th><a class="btn btn-lg btn-primary" role="button" <?php echo 'href="'.base_url('index.php/user_controller/admin/ban').'/'.$user_found["username"].'"';?>>Banear</a></th>
+						<th><a class="btn btn-lg btn-primary" role="button" <?php echo 'href="'.base_url('index.php/user_controller/ban_user').'/'.$user_found["username"].'"';?>>Banear</a></th>
 						<?php else : ?>
 						<th></th>
 						<?php endif;?>

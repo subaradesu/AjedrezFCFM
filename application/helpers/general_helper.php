@@ -38,10 +38,22 @@ function checkPermission($permissionNeeded){
 	}
 }
 
+/*Muestra una vista de éxito con el titulo y el mensaje ingresados*/
+function successView($heading, $message){
+	$this->load->view('simple_success', array('heading' => $heading, 'message' => $message));
+}
+
+/*Muestra una vista de peligro con el titulo y el mensaje ingresados*/
+function dangerView($heading, $message){
+	$this->load->view('simple_danger', array('heading' => $heading, 'message' => $message));
+}
+
 /*Muestra en pantalla el valor de la variable en el momento del llamado (bota la aplicacion, usar con cuidado)*/
 function debug_var($var){
 		echo "<pre>";
 		die(print_r($var, TRUE));
 }
+
+
 
 ?>

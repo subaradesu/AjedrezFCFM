@@ -47,6 +47,8 @@ class User_controller extends CI_Controller{
 				else{
 					$this->load->view('simple_success', array(	'heading' => '¡Ingreso Exitoso!',
 							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. Disfruta tu estadía.'));
+					$this->load->view('header_board', $data);
+					$this->load->view('home');
 				}
 			}
 			else{
@@ -305,7 +307,24 @@ class User_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
+	public function ban_user($id_user){
+		checkPermission(3);
+		$this->load->library('form_validation');
+		$header_data = array('title' => 'Banear Usuario');
+		$this->load->view('header_general', $header_data);
+		$this->load->view('navbar');
 	
-
+		if($user_info = $this->data_model->getUserInfo($id_user)[0]){
+			//TODO: ver que pasa si no encontré al user
+			if($user_info["userStatus"]!=3){
+				$this->load->view('ban_user', $user_info);
+			}
+			else{
+				dangerView('El usuario no puede ser baneado!', 'No se pueden banear administradores.');
+			}
+		}
+	
+		$this->load->view('footer');
+	}
 }
 ?>
