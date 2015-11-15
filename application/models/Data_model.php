@@ -19,7 +19,7 @@ Class data_model extends CI_model{
 		$this->db->query("	SELECT LAST_INSERT_ID()
 							INTO @publication_id;");
 		//inserto la relación publicación-publicador en la tabla correspondiente
-		$this->db->query("	INSERT INTO userPublication (user_username, publication_idPublication)
+		$this->db->query("	INSERT INTO userPublication (id_user, id_publication)
 							VALUES ('".$publisher."', @publication_id);");
 		//inserto la noticia con la id de publicación obtenida
 		$this->db->query("	INSERT INTO news (id_new, title, date, content, image_url, category)
@@ -31,8 +31,9 @@ Class data_model extends CI_model{
 	}
 	
 	function getPublications($id_user){
-		$result["events"] = $this->db->query("SELECT * FROM event, userpublication WHERE userpublication.id_user='".$id_user."' AND userpublication.id_publication=event.id_event;")->result_array();
-		$result["news"] = $this->db->query("SELECT * FROM news, userpublication WHERE userpublication.id_user='".$id_user."' AND userpublication.id_publication=news.id_new;")->result_array();
+		//debug_var("SELECT * FROM news, userpublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;");
+		$result["events"] = $this->db->query("SELECT * FROM event, userpublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=event.id_event;")->result_array();
+		$result["news"] = $this->db->query("SELECT * FROM news, userpublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;")->result_array();
 		//$result["games"] = $this->db->query();
 		//$result["comments"] = $this->db->query();
 		return $result;
@@ -52,7 +53,7 @@ Class data_model extends CI_model{
 		$this->db->query("	SELECT LAST_INSERT_ID()
 							INTO @publication_id;");
 		//inserto la relación publicación-publicador en la tabla correspondiente
-		$this->db->query("	INSERT INTO userPublication (user_username, publication_idPublication)
+		$this->db->query("	INSERT INTO userPublication (id_user, id_publication)
 							VALUES ('".$publisher."', @publication_id);");
 		//inserto el evento con la id de publicación obtenida
 		$this->db->query("	INSERT INTO event (id_event, title, description, date, time, place, visibility)
@@ -157,8 +158,24 @@ Class data_model extends CI_model{
 		return $result->num_rows() == 1? $result->first_row('array') : 0;
 	}
 	
-	function changeStatus($id_user, $new_status){
-		return $this->db->simple_query("UPDATE user SET userStatus='".$new_status."' WHERE user.username='".$id_user."'");
+	function changeStatus($id_user, $new_status, $ban_date){
+		$this->db->trans_start();
+		//cambio el estado del usuario
+		$this->db->simple_query("UPDATE user SET userStatus='".$new_status."' WHERE user.username='".$id_user."'");
+		if($new_status == 2){
+			if($this->db->query("SELECT * FROM banStatus WHERE id_user='".$id_user."';")->count_all()){
+				$this->db->simple_query("INSERT INTO banStatus VALUES ('".$id_user."', '1', ".$ban_date."');");
+			}
+			else{
+				$this->db->simple_query("UPDATE banStatus SET banned=1, ban_until='".$ban_date."' WHERE banStatus.id_user='".$id_user."';");
+			}
+		}
+		elseif($new_status == 1){
+			//asumo que está baneado
+			$this->db->simple_query("UPDATE banStatus SET banned=0, ban_until=NOW() WHERE banStatus.id_user='".$id_user."';");
+		}
+		$this->db->trans_complete();
+		return $this->db->trans_status();
 	}
 	
 	function getEvent($id_event){
