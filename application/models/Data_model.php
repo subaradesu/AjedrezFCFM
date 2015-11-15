@@ -22,7 +22,7 @@ Class data_model extends CI_model{
 		$this->db->query("	INSERT INTO userPublication (user_username, publication_idPublication)
 							VALUES ('".$publisher."', @publication_id);");
 		//inserto la noticia con la id de publicación obtenida
-		$this->db->query("	INSERT INTO news (idNew, title, date, content, image_url, category)
+		$this->db->query("	INSERT INTO news (id_new, title, date, content, image_url, category)
 							VALUES (@publication_id, '".$title."', NOW(), '".$content."', '".$imageFilename."', '".$category."');");
 		//termina la transacción
 		$this->db->trans_complete();
@@ -31,8 +31,8 @@ Class data_model extends CI_model{
 	}
 	
 	function getPublications($id_user){
-		$result["events"] = $this->db->query("SELECT * FROM event, userpublication WHERE userpublication.user_username='".$id_user."' AND userpublication.publication_idPublication=event.publication_idPublication;")->result_array();
-		$result["news"] = $this->db->query("SELECT * FROM news, userpublication WHERE userpublication.user_username='".$id_user."' AND userpublication.publication_idPublication=news.idNew;")->result_array();
+		$result["events"] = $this->db->query("SELECT * FROM event, userpublication WHERE userpublication.id_user='".$id_user."' AND userpublication.id_publication=event.id_event;")->result_array();
+		$result["news"] = $this->db->query("SELECT * FROM news, userpublication WHERE userpublication.id_user='".$id_user."' AND userpublication.id_publication=news.id_new;")->result_array();
 		//$result["games"] = $this->db->query();
 		//$result["comments"] = $this->db->query();
 		return $result;
@@ -55,7 +55,7 @@ Class data_model extends CI_model{
 		$this->db->query("	INSERT INTO userPublication (user_username, publication_idPublication)
 							VALUES ('".$publisher."', @publication_id);");
 		//inserto el evento con la id de publicación obtenida
-		$this->db->query("	INSERT INTO event (publication_idPublication, title, description, date, time, place, visibility)
+		$this->db->query("	INSERT INTO event (id_event, title, description, date, time, place, visibility)
 							VALUES (@publication_id, '".$title."', '".$description."', '".$date."', '".$time."', '".$location."', '".$visibility."');");
 		//creo la invitacion al evento para cada usuario invitado
 		if($visibility == 'private'){
@@ -114,8 +114,8 @@ Class data_model extends CI_model{
 		return $this->db->query("SELECT username,first_name, last_name FROM user;")->result_array();
 	}
 	
-	function getNew($idNew){
-		return $this->db->query("SELECT * FROM news WHERE idNew='".$idNew."'")->first_row('array');
+	function getNew($id_new){
+		return $this->db->query("SELECT * FROM news WHERE id_new='".$id_new."'")->first_row('array');
 	}
 	
 	function getBoardgame($idBoard){
@@ -152,11 +152,11 @@ Class data_model extends CI_model{
 	}
 	
 	function getEvent($id_event){
-		return $this->db->query("SELECT * FROM event WHERE publication_idPublication='".$id_event."';")->result_array();
+		return $this->db->query("SELECT * FROM event WHERE id_event='".$id_event."';")->result_array();
 	}
 	
 	function getEvents($id_user){
-		$result['private_events'] = $this->db->query("SELECT * FROM invitedList AS il, event WHERE il.invited_username='".$id_user."' AND il.idevent=event.publication_idPublication")->result_array();
+		$result['private_events'] = $this->db->query("SELECT * FROM invitedList AS il, event WHERE il.id_user='".$id_user."' AND il.id_event=event.id_event")->result_array();
 		$result['public_events'] = $this->db->query("SELECT * FROM event WHERE event.visibility='public'")->result_array();
 		
 		return $result;
