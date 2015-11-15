@@ -64,10 +64,15 @@ new PgnViewer({ boardName: "demo",
 			</tr>	
 			<tr >
 				<th class"col-sm-offset-2">Tablero:</th>
-				<td class"col-sm-offset-10"><div id="demo-container"></div>  
-				<!--div id="demo-moves"></div--> <?php $data_boardgame["pgn_string"]; ?>
+				<td class"col-sm-offset-10"><div id="demo-container"></div> 
 				</td>
 			</tr>	
+			<tr >
+				<th class"col-sm-offset-2">Publicado por:</th>
+				<td class"col-sm-offset-10"><?php echo $data_boardgame["user"]["first_name"]." ".$data_boardgame["user"]["last_name"]; ?></div>  
+				<!--div id="demo-moves"></div--> 
+				</td>
+			</tr>
 
 		</table>
 	</div>

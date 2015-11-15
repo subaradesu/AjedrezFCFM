@@ -73,7 +73,6 @@ Class data_model extends CI_model{
 	function createGame($publisher, $title, $white, $black, $origin, $content, $format, $filename, $stringpgn){
 		//comenzar transacción
 		$game_attr = array(
-				$publisher,
 				$this->db->escape_str($title),
 				$this->db->escape_str($white),
 				$this->db->escape_str($black),
@@ -84,8 +83,7 @@ Class data_model extends CI_model{
 				$this->db->escape_str($stringpgn));
 		$this->db->trans_start();
 		//Creo una nueva publicacion
-		$this->db->query("INSERT INTO matchboard (uploader,
-											title,
+		$this->db->query("INSERT INTO matchboard (title,
 											white_player,
 											black_player,
 											match_origin,
@@ -93,7 +91,9 @@ Class data_model extends CI_model{
 											format,
 											pgn_board,
 											pgn_string)
-						VALUES (?,?,?,?,?,?,?,?,?);", $game_attr);
+						VALUES (?,?,?,?,?,?,?,?);", $game_attr);
+		$this->db->query("SELECT LAST_INSERT_ID() INTO @mboard_id;");		
+		$this->db->query("INSERT INTO uploadsMatch (user_id, matchboard_id) VALUES (?, @mboard_id);", $publisher);		
 		//termina la transacción
 		$this->db->trans_complete();
 		return $this->db->trans_status();
@@ -119,7 +119,10 @@ Class data_model extends CI_model{
 	}
 	
 	function getBoardgame($idBoard){
-		return $this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
+		$info =$this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
+		$user = $this->db->query("SELECT user_id FROM uploadsMatch WHERE matchboard_id=".$idBoard."")->first_row('array');
+		$info["user"] = $this->db->query("SELECT first_name, last_name FROM user WHERE username='".$user["user_id"]."'")->first_row('array');
+		return $info;
 	}
 
 	function getNews(){
