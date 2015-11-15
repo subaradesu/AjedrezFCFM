@@ -32,8 +32,8 @@ Class data_model extends CI_model{
 	
 	function getPublications($id_user){
 		//debug_var("SELECT * FROM news, userpublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;");
-		$result["events"] = $this->db->query("SELECT * FROM event, userpublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=event.id_event;")->result_array();
-		$result["news"] = $this->db->query("SELECT * FROM news, userpublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;")->result_array();
+		$result["events"] = $this->db->query("SELECT * FROM event, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=event.id_event;")->result_array();
+		$result["news"] = $this->db->query("SELECT * FROM news, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;")->result_array();
 		//$result["games"] = $this->db->query();
 		//$result["comments"] = $this->db->query();
 		return $result;
