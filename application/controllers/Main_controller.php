@@ -17,7 +17,7 @@ class Main_controller extends CI_Controller{
 	}
 	
 	public function index(){
-		checkPermission(0);		
+		checkPermission(0);
 		$data = array('title' => 'Inicio');
 		$this->load->view('header_board',$data);
 		$this->load->view('navbar');

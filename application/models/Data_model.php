@@ -7,31 +7,76 @@ Class data_model extends CI_model{
 		$this->load->database();
 	}
 	
+	/*Crea una nueva noticia con los datos entregados, retorna el nombre con el que se guardó la imagen en la db, si falla retorna false,*/
 	function createNew($publisher, $title, $content, $imageType, $category){
 		//comenzar transacción
 		$this->db->trans_start();
 		//Creo una nueva publicacion
 		$this->db->query(	"INSERT INTO publication
-							VALUES (null);");
+							VALUES (null, NOW());");
 		$imageFilename = $this->db->insert_id().'.'.$imageType;
 	
 		//guardo la ID en @publication_id
 		$this->db->query("	SELECT LAST_INSERT_ID()
 							INTO @publication_id;");
 		//inserto la relación publicación-publicador en la tabla correspondiente
-		$this->db->query("	INSERT INTO userPublication (id_user, id_publication)
-							VALUES ('".$publisher."', @publication_id);");
+		$this->db->query("	INSERT INTO userPublication
+							VALUES ('".$publisher."', @publication_id, NOW());");
 		//inserto la noticia con la id de publicación obtenida
 		$this->db->query("	INSERT INTO news (id_new, title, date, content, image_url, category)
 							VALUES (@publication_id, '".$title."', NOW(), '".$content."', '".$imageFilename."', '".$category."');");
 		//termina la transacción
 		$this->db->trans_complete();
 	
-		return $this->db->trans_status() ? $imageFilename : 0;
+		return $this->db->trans_status() ? $imageFilename : false;
+	}
+	
+	/*Agrega el comentario del usuario en la publicación*/
+	function createComment($id_publisher, $id_publication,$content){
+		//comenzar transacción
+		$this->db->trans_start();
+		//Creo una nueva publicacion
+		$this->db->query(	"INSERT INTO publication VALUES (null, NOW());");
+		
+		//guardo la ID en @publication_id
+		$this->db->query("	SELECT LAST_INSERT_ID()
+							INTO @publication_id;");
+		
+		//inserto la relación publicación-publicador en la tabla correspondiente
+		$this->db->query("	INSERT INTO userPublication
+							VALUES ('".$id_publisher."', @publication_id, NOW());");
+		//inserto la noticia con la id de publicación obtenida
+		$this->db->query("	INSERT INTO comment 
+							VALUES (@publication_id, '".$id_publication."', '".$content."');");
+		//termina la transacción
+		$this->db->trans_complete();
+		
+		return $this->db->trans_status();
+	}
+	
+	public function send_message($sender, $receiver, $content){
+		//TODO: usar esto pa mandar mensajes entre usuarios
+		return $this->db->simple_query("INSERT INTO privateMessage VALUES (null, 'holahola', 'user01', 'user02');");
+	}
+	
+	public function getPublicationScore($id_publication){
+		//TODO: retornar el puntaje de una publicación
+		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_publication = '".$id_publication."'")->result_array();
+	}
+	
+	public function updateScore($id_user, $id_publication, $new_score){
+		$this->trans_start();
+		if($this->db->query("SELECT * FROM publicationKarma WHERE id_publication = '".$id_publication."' AND id_user = '".$id_user."';")->num_rows()){
+			$this->db->simple_query("UPDATE publicationKarma SET value='".$new_score."' WHERE id_publication = '".$id_publication."' AND id_user = '".$id_user."';");
+		}
+		else{
+			$this->db->simple_query("INSERT INTO publicationKarma VALUES ('".id_publication."','".$id_user."','".$new_score."');");
+		}
+		$this->db->trans_complete();
+		return $this->db->trans_status();		
 	}
 	
 	function getPublications($id_user){
-		//debug_var("SELECT * FROM news, userpublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;");
 		$result["events"] = $this->db->query("SELECT * FROM event, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=event.id_event;")->result_array();
 		$result["news"] = $this->db->query("SELECT * FROM news, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;")->result_array();
 		//$result["games"] = $this->db->query();
@@ -39,25 +84,25 @@ Class data_model extends CI_model{
 		return $result;
 	}
 	
-	public function deletePublication($id_publication){
+	function deletePublication($id_publication){
 		return $this->db->simple_query("DELETE FROM publication WHERE idPublication='".$id_publication."';");
 	}
 	
-	function createEvent($publisher, $title, $date, $location, $time, $description, $visibility, $invited_list){
+	function createEvent($publisher, $title, $start, $end, $location, $description, $visibility, $invited_list){
 		//comenzar transacción
 		$this->db->trans_start();
 		//Creo una nueva publicacion
 		$this->db->query(	"INSERT INTO publication
-							VALUES (null);");
+							VALUES (null, NOW());");
 		//guardo la ID en @publication_id
 		$this->db->query("	SELECT LAST_INSERT_ID()
 							INTO @publication_id;");
 		//inserto la relación publicación-publicador en la tabla correspondiente
-		$this->db->query("	INSERT INTO userPublication (id_user, id_publication)
-							VALUES ('".$publisher."', @publication_id);");
+		$this->db->query("	INSERT INTO userPublication (id_user, id_publication, last_changed)
+							VALUES ('".$publisher."', @publication_id, NOW());");
 		//inserto el evento con la id de publicación obtenida
-		$this->db->query("	INSERT INTO event (id_event, title, description, date, time, place, visibility)
-							VALUES (@publication_id, '".$title."', '".$description."', '".$date."', '".$time."', '".$location."', '".$visibility."');");
+		$this->db->query("	INSERT INTO event (id_event, title, description, date_start, date_end, place, visibility)
+							VALUES (@publication_id, '".$title."', '".$description."', '".$start."', '".$end."', '".$location."', '".$visibility."');");
 		//creo la invitacion al evento para cada usuario invitado
 		if($visibility == 'private'){
 			foreach ($invited_list as $invited_user ){

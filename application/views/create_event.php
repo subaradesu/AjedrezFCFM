@@ -1,4 +1,7 @@
 <div id="content">
+		<div>
+			<?php echo validation_errors(); ?>
+		</div>
 		<div class=page-header>
 			<h1>Crear Evento:</h1>
 		</div>
@@ -11,29 +14,29 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="text" name="title" class="form-control" id="title" placeholder="El título de tu publicación. Ej: 5° Torneo Internacional Beauchef." required>
+						<input type="text" name="title" class="form-control" id="title" placeholder="El título de tu publicación. Ej: 1er Torneo Navideño Bauchef." required>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-2" for="date">Fecha<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="end">Inicio<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="text" name="date" class="form-control" id="date" placeholder="Fecha de realización del evento." required>
+						<input type="text" name="start" class="form-control" id="end" placeholder="Fecha de inicio del evento. Ej: 25-12-2015 16:00." required>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-2" for="location">Lugar<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="end">Término<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="text" name="location" class="form-control" id="location" placeholder="Lugar de realización del evento." required>
+						<input type="text" name="end" class="form-control" id="end" placeholder="Fecha de inicio del evento. Ej: 25-12-2015 22:00." required>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-2" for="time">Horario<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="location">Ubicación<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="text" name="time" class="form-control" id="time" placeholder="Hora de realización del evento." required>
+						<input type="text" name="location" class="form-control" id="location" placeholder="Lugar de realización del evento. Ej: Hall Sur Edificio Escuela" required>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label col-sm-2" for="description">Contenido<span class="red-text">*</span>:</label>
+					<label class="control-label col-sm-2" for="description">Descripción<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
 						<textarea name="description" class="form-control" rows="2" id="description" placeholder="Pequeña descripción sobre el evento." required></textarea>
 					</div>

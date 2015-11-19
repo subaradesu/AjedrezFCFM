@@ -71,21 +71,25 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
 	
+		//setea el mensaje de error y hace que se vea bonito
+		$this->form_validation->set_message('DATETIME_Check', 'El formato de fecha no coincide: %s');
+		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>', '</div>');
+		
 		$this->form_validation->set_rules('title', 'Título', 'required');
-		$this->form_validation->set_rules('date', 'Portada', 'required');
-		$this->form_validation->set_rules('location', 'Categoría', 'required');
-		$this->form_validation->set_rules('time', 'Contenido', 'required');
-		$this->form_validation->set_rules('description', 'Contenido', 'required');
-		$this->form_validation->set_rules('visibility', 'Contenido', 'required');
+		$this->form_validation->set_rules('start', 'Fecha Inicio', 'required|callback_DATETIME_Check');
+		$this->form_validation->set_rules('end', 'Fecha Fin', 'required|callback_DATETIME_Check');
+		$this->form_validation->set_rules('location', 'Ubicación', 'required');
+		$this->form_validation->set_rules('description', 'Descripción', 'required');
+		$this->form_validation->set_rules('visibility', 'Visibilidad', 'required');
 		if($this->form_validation->run()){
 			$title = $this->input->post('title');
-			$date = $this->input->post('date');
+			$start = $this->input->post('start');
+			$end = $this->input->post('end');
 			$location = $this->input->post('location');
-			$time = $this->input->post('time');
 			$description = $this->input->post('description');
 			$visibility = $this->input->post('visibility');
 			$invited_list = $this->input->post('invited');
-			if($publish_try = $this->data_model->createEvent($_SESSION["username"],$title, $date, $location, $time, $description, $visibility, $invited_list)){
+			if($publish_try = $this->data_model->createEvent($_SESSION["username"],$title, $start, $end, $location, $description, $visibility, $invited_list)){
 				$this->load->view('simple_success', array ('heading' => '¡El evento fue creado con éxito!', 'message' => 'Los usuarios invitados recibirán una notificación'));
 			}
 			else{
@@ -97,6 +101,10 @@ class Publication_controller extends CI_Controller{
 			$this->load->view('create_event', array('users' => $this->data_model->getUsers()));
 		}
 		$this->load->view('footer');
+	}
+	
+	public function DATETIME_Check($str){
+		return getDBTime($str);
 	}
 	
 	public function publish_game(){
@@ -218,12 +226,11 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function view_event($id_event = 0){
+	public function view_event($id_event = 0, $action = 'none'){
 		checkPermission(1);
 		$header_data = array('title' => 'Ver Evento');
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
-		//TODO: Visualizar la información del evento $id_event
 		if($data_event = $this->data_model->getEvent($id_event)){
 			$this->load->view('view_event', array('event' => $data_event));
 		}

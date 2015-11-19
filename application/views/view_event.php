@@ -6,8 +6,14 @@
 			<h1>Evento "<?php echo $event["title"];?>"</h1>
 		</div>
 		<div>
-			<p>Descripción: <?php echo $event["description"];?></p>
-			<p><?php echo "El ".$event["date"]." en ".$event["place"]." a las ".$event["time"]; ?></p>
+			<p>
+			<p><strong>Descripción: </strong><?php echo $event["description"];?></p>
+			<p><strong>Desde: </strong><?php echo $event["date_start"];?></p>
+			<p><strong>Hasta: </strong><?php echo $event["date_end"];?></p>
+			<p><strong>En: </strong><?php echo $event["place"];?></p>
+		</div>
+		<div class=page-header>
+			<h1>Lista de Invitados:</h1>
 		</div>
 		<div>
 			<table class="table table-hover">
