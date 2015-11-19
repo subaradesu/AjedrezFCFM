@@ -209,6 +209,8 @@ class Publication_controller extends CI_Controller{
 		//TODO: Visualizar la información de la noticia $id_new
 		if($data_new = $this->data_model->getNew($id_new)){
 			$this->load->view('view_new', array('data_new' => $data_new));
+			//TODO: sacar comentarios de verdad y mandarlos
+			$this->load->view('comments');
 		}
 		else{
 			$this->load->view('simple_danger', array('heading' => '¡La noticia solicitada no existe!', 'message' => ''));

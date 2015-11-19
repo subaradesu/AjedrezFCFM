@@ -18,6 +18,8 @@
 	<!-- General Custom Style -->
 	<?php echo link_tag('css/default.css');?>
 	
+	<?php echo link_tag('css/comment.css');?>
+	
 </head>
 
 <body>
