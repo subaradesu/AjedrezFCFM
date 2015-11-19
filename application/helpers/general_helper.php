@@ -48,6 +48,14 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		$this->load->view('simple_danger', array('heading' => $heading, 'message' => $message));
 	}
 	
+	/*Retorna 1 si la fecha ya pasó, 0 si no*/
+	function compareWithNow($dateStr){
+		$d = date_create_from_format('d-m-Y H:i:s', $dateStr);
+		$now = date_create();
+		$diff = date_diff($now, $d);
+		return intval($diff->format('%R%a')) < 0;
+	}
+	
 	/*Obtiene el valor para ingresarlo en dateTime en la db, retorna falso si no cumple con el formato esperado*/
 	function getDBTime($dateString){
 		$d = date_create_from_format('d-m-Y H:i', $dateString);

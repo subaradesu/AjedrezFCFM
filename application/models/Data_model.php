@@ -61,7 +61,7 @@ Class data_model extends CI_model{
 	
 	public function getPublicationScore($id_publication){
 		//TODO: retornar el puntaje de una publicación
-		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_publication = '".$id_publication."'")->result_array();
+		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_publication = '".$id_publication."'")->result_array()[0]["score"];
 	}
 	
 	public function updateScore($id_user, $id_publication, $new_score){
