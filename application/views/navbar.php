@@ -1,3 +1,4 @@
+	<?php //TODO: Recibir los datos de usuario como parámetros, contar el número de notificaciones, admin events != my events?>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -44,7 +45,7 @@
 					
 					<li><a>Bievenid<?php echo ($_SESSION["sex"]==2 ? 'a' : 'o').', '.$_SESSION["first_name"];?></a></li>
 					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Mi Cuenta
+						<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Mi Cuenta <span class="badge notification-badge">1</span>
 						<span class="glyphicon glyphicon-cog"></span></a>
 					<ul class="dropdown-menu">
 						<li><?php echo anchor("/user_controller/user_profile/".$_SESSION['username'], "Mi Perfil");?></li>
@@ -53,7 +54,7 @@
 						<?php if($this->session->permission!=2) : ?>
 						
 						<li role="separator" class="divider"></li>
-						<li><?php echo anchor("/publication_controller/my_events", "Mis Eventos");?></li>
+						<li><?php echo anchor("/publication_controller/my_events", "Mis Eventos <span class='badge notification-badge'>1</span>");?></li>
 						<?php endif;?>
 						
 						<?php if($this->session->isLogged && $this->session->permission==3) : ?>

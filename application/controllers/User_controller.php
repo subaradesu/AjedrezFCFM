@@ -38,6 +38,8 @@ class User_controller extends CI_Controller{
 				$this->session->last_name = $logtry->last_name;
 				$this->session->permission = $logtry->userStatus;
 				$this->session->last_log = $logtry->update_time;
+				$this->data_model->updateEvents();
+				$this->session->event_notifications = $this->data_model->getEventNotifications($this->session->username);
 				$this->load->view('navbar');
 				//mensaje de bienvenida
 				if($_SESSION["permission"] == 2){

@@ -81,3 +81,9 @@ textarea {
         cursor: inherit;
         display: block;
     }
+    
+/* Personalizar las badges (el circulito mágico que tiene el número de notificaciones)*/
+
+.notification-badge {
+	background-color: #269abc;
+}

@@ -54,6 +54,11 @@ Class data_model extends CI_model{
 		return $this->db->trans_status();
 	}
 	
+	/* Retorna el número de eventos finalizados del usuario que se pueden finalizar (status = ended)*/
+	public function getEventNotifications($id_user){
+		return $this->db->query("SELECT COALESCE(COUNT(id_event),0) as numberOfEvents FROM event, userPublication WHERE id_event = id_publication AND id_user='".$id_user."' AND status='ended';");
+	}
+	
 	public function send_message($sender, $receiver, $content){
 		//TODO: usar esto pa mandar mensajes entre usuarios
 		return $this->db->simple_query("INSERT INTO privateMessage VALUES (null, 'holahola', 'user01', 'user02');");
