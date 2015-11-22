@@ -38,16 +38,6 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		}
 	}
 	
-	/*Muestra una vista de éxito con el titulo y el mensaje ingresados*/
-	function successView($heading, $message=''){
-		$this->load->view('simple_success', array('heading' => $heading, 'message' => $message));
-	}
-	
-	/*Muestra una vista de peligro con el titulo y el mensaje ingresados*/
-	function dangerView($heading, $message=''){
-		$this->load->view('simple_danger', array('heading' => $heading, 'message' => $message));
-	}
-	
 	/*Retorna 1 si la fecha ya pasó, 0 si no*/
 	function compareWithNow($dateStr){
 		$d = date_create_from_format('d-m-Y H:i:s', $dateStr);
@@ -69,6 +59,17 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	function debug_var($var){
 			echo "<pre>";
 			die(print_r($var, TRUE));
+	}
+	
+	/*Carga la vista simple de éxito*/
+	function successView($heading, $message, $output = false){
+		$CI = &get_instance();
+		return $CI->load->view('simple_success', array('heading' => $heading, 'message' => $message, $output));
+	}
+	
+	function dangerView($heading, $message, $output = false){
+		$CI = &get_instance();
+		return $CI->load->view('simple_danger', array('heading' => $heading, 'message' => $message, $output));
 	}
 
 ?>

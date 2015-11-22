@@ -180,6 +180,10 @@ Class data_model extends CI_model{
 		$info["user"] = $this->db->query("SELECT first_name, last_name FROM user WHERE username='".$user["user_id"]."'")->first_row('array');
 		return $info;
 	}
+	
+	function getComments($id_publication){
+		return $this->db->query("SELECT * FROM comment, userPublication WHERE commented_publication='".$id_publication."' AND id_publication=id_comment;")->result_array();
+	}
 
 	function getNews(){
 		return $this->db->query("SELECT * FROM news;")->result_array();
@@ -187,6 +191,7 @@ Class data_model extends CI_model{
 	function getMatchboards(){
 		return $this->db->query("SELECT * FROM matchboard;")->result_array();
 	}
+	
 	function updateProfileData($id_user, $update_data){
 		if($update_data == null){
 			return false;
@@ -206,6 +211,10 @@ Class data_model extends CI_model{
 		$result = $this->db->query($sql);
 
 		return $result->num_rows() == 1? $result->first_row('array') : 0;
+	}
+	
+	function getOptionalProfileData($id_user){
+		return $this->db->query("SELECT * FROM user_info WHERE user_id= '".$id_user."';");
 	}
 	
 	function changeStatus($id_user, $new_status, $ban_date=''){

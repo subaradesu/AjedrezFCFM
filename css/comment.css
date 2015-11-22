@@ -1,5 +1,9 @@
 @CHARSET "ISO-8859-1";
 
+.form-comment {
+	margin-bottom: 10px;
+}
+
 .post-comments {
   padding-bottom: 9px;
   margin: 5px 0 5px;
@@ -16,8 +20,8 @@
 }
 
 .post-comments .media {
-  border-left: 1px dotted #000;
-  border-bottom: 1px dotted #000;
+  /*border-left: 1px dotted #000;
+  border-bottom: 1px dotted #000;*/
   margin-bottom: 5px;
   padding-left: 10px;
 }

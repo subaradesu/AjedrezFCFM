@@ -201,21 +201,77 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function view_new($id_new = 0){
-		checkPermission(0);
-		$header_data = array('title' => 'Ver Evento');
+	public function publish_comment($id_publication){
+		checkPermission(1);
+		$this->load->library('form_validation');
+		$header_data = array('title' => 'Agregar Comentario');
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
-		//TODO: Visualizar la información de la noticia $id_new
+		
+		$this->form_validation->set_rules('comment', 'Comentario', 'required');
+		if(!$this->form_validation->run()){
+			dangerView('No se agregó el comentario', 'No cumple con las condiciones básicas');
+		}
+		else{
+			$username = $_SESSION["username"];
+			$comment = $this->input->post('comment');
+			if($this->data_model->createComment($username, $id_publication, $comment)){
+				successView('El mensaje se agregó correctamente', 'k');
+			}
+			else{
+				dangerView('El mensaje no se pudo agregar', 'Inténtalo de nuevo más tarde o contacta a los administradores para solucionar el problema.');
+			}
+		}
+		
+		
+		$this->load->view('footer');
+	}
+	
+	public function view_new($id_new = 0){
+		checkPermission(0);
+		$header_data = array('title' => 'Ver Noticia');
+		$this->load->view('header_general',$header_data);
+		$this->load->view('navbar');
 		if($data_new = $this->data_model->getNew($id_new)){
+			//Muestra la información de la noticia
 			$this->load->view('view_new', array('data_new' => $data_new));
-			//TODO: sacar comentarios de verdad y mandarlos
-			$this->load->view('comments');
+			//Muestra los comentarios de la noticia
+			$this->show_comments($id_new);
+			//showComments($id_new);
 		}
 		else{
 			$this->load->view('simple_danger', array('heading' => '¡La noticia solicitada no existe!', 'message' => ''));
 		}
 		$this->load->view('footer');
+	}
+	
+	private function show_comments($id_publication, $recursive = false){
+		//TODO Mostrar nombre y apellido en vez de username, puntaje de la publicación, fecha, avatar quizás.
+		$comments = $this->data_model->getComments($id_publication);
+		if(!$recursive){
+			$this->load->view('comments_open', array('id_publication' => $id_publication));
+			if(count($comments)> 0){
+				foreach ($comments as $c){
+					$comment_data = array('publisher' => $c['id_user'], 'score' => '0', 'content' => $c['content'], 'id_comment' => $c['id_comment'], 'id_publication' => $c['commented_publication']);
+					$this->load->view('comment_content', $comment_data);
+					$this->show_comments($c['id_comment'], true);
+				}
+				$this->load->view('comment_end');
+			}
+			else{
+				//TODO hacer esto en bonito
+				successView('La publicación no tiene comentarios!', 'Sé el primero en comentar esta publicación.');
+			}
+			$this->load->view('comments_close');
+		}
+		else{
+			foreach ($comments as $c){
+				$comment_data = array('publisher' => $c['id_user'], 'score' => '0', 'content' => $c['content'], 'id_comment' => $c['id_comment'], 'id_publication' => $c['commented_publication']);
+				$this->load->view('comment_content', $comment_data);
+				$this->show_comments($c['id_comment'], true);
+			}
+			$this->load->view('comment_end');
+		}
 	}
 	
 	public function my_events(){
