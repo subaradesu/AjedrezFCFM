@@ -40,6 +40,15 @@ class User_controller extends CI_Controller{
 				$this->session->last_log = $logtry->update_time;
 				//$this->data_model->updateEvents();
 				$this->session->event_notifications = $this->data_model->getEventNotifications($this->session->username);
+				//TODO buscar como hacer variable global $nav_data
+				$nav_data = array(	'userLogged' => $_SESSION["isLogged"],
+									'username' => $_SESSION["username"],
+									'userType' => $_SESSION["permission"],
+									'first_name' => $_SESSION["first_name"],
+									'last_name' => $_SESSION["last_name"],
+									'sex' => $_SESSION["sex"],
+									'notifications' => $this->data_model->getEventNotifications($this->session->username)
+				);
 				$this->load->view('navbar');
 				//mensaje de bienvenida
 				if($_SESSION["permission"] == 2){
