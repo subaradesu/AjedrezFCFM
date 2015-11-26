@@ -2,9 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-
-
 class Main_controller extends CI_Controller{
+	
+	//TODO: Definir css como variables globales
 	
 	function __construct(){
 		parent::__construct();
@@ -19,8 +19,9 @@ class Main_controller extends CI_Controller{
 	
 	public function index(){
 		checkPermission(0);
-		$data = array('title' => 'Inicio');
-		$this->load->view('header_board',$data);
+		$css = array('css/default.css', 'css/chessboard.css');
+		$header_data = array('title' => 'Inicio', 'css_file_paths' => $css);
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		$this->load->view('home');
 		$this->load->view('footer');
@@ -28,8 +29,8 @@ class Main_controller extends CI_Controller{
 	
 	public function contact(){
 		checkPermission(0);
-		$header_data = array('title' => 'Contacto');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Contacto', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('contact');
 		$this->load->view('footer');
@@ -37,16 +38,16 @@ class Main_controller extends CI_Controller{
 	
 	public function news(){
 		checkPermission(0);
-		$header_data = array('title' => 'Noticias');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Noticias', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('news',array('publications' => $this->data_model->getNews()));
 		$this->load->view('footer');
 	}
 	public function boardgames(){
 		checkPermission(0);
-		$header_data = array('title' => 'Partidas');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Partidas', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('boardgames',array('boardgames' => $this->data_model->getMatchboards()));
 		$this->load->view('footer');
@@ -54,8 +55,8 @@ class Main_controller extends CI_Controller{
 
 	public function about(){
 		checkPermission(0);
-		$header_data = array('title' => 'Historia');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Historia', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('about');
 		$this->load->view('footer');
@@ -63,16 +64,16 @@ class Main_controller extends CI_Controller{
 	
 	public function links(){
 		checkPermission(0);
-		$header_data = array('title' => 'Enlaces');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Enlaces', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 		$this->load->view('links');
 		$this->load->view('footer');
 	}
 	
 	public function access_denied($accessNeeded){
-		$header_data = array('title' => 'Acceso denegado');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Acceso denegado', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		$data['title'] = '';
 		$data['message'] = '';

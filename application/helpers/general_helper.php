@@ -55,6 +55,23 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		return $d->format('Y-m-d H:i:s');
 	}
 	
+	function getCSS($str = 0){
+		if($str == 'index'){
+			return array('css/default.css', 'css/chessboard.css');
+		}
+		if($str == 'comments'){
+			return array('css/default.css', 'css/comment.css');
+		}
+		if($str == 'login' || $str == 'register'){
+			return array('css/default.css', 'css/log-register.css');
+		}
+		if($str == 'profile'){
+			return array('css/default.css', 'css/profile.css');
+		}
+		//default
+		return array('css/default.css');
+	}
+	
 	/*Muestra en pantalla el valor de la variable en el momento del llamado (bota la aplicacion, usar con cuidado)*/
 	function debug_var($var){
 			echo "<pre>";

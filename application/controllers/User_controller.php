@@ -20,11 +20,11 @@ class User_controller extends CI_Controller{
 	
 	public function user_login(){
 		checkPermission(-1);
-		$data = array('title' => 'Ingresar');
 		$this->load->library('form_validation');
-	
-		$this->load->view('header_log_reg', $data);
-	
+		
+		$header_data = array('title' => 'Ingresar', 'css_file_paths' => getCSS('login'));
+		$this->load->view('header', $header_data);
+		
 		$this->form_validation->set_rules('user', 'Nombre de Usuario', 'required');
 		$this->form_validation->set_rules('pass', 'Contraseña', 'required');
 		if($this->form_validation->run()){
@@ -56,10 +56,11 @@ class User_controller extends CI_Controller{
 							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. <p>Al parecer tu cuenta se encuentra baneada, contáctate con los administradores para solucionar tu situación. Por ahora tienes acceso limitado al sitio.</p>'));
 				}
 				else{
+					//TODO redirigir al index probablemente
 					$this->load->view('simple_success', array(	'heading' => '¡Ingreso Exitoso!',
 							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. Disfruta tu estadía.'));
-					$this->load->view('header_board', $data);
-					$this->load->view('header_log_reg', $data);
+					$header_data['css_file_paths'] = getCSS('index');
+					$this->load->view('header', $header_data);
 					$this->load->view('home');
 				}
 			}
@@ -86,8 +87,9 @@ class User_controller extends CI_Controller{
 	public function user_register(){
 		checkPermission(-1);
 		$this->load->library('form_validation');
-	
-		$this->load->view('header_log_reg', array('title' => 'Registro'));
+		$header_data = array('title' => 'Registro', 'css_file_paths' => getCSS('register'));	
+		$this->load->view('header', $header_data);
+		
 		$this->load->view('navbar');
 	
 		//reglas para el registro de usuario
@@ -128,10 +130,10 @@ class User_controller extends CI_Controller{
 		checkPermission(1);
 		//defino los datos que usarán las vistas
 		$profile_data = $this->data_model->getProfileData($id_user);
-		$header_data = array('title' => 'Ver Perfil - '.$profile_data["first_name"].' '.$profile_data["last_name"]);
+		$header_data = array('title' => 'Ver Perfil - '.$profile_data["first_name"].' '.$profile_data["last_name"], 'css_file_paths' => getCSS('profile'));
 	
 		//cargo las vistas
-		$this->load->view('header_profile', $header_data);
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 	
 		if(!$profile_data){
@@ -237,7 +239,7 @@ class User_controller extends CI_Controller{
 	
 	public function admin($action = 'none', $id_user = 0){
 		checkPermission(3);
-		$header_data = array('title' => 'Administrar');
+		$header_data = array('title' => 'Administrar', 'css_file_paths' => getCSS('default'));
 		$this->load->view('header_general',$header_data);
 		$this->load->view('navbar');
 		if($action == 'ban'){
