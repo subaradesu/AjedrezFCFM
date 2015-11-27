@@ -39,16 +39,16 @@ class User_controller extends CI_Controller{
 				$this->session->permission = $logtry->userStatus;
 				$this->session->last_log = $logtry->update_time;
 				//$this->data_model->updateEvents();
-				$this->session->event_notifications = $this->data_model->getEventNotifications($this->session->username);
+				//$this->session->event_notifications = $this->data_model->getEventNotifications($this->session->username);
 				//TODO buscar como hacer variable global $nav_data
-				$nav_data = array(	'userLogged' => $_SESSION["isLogged"],
-									'username' => $_SESSION["username"],
-									'userType' => $_SESSION["permission"],
-									'first_name' => $_SESSION["first_name"],
-									'last_name' => $_SESSION["last_name"],
-									'sex' => $_SESSION["sex"],
-									'notifications' => $this->data_model->getEventNotifications($this->session->username)
-				);
+// 				$nav_data = array(	'userLogged' => $_SESSION["isLogged"],
+// 									'username' => $_SESSION["username"],
+// 									'userType' => $_SESSION["permission"],
+// 									'first_name' => $_SESSION["first_name"],
+// 									'last_name' => $_SESSION["last_name"],
+// 									'sex' => $_SESSION["sex"],
+// 									'notifications' => $this->data_model->getEventNotifications($this->session->username)
+// 				);
 				$this->load->view('navbar');
 				//mensaje de bienvenida
 				if($_SESSION["permission"] == 2){
@@ -240,7 +240,7 @@ class User_controller extends CI_Controller{
 	public function admin($action = 'none', $id_user = 0){
 		checkPermission(3);
 		$header_data = array('title' => 'Administrar', 'css_file_paths' => getCSS('default'));
-		$this->load->view('header_general',$header_data);
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		if($action == 'ban'){
 			$this->data_model->changeStatus($id_user, 2);
@@ -255,8 +255,8 @@ class User_controller extends CI_Controller{
 	
 	public function close(){
 		checkPermission(3);
-		$header_data = array('title' => 'Denegar Acceso');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Denegar Acceso', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('cause', 'Razón', 'required');
@@ -283,8 +283,8 @@ class User_controller extends CI_Controller{
 	
 	public function user_publications($id_user = 0, $id_publication = 0, $action = 'none'){
 		checkPermission(3);
-		$header_data = array('title' => 'Ver Publicaciones');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Ver Publicaciones', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 		//echo anchor('main_controller/user_publications/'.$profile_data["username"],'Ver Publicaciones.');
 		//TODO: Cargar publicaciones del usuario, pasarlas a la vista. Si el usuario no existe mostrar algo.
@@ -304,8 +304,8 @@ class User_controller extends CI_Controller{
 		checkPermission(1);
 		//TODO: revisar como hacer la búsqueda con GET
 		$this->load->library('form_validation');
-		$header_data = array('title' => 'Buscar Usuario');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Buscar Usuario', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 	
 		$this->form_validation->set_rules('search', 'Término de Búsqueda', 'required');
@@ -324,8 +324,8 @@ class User_controller extends CI_Controller{
 	public function ban_user($id_user){
 		checkPermission(3);
 		$this->load->library('form_validation');
-		$header_data = array('title' => 'Banear Usuario');
-		$this->load->view('header_general', $header_data);
+		$header_data = array('title' => 'Banear Usuario', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
 		
 		$this->form_validation->set_rules('user', 'Nombre de Usuario', 'required');

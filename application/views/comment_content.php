@@ -5,7 +5,7 @@
 					<button class="btn btn-default btn-xs" type="button" data-toggle="collapse" data-target="#collapse<?php echo $id_comment;?>" aria-expanded="false" aria-controls="collapseExample">
 						<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 					</button>
-					<span class="label label-info"><?php echo $score;?></span> <?php echo $publisher.' 12 hours ago';?>
+					<span class="label label-info"><?php echo $score;?></span> <?php echo anchor('/user_controller/user_profile/'.$id_publisher, $publisher);?> 12 hours ago
 				</div>
 				
 				<div class="panel-collapse collapse in" id="collapse<?php echo $id_comment;?>">
@@ -25,9 +25,8 @@
 					<div class="media-body">
 						<p><?php echo $content;?></p>
 						<div class="comment-meta">
-							<span><a href="#">borrar</a></span>
-							<span><a href="#">reportar</a></span>
-							<span><a href="#">ocultar</a></span>
+							<span><a >reportar</a></span>
+							<span><a >ocultar</a></span>							
 							<span>
 								<a class="" role="button" data-toggle="collapse" href="#replyComment<?php echo $id_comment;?>" aria-expanded="false" aria-controls="collapseExample">responder</a>
 							</span>
@@ -37,7 +36,7 @@
 										<label for="comment">Tu comentario</label>
 										<textarea name="comment" class="form-control" rows="3"></textarea>
 									</div>
-									<button type="submit" class="btn btn-default">Send</button>
+									<button type="submit" class="btn btn-default">Enviar</button>
 								</form>
 							</div>
 						</div>

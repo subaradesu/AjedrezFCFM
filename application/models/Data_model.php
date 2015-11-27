@@ -167,7 +167,8 @@ Class data_model extends CI_model{
 	}
 	
 	function getUserInfo($id_user){
-		return $this->db->query("SELECT username,first_name, last_name,userStatus FROM user WHERE username='".$id_user."';")->result_array();
+		$r = $this->db->query("SELECT username,first_name, last_name,userStatus FROM user WHERE username='".$id_user."';")->result_array();
+		return count($r) > 0 ? $r[0] : false; 
 	}
 	
 	function getNew($id_new){

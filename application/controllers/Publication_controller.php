@@ -19,8 +19,9 @@ class Publication_controller extends CI_Controller{
 	public function publish_new(){
 		checkPermission(3);
 		$this->load->library('form_validation');
-		$header_data = array('title' => 'Crear Noticia');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Crear Noticia', 'css_file_paths' => getCSS('comment'));
+		$this->load->view('header',$header_data);
+		
 		$this->load->view('navbar');
 	
 		$this->form_validation->set_rules('title', 'Título', 'required');
@@ -67,8 +68,8 @@ class Publication_controller extends CI_Controller{
 	public function publish_event(){
 		checkPermission(3);
 		$this->load->library('form_validation');
-		$header_data = array('title' => 'Crear Evento');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Crear Evento', 'css_file_paths' => getCSS('comment'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 	
 		//setea el mensaje de error y hace que se vea bonito
@@ -110,8 +111,8 @@ class Publication_controller extends CI_Controller{
 	public function publish_game(){
 		checkPermission(3);
 		$this->load->library('form_validation');
-		$header_data = array('title' => 'Crear Partida');
-		$this->load->view('header_general',$header_data);
+		$header = array('title' => 'Crear Partida', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 	
 		$this->form_validation->set_rules('title', 'Título', 'required');
@@ -204,8 +205,8 @@ class Publication_controller extends CI_Controller{
 	public function publish_comment($id_publication){
 		checkPermission(1);
 		$this->load->library('form_validation');
-		$header_data = array('title' => 'Agregar Comentario');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Agregar Comentario', 'css_file_paths' => getCSS('comment'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		
 		$this->form_validation->set_rules('comment', 'Comentario', 'required');
@@ -216,7 +217,7 @@ class Publication_controller extends CI_Controller{
 			$username = $_SESSION["username"];
 			$comment = $this->input->post('comment');
 			if($this->data_model->createComment($username, $id_publication, $comment)){
-				successView('El mensaje se agregó correctamente', 'k');
+				successView('El mensaje se agregó correctamente', 'Has click <a href="javascript:history.back(1)">aquí</a> para volver a la publicación.');
 			}
 			else{
 				dangerView('El mensaje no se pudo agregar', 'Inténtalo de nuevo más tarde o contacta a los administradores para solucionar el problema.');
@@ -227,10 +228,15 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
+	private function vote_publication($id_publication, $vote){
+		checkPermission(1);
+		$this->load->library('form_validation');
+	}
+	
 	public function view_new($id_new = 0){
 		checkPermission(0);
-		$header_data = array('title' => 'Ver Noticia');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Ver Noticia','css_file_paths' => getCSS('comments'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		if($data_new = $this->data_model->getNew($id_new)){
 			//Muestra la información de la noticia
@@ -246,17 +252,12 @@ class Publication_controller extends CI_Controller{
 	}
 	
 	private function show_comments($id_publication, $recursive = false){
-		//TODO Mostrar nombre y apellido en vez de username, puntaje de la publicación, fecha, avatar quizás.
+		//TODO Mostrar nombre y apellido en vez de username, fecha, avatar quizás.
 		$comments = $this->data_model->getComments($id_publication);
 		if(!$recursive){
 			$this->load->view('comments_open', array('id_publication' => $id_publication));
 			if(count($comments)> 0){
-				foreach ($comments as $c){
-					$comment_data = array('publisher' => $c['id_user'], 'score' => '0', 'content' => $c['content'], 'id_comment' => $c['id_comment'], 'id_publication' => $c['commented_publication']);
-					$this->load->view('comment_content', $comment_data);
-					$this->show_comments($c['id_comment'], true);
-				}
-				$this->load->view('comment_end');
+				$this->show_comments($id_publication, true);
 			}
 			else{
 				//TODO hacer esto en bonito
@@ -266,7 +267,10 @@ class Publication_controller extends CI_Controller{
 		}
 		else{
 			foreach ($comments as $c){
-				$comment_data = array('publisher' => $c['id_user'], 'score' => '0', 'content' => $c['content'], 'id_comment' => $c['id_comment'], 'id_publication' => $c['commented_publication']);
+				$score = $this->data_model->getPublicationScore($c['id_comment']);
+				$userinfo = $this->data_model->getUserInfo($c['id_user']);
+				$comment_data = array(	'id_publisher' => $c['id_user'], 'publisher' => $userinfo['first_name'].' '.$userinfo['last_name'],
+										'score' => $score, 'content' => $c['content'], 'id_comment' => $c['id_comment'], 'id_publication' => $c['commented_publication']);
 				$this->load->view('comment_content', $comment_data);
 				$this->show_comments($c['id_comment'], true);
 			}
@@ -276,8 +280,8 @@ class Publication_controller extends CI_Controller{
 	
 	public function my_events(){
 		checkPermission(1);
-		$header_data = array('title' => 'Mis Eventos');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Mis Eventos', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		//TODO: Cargar Eventos del usuario actual, pasarlos a la vista de eventos.
 		$this->load->view('my_events',$this->data_model->getEvents($_SESSION["username"]));
@@ -286,8 +290,8 @@ class Publication_controller extends CI_Controller{
 	
 	public function view_event($id_event = 0, $action = 'none'){
 		checkPermission(1);
-		$header_data = array('title' => 'Ver Evento');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Ver Evento', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		if($data_event = $this->data_model->getEvent($id_event)){
 			$this->load->view('view_event', array('event' => $data_event));
@@ -301,8 +305,8 @@ class Publication_controller extends CI_Controller{
 
 	public function view_boardgame($id_boardgame = 0){
 		checkPermission(1);
-		$header_data = array('title' => 'Ver Evento');
-		$this->load->view('header_general',$header_data);
+		$header_data = array('title' => 'Ver Evento', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		if($data_boardgame = $this->data_model->getBoardgame($id_boardgame)){
 			$this->load->view('view_boardgame', array('data_boardgame' => $data_boardgame));

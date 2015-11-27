@@ -1,14 +1,14 @@
 <!-- Support libraries from Yahoo YUI project -->  
 <script type="text/javascript"  
-    src="http://chesstempo.com/js/pgnyui.js">  
+    src="<?php echo base_url().'/chessboard/http_chesstempo.com_js_pgnyui.js'; //"http://chesstempo.com/js/pgnyui.js";?>">  
 </script>   
 <script type="text/javascript"  
-    src="http://chesstempo.com/js/pgnviewer.js">  
+    src="<?php echo base_url().'/chessboard/http_chesstempo.com_js_pgnviewer.js';//"http://chesstempo.com/js/pgnviewer.js"?>">  
 </script>  
 <link  
  type="text/css"   
  rel="stylesheet"   
- href="http://chesstempo.com/css/board-min.css">  
+ href="<?php echo base_url().'/chessboard/http_chesstempo.com_css_board-min.css'; //"http://chesstempo.com/css/board-min.css"?>">  
 </link> 
 <script>  
 new PgnViewer({ boardName: "demo",  

@@ -40,6 +40,11 @@ textarea {
 	color: #ff0000;
 }
 
+.news-image{
+	/*TODO: Make it responsive*/
+	width: 1140px;
+}
+
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
 
