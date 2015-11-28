@@ -1,5 +1,7 @@
 @CHARSET "ISO-8859-1";
 
+/*CSS comentarios*/
+
 .form-comment {
 	margin-bottom: 10px;
 }
@@ -36,4 +38,50 @@
   color: grey;
   font-weight: bolder;
   margin-right: 5px;
+}
+
+/*Colores Flechitas de +1 -1*/
+
+.flechita-up-mark {
+	color: #ff8000;
+	text-decoration: #ff8000;
+}
+
+.flechita-up-mark:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.flechita-up-unmark{
+	color: grey;
+	text-decoration: grey;
+}
+
+.flechita-up-unmark:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.flechita-down-mark{
+	color: #0000a0;
+	text-decoration: #0000a0;
+}
+
+.flechita-down-mark:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
+}
+
+.flechita-down-unmark{
+	color: grey;
+	text-decoration: grey;
+}
+
+.flechita-down-unmark:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
 }

@@ -228,9 +228,16 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	private function vote_publication($id_publication, $vote){
+	//Cambia la votación del usuario actualmente loggeado por lo que venga en la variable $vote como +1 o -1 y devuelve a la página anterior
+	public function vote_publication($id_publication, $vote){
 		checkPermission(1);
-		$this->load->library('form_validation');
+		$vote = $vote > 0 ? 1 : -1;
+		$user = $_SESSION["username"];
+		if($vote == $this->data_model->getUserPublicationVote($id_publication,$user)){
+			$vote = 0;
+		}
+		$this->data_model->updateScore($user, $id_publication, $vote);
+		header('Location: ' . $_SERVER['HTTP_REFERER']);
 	}
 	
 	public function view_new($id_new = 0){
@@ -270,7 +277,9 @@ class Publication_controller extends CI_Controller{
 				$score = $this->data_model->getPublicationScore($c['id_comment']);
 				$userinfo = $this->data_model->getUserInfo($c['id_user']);
 				$comment_data = array(	'id_publisher' => $c['id_user'], 'publisher' => $userinfo['first_name'].' '.$userinfo['last_name'],
-										'score' => $score, 'content' => $c['content'], 'id_comment' => $c['id_comment'], 'id_publication' => $c['commented_publication']);
+										'score' => $score, 'content' => $c['content'], 'id_comment' => $c['id_comment'],
+										'id_publication' => $c['commented_publication'],
+										'vote' => isset($_SESSION["username"]) ? $this->data_model->getUserPublicationVote($c['id_comment'], $_SESSION["username"]) : 0);
 				$this->load->view('comment_content', $comment_data);
 				$this->show_comments($c['id_comment'], true);
 			}
@@ -280,21 +289,31 @@ class Publication_controller extends CI_Controller{
 	
 	public function my_events(){
 		checkPermission(1);
-		$header_data = array('title' => 'Mis Eventos', 'css_file_paths' => getCSS('default'));
+		$header_data = array('title' => 'Mis Eventos', 'css_file_paths' => getCSS('events'));
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		//TODO: Cargar Eventos del usuario actual, pasarlos a la vista de eventos.
-		$this->load->view('my_events',$this->data_model->getEvents($_SESSION["username"]));
+		$this->load->view('my_events',array('events' => $this->data_model->getEvents($_SESSION["username"])));
+		$this->load->view('footer');
+	}
+	
+	public function admin_events(){
+		checkPermission(1);
+		$header_data = array('title' => 'Mis Eventos', 'css_file_paths' => getCSS('events'));
+		$this->load->view('header',$header_data);
+		$this->load->view('navbar');
+		$this->load->view('admin_events');
 		$this->load->view('footer');
 	}
 	
 	public function view_event($id_event = 0, $action = 'none'){
 		checkPermission(1);
-		$header_data = array('title' => 'Ver Evento', 'css_file_paths' => getCSS('default'));
+		$header_data = array('title' => 'Ver Evento', 'css_file_paths' => getCSS('comments'));
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		if($data_event = $this->data_model->getEvent($id_event)){
 			$this->load->view('view_event', array('event' => $data_event));
+			$this->show_comments($id_event);
 		}
 		else{
 			$this->load->view('simple_danger', array('heading' => '¡El evento solicitado no existe!', 'message' => ''));

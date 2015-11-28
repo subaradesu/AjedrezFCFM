@@ -23,7 +23,7 @@ Class data_model extends CI_model{
 		$this->db->query("	INSERT INTO userPublication
 							VALUES ('".$publisher."', @publication_id, NOW());");
 		//inserto la noticia con la id de publicación obtenida
-		$this->db->query("	INSERT INTO news (id_new, title, date, content, image_url, category)
+		$this->db->query("	INSERT INTO news (id_new, title, date, content, image_cover, category)
 							VALUES (@publication_id, '".$title."', NOW(), '".$content."', '".$imageFilename."', '".$category."');");
 		//termina la transacción
 		$this->db->trans_complete();
@@ -56,7 +56,12 @@ Class data_model extends CI_model{
 	
 	/* Retorna el número de eventos finalizados del usuario que se pueden finalizar (status = ended)*/
 	public function getEventNotifications($id_user){
-		return $this->db->query("SELECT COALESCE(COUNT(id_event),0) as numberOfEvents FROM event, userPublication WHERE id_event = id_publication AND id_user='".$id_user."' AND status='ended';");
+		return $this->db->query("SELECT COALESCE(COUNT(id_event),0) as numberOfEvents FROM event, userPublication WHERE id_event = id_publication AND id_user='".$id_user."' AND status='ended';")->result_array()[0]["numberOfEvents"];
+	}
+	
+	/* Retorna las notificaciones del usuario*/
+	public function getUserNotifications($id_user){
+		return 2;
 	}
 	
 	
@@ -94,18 +99,22 @@ Class data_model extends CI_model{
 	
 	//obtiene el puntaje de la publicación
 	public function getPublicationScore($id_publication){
-		//TODO: retornar el puntaje de una publicación
 		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_publication = '".$id_publication."'")->result_array()[0]["score"];
 	}
 	
+	//obtiene el puntaje asignado por el usuario a la publicación
+	public function getUserPublicationVote($id_publication, $id_user){
+		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_user='".$id_user."' AND id_publication = '".$id_publication."'")->result_array()[0]["score"];
+	}
+	
 	/*Actualiza el puntaje asignado por el usuario a la publicación*/
-	public function updateScore($id_user, $id_publication, $new_score){
-		$this->trans_start();
+	public function updateScore($id_user, $id_publication, $value){
+		$this->db->trans_start();
 		if($this->db->query("SELECT * FROM publicationKarma WHERE id_publication = '".$id_publication."' AND id_user = '".$id_user."';")->num_rows()){
-			$this->db->simple_query("UPDATE publicationKarma SET value='".$new_score."' WHERE id_publication = '".$id_publication."' AND id_user = '".$id_user."';");
+			$this->db->simple_query("UPDATE publicationKarma SET value='".$value."' WHERE id_publication = '".$id_publication."' AND id_user = '".$id_user."';");
 		}
 		else{
-			$this->db->simple_query("INSERT INTO publicationKarma VALUES ('".id_publication."','".$id_user."','".$new_score."');");
+			$this->db->simple_query("INSERT INTO publicationKarma VALUES ('".$id_publication."','".$id_user."','".$value."');");
 		}
 		$this->db->trans_complete();
 		return $this->db->trans_status();		
@@ -271,15 +280,20 @@ Class data_model extends CI_model{
 		return $this->db->trans_status();
 	}
 	
+	//retorna la información del evento si es que existe, si no retorna false
 	function getEvent($id_event){
-		return $this->db->query("SELECT * FROM event WHERE id_event='".$id_event."';")->result_array();
+		$r = $this->db->query("SELECT * FROM event WHERE id_event='".$id_event."';")->result_array();
+		return count($r) > 0 ? $r[0] : false;
 	}
 	
 	function getEvents($id_user){
-		$result['private_events'] = $this->db->query("SELECT * FROM invitedList AS il, event WHERE il.id_user='".$id_user."' AND il.id_event=event.id_event")->result_array();
-		$result['public_events'] = $this->db->query("SELECT * FROM event WHERE event.visibility='public'")->result_array();
+		$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM invitedList AS il, event WHERE il.id_user='".$id_user."' AND il.id_event=event.id_event AND event.status!='closed';")->result_array();
+		$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM event WHERE event.visibility='public' AND event.status!='closed';")->result_array();
+		return array_merge($result['private_events'], $result['public_events']);
+	}
+	
+	function countComments(){
 		
-		return $result;
 	}
 	
 	function userLogin($username, $password){

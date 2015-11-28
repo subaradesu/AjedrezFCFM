@@ -33,13 +33,6 @@
 					</div>
 				</div>
 				
-<!-- 				<div class="form-group"> -->
-<!-- 					<label class="control-label col-sm-2">Recibir Notificaciones:</label> -->
-<!-- 					<div class="col-sm-1"> -->
-<!-- 						<input type="checkbox" class="form-control" id="notifications" name="notifications"> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-				
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="avatar">Avatar:</label>
 					<input type="file" name="avatar" class="col-sm-8" id="avatar">

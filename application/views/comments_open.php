@@ -1,6 +1,6 @@
 
 	<?php //Recibe $id_publication la id de la publicación que se está comentando?>
-	<div class="container">
+	<div class="comment-wrapper">
 		<div class="post-comments">
 			
 	<!-- Panel para Comentar -->
@@ -29,4 +29,4 @@
 		
 	<!-- Abrir panel de Comentarios -->
 		
-		<div class="row">
+		<div>

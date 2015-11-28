@@ -23,7 +23,6 @@ class User_controller extends CI_Controller{
 		$this->load->library('form_validation');
 		
 		$header_data = array('title' => 'Ingresar', 'css_file_paths' => getCSS('login'));
-		$this->load->view('header', $header_data);
 		
 		$this->form_validation->set_rules('user', 'Nombre de Usuario', 'required');
 		$this->form_validation->set_rules('pass', 'Contraseña', 'required');
@@ -31,6 +30,8 @@ class User_controller extends CI_Controller{
 			$user = $this-> input ->post('user');
 			$pass = $this-> input ->post('pass');
 			if($logtry = $this->data_model->userLogin($user, $pass)){
+				
+				
 				$this->session->isLogged = 1;
 				$this->session->username = $logtry->username;
 				$this->session->sex = $logtry->sex;
@@ -39,7 +40,9 @@ class User_controller extends CI_Controller{
 				$this->session->permission = $logtry->userStatus;
 				$this->session->last_log = $logtry->update_time;
 				//$this->data_model->updateEvents();
-				//$this->session->event_notifications = $this->data_model->getEventNotifications($this->session->username);
+				$this->session->notifications = $this->data_model->getUserNotifications($this->session->username);
+				$this->session->event_notifications = $this->data_model->getEventNotifications($this->session->username);
+				
 				//TODO buscar como hacer variable global $nav_data
 // 				$nav_data = array(	'userLogged' => $_SESSION["isLogged"],
 // 									'username' => $_SESSION["username"],
@@ -49,30 +52,33 @@ class User_controller extends CI_Controller{
 // 									'sex' => $_SESSION["sex"],
 // 									'notifications' => $this->data_model->getEventNotifications($this->session->username)
 // 				);
-				$this->load->view('navbar');
-				//mensaje de bienvenida
+				//mensaje de bienvenida, si el usuario está baneado
 				if($_SESSION["permission"] == 2){
+					$this->load->view('header', $header_data);
+					$this->load->view('navbar');
 					$this->load->view('simple_danger', array(	'heading' => 'Ingreso Exitoso...',
-							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. <p>Al parecer tu cuenta se encuentra baneada, contáctate con los administradores para solucionar tu situación. Por ahora tienes acceso limitado al sitio.</p>'));
+							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. Tu último ingreso fue hace '.daysSinceLastLogin($this->session->last_log).' días. <p>Al parecer tu cuenta se encuentra baneada, contáctate con los administradores para solucionar tu situación. Por ahora tienes acceso limitado al sitio.</p>'));
 				}
+				//mensaje de bienvenida normal
 				else{
-					//TODO redirigir al index probablemente
-					$this->load->view('simple_success', array(	'heading' => '¡Ingreso Exitoso!',
-							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. No te veíamos desde '.$this->session->last_log.'. Disfruta tu estadía.'));
 					$header_data['css_file_paths'] = getCSS('index');
 					$this->load->view('header', $header_data);
+					$this->load->view('navbar');
+					$this->load->view('simple_success', array(	'heading' => '¡Ingreso Exitoso!',
+							'message' => ($this->session->sex == 2 ? 'Bienvenida ' : 'Bienvenido ').$this->session->first_name.' '.$this->session->last_name.'. Tu último ingreso fue hace '.daysSinceLastLogin($this->session->last_log).' días. Disfruta tu estadía.'));
 					$this->load->view('home');
 				}
 			}
 			else{
+				$this->load->view('header', $header_data);
 				$this->load->view('navbar');
-				//mensaje de fallo
 				$this->load->view('simple_danger', array(	'heading' => '¡Nombre de Usuario y/o Contraseña incorrecto!',
 						'message' => 'Inténtalo de nuevo'));
 				$this->load->view('log_pane');
 			}
 		}
 		else{
+			$this->load->view('header', $header_data);
 			$this->load->view('navbar');
 			$this->load->view('log_pane');
 		}

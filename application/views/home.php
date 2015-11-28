@@ -13,4 +13,5 @@
 		
 			<p>Esperamos que disfrutes tu estadía y que el contenido sea de tu agrado.</p>
 		</div>
+	
 	</div>

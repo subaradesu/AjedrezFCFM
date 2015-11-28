@@ -46,6 +46,13 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		return intval($diff->format('%R%a')) < 0;
 	}
 	
+	function daysSinceLastLogin($dateStr){
+		$d = date_create_from_format('Y-m-d', $dateStr);
+		$now = date_create();
+		$diff = date_diff($d, $now);
+		return intval($diff->format('%R%a'));
+	}
+	
 	/*Obtiene el valor para ingresarlo en dateTime en la db, retorna falso si no cumple con el formato esperado*/
 	function getDBTime($dateString){
 		$d = date_create_from_format('d-m-Y H:i', $dateString);
@@ -68,6 +75,10 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		if($str == 'profile'){
 			return array('css/default.css', 'css/profile.css');
 		}
+		if($str == 'events'){
+			return array('css/default.css', 'css/events.css');
+		}
+		
 		//default
 		return array('css/default.css');
 	}

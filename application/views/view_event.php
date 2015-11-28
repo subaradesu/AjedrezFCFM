@@ -1,5 +1,3 @@
-	
-	<?php $event = $event[0];?>
 				
 	<div id="content">
 		<div class=page-header>
@@ -28,4 +26,4 @@
 				</tbody>
 			</table>
 		</div>
-	</div>			
+	</div>

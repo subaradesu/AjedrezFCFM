@@ -2,25 +2,30 @@
 
 /*general style*/
 
+
+
 body {
-	/* background-image: url("http://localhost/AjedrezFCFM/img/resources/chessbg1.png"); */
+	height: 100%;
+	background: #f5f5f5;
 }
 
 html {
 	position: relative;
-	min-height: 100%;
+	height: 100%;
 }
 
 textarea {
 	resize: vertical;
 }
 
+.push {
+	height: 30px;
+}
+
 .footer {
-	width: auto;
-	position: absolute;
-	bottom: 0;
 	height: 30px;
 	background-color: #f5f5f5;
+	border-radius: 4px;
 }
 .nav li a{
 	padding-left: 10px;
@@ -32,8 +37,11 @@ textarea {
 }
 
 .IKUSABA {
-/* 	width: 100%;
- */	margin-bottom: 60px;
+	min-height: 100%;
+    height: auto !important;
+	height: 100%;
+	margin: 0 auto -30px;
+ 	background: white;
 }
 
 .red-text{
@@ -42,7 +50,7 @@ textarea {
 
 .news-image{
 	/*TODO: Make it responsive*/
-	width: 1140px;
+	width: 100%;
 }
 
 /* CUSTOMIZE THE CAROUSEL
@@ -90,5 +98,5 @@ textarea {
 /* Personalizar las badges (el circulito mágico que tiene el número de notificaciones)*/
 
 .notification-badge {
-	background-color: #269abc;
+	background-color: #0000ff;
 }

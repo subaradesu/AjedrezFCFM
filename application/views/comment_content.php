@@ -15,10 +15,16 @@
 								<a href="#"><span class="glyphicon glyphicon-star" aria-label="Save"></span></a>
 							</div>
 							<div class="vote up">
-								<i class="glyphicon glyphicon-menu-up"></i>
+								<?php
+								$up_arrow = array('class' => $vote > 0 ? 'flechita-up-mark' : 'flechita-up-unmark');
+								echo anchor('/publication_controller/vote_publication/'.$id_comment.'/'.'1', '<i class="glyphicon glyphicon-menu-up"></i>', $up_arrow);
+								?>
 							</div>
 							<div class="vote inactive">
-								<i class="glyphicon glyphicon-menu-down"></i>
+								<?php
+								$down_arrow = array('class' => $vote < 0 ? 'flechita-down-mark' : 'flechita-down-unmark');
+								echo anchor('/publication_controller/vote_publication/'.$id_comment.'/'.'-1', '<i class="glyphicon glyphicon-menu-down"></i>', $down_arrow);
+								?>
 							</div>
 						</div>
 					</div>

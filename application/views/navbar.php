@@ -18,11 +18,14 @@
 						<span class="caret"></span></a>
 						<ul class="dropdown-menu">
 	<!-- 					<li><a href="news.php">Noticias Fcfm</a></li> -->
-							<li><?php echo anchor("/main_controller/news", "Noticias Fcfm");?></li>
-							<li class="disabled"><a>Eventos</a></li>
+							<li><?php echo anchor("/main_controller/news", "Noticias");?></li>
 							<li><?php echo anchor("/main_controller/boardgames", "Partidas publicadas");?></li>
 							<li><?php echo anchor("/main_controller/about", "Historia");?></li>
 							<li><?php echo anchor("/main_controller/links", "Enlaces");?></li>
+							<?php if ($this->session->isLogged) :?>
+							<li role="separator" class="divider"></li>
+							<li><?php echo anchor("/publication_controller/my_events", "Mis Eventos");?></li>
+							<?php endif;?>
 						</ul>
 					</li>
 					<li><?php echo anchor("/user_controller/search_user", "Buscar Usuario");?></li>
@@ -45,7 +48,8 @@
 					
 					<li><a>Bievenid<?php echo ($_SESSION["sex"]==2 ? 'a' : 'o').', '.$_SESSION["first_name"];?></a></li>
 					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Mi Cuenta <span class="badge notification-badge">1</span>
+						<a class="dropdown-toggle" data-toggle="dropdown" href="news.php">Mi Cuenta 
+						<?php if ($_SESSION["notifications"] > 0) : ?><span class="badge notification-badge"><?php echo $_SESSION["notifications"];?></span><?php endif;?>
 						<span class="glyphicon glyphicon-cog"></span></a>
 					<ul class="dropdown-menu">
 						<li><?php echo anchor("/user_controller/user_profile/".$_SESSION['username'], "Mi Perfil");?></li>
@@ -54,7 +58,11 @@
 						<?php if($this->session->permission!=2) : ?>
 						
 						<li role="separator" class="divider"></li>
-						<li><?php echo anchor("/publication_controller/my_events", "Mis Eventos <span class='badge notification-badge'>1</span>");?></li>
+						<li><?php
+							$badge = ($_SESSION["event_notifications"] > 0 ? ("<span class='badge notification-badge'>".$_SESSION["event_notifications"]."</span>") : '');
+							echo anchor("/publication_controller/admin_events", "Mis Eventos ".$badge);
+							?>
+						</li>
 						<?php endif;?>
 						
 						<?php if($this->session->isLogged && $this->session->permission==3) : ?>
