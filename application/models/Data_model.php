@@ -59,16 +59,46 @@ Class data_model extends CI_model{
 		return $this->db->query("SELECT COALESCE(COUNT(id_event),0) as numberOfEvents FROM event, userPublication WHERE id_event = id_publication AND id_user='".$id_user."' AND status='ended';");
 	}
 	
+	
 	public function send_message($sender, $receiver, $content){
 		//TODO: usar esto pa mandar mensajes entre usuarios
 		return $this->db->simple_query("INSERT INTO privateMessage VALUES (null, 'holahola', 'user01', 'user02');");
 	}
 	
+	public function addEventPicture($id_publisher, $id_event, $title = '', $description = '', $image){
+		
+		//si el usuario no confirmó asistencia al evento
+		if(count($this->db->query("SELECT * FROM invitedList WHERE assistance != 'confirmed' AND id_event='".$id_event."' AND id_publisher='".$id_publisher."';")->result_array()) < 1)
+			return false;
+		
+		//comenzar la transacción
+		$this->db->trans_start();
+		//Creo una nueva publicacion
+		$this->db->query(	"INSERT INTO publication VALUES (null, NOW());");
+		
+		//guardo la ID en @publication_id
+		$this->db->query("	SELECT LAST_INSERT_ID()
+							INTO @publication_id;");
+		
+		//inserto la relación publicación-publicador en la tabla correspondiente
+		$this->db->query("	INSERT INTO userPublication
+							VALUES ('".$id_publisher."', @publication_id, NOW());");
+		//inserto la foto del evento con la id de publicación obtenida
+		$this->db->query("	INSERT INTO eventPicture
+							VALUES (@publication_id, '".$id_event."', '".$id_publisher."', '".$title."', '".$description."', '".$image."');");
+		//termina la transacción
+		$this->db->trans_complete();
+		
+		return $this->db->trans_status();
+	}
+	
+	//obtiene el puntaje de la publicación
 	public function getPublicationScore($id_publication){
 		//TODO: retornar el puntaje de una publicación
 		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_publication = '".$id_publication."'")->result_array()[0]["score"];
 	}
 	
+	/*Actualiza el puntaje asignado por el usuario a la publicación*/
 	public function updateScore($id_user, $id_publication, $new_score){
 		$this->trans_start();
 		if($this->db->query("SELECT * FROM publicationKarma WHERE id_publication = '".$id_publication."' AND id_user = '".$id_user."';")->num_rows()){
@@ -81,11 +111,12 @@ Class data_model extends CI_model{
 		return $this->db->trans_status();		
 	}
 	
+	//obtiene las publicaciones del usuario
 	function getPublications($id_user){
 		$result["events"] = $this->db->query("SELECT * FROM event, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=event.id_event;")->result_array();
 		$result["news"] = $this->db->query("SELECT * FROM news, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;")->result_array();
 		//$result["games"] = $this->db->query();
-		//$result["comments"] = $this->db->query();
+		$result["comments"] = $this->db->query("SELECT * FROM ");
 		return $result;
 	}
 	

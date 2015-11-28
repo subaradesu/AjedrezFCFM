@@ -111,7 +111,7 @@ class Publication_controller extends CI_Controller{
 	public function publish_game(){
 		checkPermission(3);
 		$this->load->library('form_validation');
-		$header = array('title' => 'Crear Partida', 'css_file_paths' => getCSS('default'));
+		$header_data = array('title' => 'Crear Partida', 'css_file_paths' => getCSS('default'));
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 	
