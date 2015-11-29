@@ -20,12 +20,6 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="end">Inicio<span class="red-text">*</span>:</label>
 					<div class="col-sm-8">
-						<input type="datetime-local" name="inicio" class="form-control" id="inicio" placeholder="Fecha de inicio del evento. Ej: 25-12-2015 16:00." required>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label col-sm-2" for="end">Inicio<span class="red-text">*</span>:</label>
-					<div class="col-sm-8">
 						<input type="text" name="start" class="form-control" id="end" placeholder="Fecha de inicio del evento. Ej: 25-12-2015 16:00." required>
 					</div>
 				</div>
