@@ -52,4 +52,8 @@
 				</tbody>
 			</table>
 		</div>
+		<?php if ($event["event_data"]["status"] == closed) : ?>
+		<div>
+		</div>
+		<?php endif;?>
 	</div>
