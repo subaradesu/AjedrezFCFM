@@ -69,7 +69,7 @@ new PgnViewer({ boardName: "demo",
 			</tr>	
 			<tr >
 				<th class"col-sm-offset-2">Publicado por:</th>
-				<td class"col-sm-offset-10"><?php echo $data_boardgame["user"]["first_name"]." ".$data_boardgame["user"]["last_name"]; ?></div>  
+				<td class"col-sm-offset-10"><?php echo anchor('user_controller/user_profile/'.$data_boardgame["user"]["username"], $data_boardgame["user"]["first_name"]." ".$data_boardgame["user"]["last_name"]); ?></div>  
 				<!--div id="demo-moves"></div--> 
 				</td>
 			</tr>

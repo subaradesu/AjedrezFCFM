@@ -9,6 +9,10 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		return base_url().'img/news_cover/'.$coverFilename;
 	}
 	
+	function prepareHTMLFromText($str){
+		return str_replace('\r\n','<br>',$str);
+	}
+	
 	function checkPermission($permissionNeeded){
 		if(!isset($_SESSION["isLogged"])){
 			//Si necesito permisos y no estoy loggeado

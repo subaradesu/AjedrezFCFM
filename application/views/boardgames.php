@@ -14,7 +14,7 @@
 				<tbody>
 				<?php foreach ($boardgames as $boardgame) :?>
 					<tr>
-						<th><?php echo anchor('publication_controller/view_boardgame/'.$boardgame["matchboard_id"], $boardgame["title"]);?></th>
+						<th><?php echo anchor('publication_controller/view_boardgame/'.$boardgame["id_matchboard"], $boardgame["title"]);?></th>
 						<th><?php echo $boardgame["details"];?></th>
 						<th>				<?php 
 					switch($boardgame["match_origin"]){

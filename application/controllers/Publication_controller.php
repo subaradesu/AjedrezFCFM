@@ -45,7 +45,7 @@ class Publication_controller extends CI_Controller{
 				$title = $this->input->post('title');
 				$imageType = $imageFileType;
 				$category = $this->input->post('category');
-				$content = $this->input->post('content');
+				$content = prepareHTMLFromText($this->input->post('content'));
 				if($image_name = $this->data_model->createNew($_SESSION["username"],$title,$content, $imageType,$category)){
 					$target_file = $target_dir . $image_name;
 					move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
@@ -268,7 +268,7 @@ class Publication_controller extends CI_Controller{
 			}
 			else{
 				//TODO hacer esto en bonito
-				successView('La publicación no tiene comentarios!', 'Sé el primero en comentar esta publicación.');
+				infoView('La publicación no tiene comentarios!', 'Sé el primero en comentar esta publicación.');
 			}
 			$this->load->view('comments_close');
 		}
@@ -373,11 +373,12 @@ class Publication_controller extends CI_Controller{
 
 	public function view_boardgame($id_boardgame = 0){
 		checkPermission(1);
-		$header_data = array('title' => 'Ver Evento', 'css_file_paths' => getCSS('default'));
+		$header_data = array('title' => 'Ver Evento', 'css_file_paths' => getCSS('comments'));
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 		if($data_boardgame = $this->data_model->getBoardgame($id_boardgame)){
 			$this->load->view('view_boardgame', array('data_boardgame' => $data_boardgame));
+			$this->show_comments($id_boardgame);
 		}
 		else{
 			$this->load->view('simple_danger', array('heading' => '¡La partida solicitada no existe!', 'message' => ''));

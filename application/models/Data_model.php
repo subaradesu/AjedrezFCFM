@@ -185,7 +185,18 @@ Class data_model extends CI_model{
 				$this->db->escape_str($stringpgn));
 		$this->db->trans_start();
 		//Creo una nueva publicacion
-		$this->db->query("INSERT INTO matchboard (title,
+		$this->db->query(	"INSERT INTO publication
+							VALUES (null, NOW());");
+		//guardo la ID en $id
+		$id = $this->db->insert_id();
+		$this->db->query("	SELECT LAST_INSERT_ID()
+							INTO @publication_id;");
+		//inserto la relación publicación-publicador en la tabla correspondiente
+		$this->db->query("	INSERT INTO userPublication (id_user, id_publication, last_changed)
+							VALUES ('".$publisher."', @publication_id, NOW());");
+		//inserto el matchboard
+		$this->db->query("INSERT INTO matchboard (id_matchboard,
+											title,
 											white_player,
 											black_player,
 											match_origin,
@@ -193,10 +204,8 @@ Class data_model extends CI_model{
 											format,
 											pgn_board,
 											pgn_string)
-						VALUES (?,?,?,?,?,?,?,?);", $game_attr);
-		$id = $this->db->insert_id();
-		$this->db->query("SELECT LAST_INSERT_ID() INTO @mboard_id;");	
-		$this->db->query("INSERT INTO uploadsMatch (user_id, matchboard_id) VALUES (?, @mboard_id);", $publisher);		
+						VALUES (@publication_id,?,?,?,?,?,?,?,?);", $game_attr);
+			
 		//termina la transacción
 		$this->db->trans_complete();
 		return array("status" => $this->db->trans_status(), "id" => $id);
@@ -225,16 +234,19 @@ Class data_model extends CI_model{
 		return count($r) > 0 ? $r[0] : false; 
 	}
 	
-	//obtiene la noticia a partir de su id
+	//obtiene la información de la noticia a partir de su id
 	function getNew($id_new){
-		return $this->db->query("SELECT * FROM news WHERE id_new='".$id_new."'")->first_row('array');
+		return $this->db->query("	SELECT *
+									FROM news, userPublication AS UP, user
+									WHERE id_new='".$id_new."' AND UP.id_publication = id_new AND user.username = UP.id_user
+				;")->first_row('array');
 	}
 	
 	//obtiene la informacion de la partida a través de su id
 	function getBoardgame($idBoard){
-		$info =$this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
-		$user = $this->db->query("SELECT user_id FROM uploadsMatch WHERE matchboard_id=".$idBoard."")->first_row('array');
-		$info["user"] = $this->db->query("SELECT first_name, last_name FROM user WHERE username='".$user["user_id"]."'")->first_row('array');
+		$info = $this->db->query("SELECT * FROM matchboard WHERE id_matchboard=".$idBoard."")->first_row('array');
+		$user = $this->db->query("SELECT id_user FROM userPublication WHERE id_publication=".$idBoard."")->first_row('array');
+		$info["user"] = $this->db->query("SELECT username, first_name, last_name FROM user WHERE username='".$user["id_user"]."'")->first_row('array');
 		return $info;
 	}
 	
@@ -284,11 +296,6 @@ Class data_model extends CI_model{
 				WHERE username = '".$id_user."'";
 		$result = $this->db->query($sql);
 		return $result->num_rows() == 1? $result->first_row('array') : false;
-	}
-	
-	//retorno la información opcional del perfil del usuario.
-	function getOptionalProfileData($id_user){
-		return $this->db->query("SELECT * FROM user_info WHERE user_id= '".$id_user."';");
 	}
 	
 	//cambia el estado del usuario, Se usa para el baneo y desbaneo de usuarios
