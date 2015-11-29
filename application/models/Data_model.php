@@ -79,15 +79,23 @@ Class data_model extends CI_model{
 	}
 	
 	/* Publica la imagen en el evento*/
-	public function addEventPicture($id_publisher, $id_event, $title = '', $description = '', $image){
+	public function addEventPicture($id_publisher, $id_event, $title, $imageFormat){
+		
 		//si el usuario no confirmó asistencia al evento
-		if(count($this->db->query("SELECT * FROM invitedList WHERE assistance != 'confirmed' AND id_event='".$id_event."' AND id_user='".$id_publisher."';")->result_array()) < 1)
+		$sql = "SELECT * FROM invitedList WHERE assistance = 'confirmed' AND id_event='".$id_event."' AND id_user='".$id_publisher."';";
+		if(count($this->db->query($sql)->result_array()) < 1){
 			return false;
+		}
 		
 		//comenzar la transacción
 		$this->db->trans_start();
 		//Creo una nueva publicacion
 		$this->db->query(	"INSERT INTO publication VALUES (null, NOW());");
+		
+		//guardo la ID en $id
+		$id = $this->db->insert_id();
+		
+		$filename= $id.'.'.$imageFormat;
 		
 		//guardo la ID en @publication_id
 		$this->db->query("	SELECT LAST_INSERT_ID()
@@ -97,12 +105,12 @@ Class data_model extends CI_model{
 		$this->db->query("	INSERT INTO userPublication
 							VALUES ('".$id_publisher."', @publication_id, NOW());");
 		//inserto la foto del evento con la id de publicación obtenida
-		$this->db->query("	INSERT INTO eventPicture
-							VALUES (@publication_id, '".$id_event."', '".$id_publisher."', '".$title."', '".$description."', '".$image."');");
+		$this->db->query("	INSERT INTO eventPicture (id_eventPicture, id_event, id_user, title, image_filename)
+							VALUES (@publication_id, '".$id_event."', '".$id_publisher."', '".$title."', '".$filename."');");
 		//termina la transacción
 		$this->db->trans_complete();
 		
-		return $this->db->trans_status();
+		return $this->db->trans_status() ? $filename : false ;
 	}
 	
 	//obtiene el puntaje de la publicación
@@ -415,6 +423,10 @@ Class data_model extends CI_model{
 			$count += $this->countComments($comment["id_comment"]);
 		}
 		return $count;
+	}
+	
+	function getEventImages($id_event){
+		return $this->db->query("SELECT * FROM eventPicture, user, publication WHERE idPublication=id_eventPicture AND username=id_user AND id_event='".$id_event."'")->result_array();
 	}
 	
 	//Se encarga de logear al usuario, retorna true si el login es posible, false si no

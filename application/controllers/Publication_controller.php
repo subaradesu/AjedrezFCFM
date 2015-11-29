@@ -270,7 +270,6 @@ class Publication_controller extends CI_Controller{
 	}
 	
 	private function show_comments($id_publication, $recursive = false){
-		//TODO Mostrar nombre y apellido en vez de username, fecha, avatar quizás.
 		$comments = $this->data_model->getComments($id_publication);
 		if(!$recursive){
 			$this->load->view('comments_open', array('id_publication' => $id_publication));
@@ -349,6 +348,68 @@ class Publication_controller extends CI_Controller{
 		}
 		else{
 			$this->load->view('simple_danger', array('heading' => '¡El evento solicitado no existe!', 'message' => ''));
+		}
+		$this->load->view('footer');
+	}
+	
+	public function event_images($event_id = 0){
+		checkPermission(1);
+		$this->load->library('form_validation');
+		$header_data = array('title' => 'Imágenes del Evento', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
+		$this->load->view('navbar');
+		
+		$this->form_validation->set_rules('title', 'Título', 'required');
+		$this->form_validation->set_rules('event', 'Id Evento', 'required');
+		
+		
+		if($this->form_validation->run()){
+			$title = $this->input->post('title');
+			$id_event =$this->input->post('event');
+			
+			if(isset($_FILES["image"]["tmp_name"]) && file_exists($_FILES["image"]["tmp_name"])){
+				if(!($check = getimagesize($_FILES["image"]["tmp_name"]))){
+					//No es imagen
+				}
+				else{
+					//si es imagen la guardo
+					$target_dir = FCPATH."img/event/";
+					$imageFileType = pathinfo($_FILES["image"]["name"],PATHINFO_EXTENSION);
+					if($image_name = $this->data_model->addEventPicture($_SESSION["username"],$id_event, $title,$imageFileType)){
+						$target_file = $target_dir . $image_name;
+						move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+						$this->load->view('simple_success', array ('heading' => '¡La imagen fue subida con éxito!', ''));
+						$images = $this->data_model->getEventImages($event_id);
+						foreach ($images as $image){
+							$this->load->view('event_images', array('image' => $image));
+							$this->show_voting($image["id_eventPicture"]);
+							$this->show_comments($image["id_eventPicture"]);
+						}
+					}
+					else{
+						//la publicación no se realizó con éxito
+						dangerView('La imagen no se pudo subir!', 'Inténtalo de nuevo más tarde');
+						$this->load->view('event_images');
+						$images = $this->data_model->getEventImages($event_id);
+						foreach ($images as $image){
+							$this->load->view('event_images', array('image' => $image));
+							$this->show_voting($image["id_eventPicture"]);
+							$this->show_comments($image["id_eventPicture"]);
+						}
+					}
+				}
+			}
+			else{
+				debug_var("no llegó!");
+			}
+		}
+		else{
+			$images = $this->data_model->getEventImages($event_id);
+			foreach ($images as $image){
+				$this->load->view('event_images', array('image' => $image));
+				$this->show_voting($image["id_eventPicture"]);
+				$this->show_comments($image["id_eventPicture"]);
+			}
 		}
 		$this->load->view('footer');
 	}
