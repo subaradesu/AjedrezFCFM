@@ -17,13 +17,13 @@
 							<div class="vote up">
 								<?php
 								$up_arrow = array('class' => $vote > 0 ? 'flechita-up-mark' : 'flechita-up-unmark');
-								echo anchor('/publication_controller/vote_publication/'.$id_comment.'/'.'1', '<i class="glyphicon glyphicon-menu-up"></i>', $up_arrow);
+								echo anchor('/publication_controller/vote_publication/'.$id_comment.'/'.'1', '<i class="glyphicon glyphicon-arrow-up"></i>', $up_arrow);
 								?>
 							</div>
 							<div class="vote inactive">
 								<?php
 								$down_arrow = array('class' => $vote < 0 ? 'flechita-down-mark' : 'flechita-down-unmark');
-								echo anchor('/publication_controller/vote_publication/'.$id_comment.'/'.'-1', '<i class="glyphicon glyphicon-menu-down"></i>', $down_arrow);
+								echo anchor('/publication_controller/vote_publication/'.$id_comment.'/'.'-1', '<i class="glyphicon glyphicon-arrow-down"></i>', $down_arrow);
 								?>
 							</div>
 						</div>

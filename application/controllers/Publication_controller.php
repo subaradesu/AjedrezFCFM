@@ -248,6 +248,8 @@ class Publication_controller extends CI_Controller{
 		if($data_new = $this->data_model->getNew($id_new)){
 			//Muestra la información de la noticia
 			$this->load->view('view_new', array('data_new' => $data_new));
+			//Agrega el panel de Votación
+			$this->show_voting($id_new);
 			//Muestra los comentarios de la noticia
 			$this->show_comments($id_new);
 			//showComments($id_new);
@@ -256,6 +258,13 @@ class Publication_controller extends CI_Controller{
 			$this->load->view('simple_danger', array('heading' => '¡La noticia solicitada no existe!', 'message' => ''));
 		}
 		$this->load->view('footer');
+	}
+	
+	private function show_voting($id_publication){
+		$this->load->view('vote_pane', array(	'my_id' => $id_publication,
+												'score' => $this->data_model->getPublicationScore($id_publication),
+												'vote' => isset($_SESSION["username"]) ? $this->data_model->getUserPublicationVote($id_publication, $_SESSION["username"]) : 0
+		));
 	}
 	
 	private function show_comments($id_publication, $recursive = false){
@@ -292,9 +301,19 @@ class Publication_controller extends CI_Controller{
 		$header_data = array('title' => 'Mis Eventos', 'css_file_paths' => getCSS('events'));
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
-		//TODO: Cargar Eventos del usuario actual, pasarlos a la vista de eventos.
 		$this->load->view('my_events',array('events' => $this->data_model->getEvents($_SESSION["username"])));
 		$this->load->view('footer');
+	}
+	
+	public function event_assistance($id_event, $assistance){
+		checkPermission(1);
+		$user = $_SESSION["username"];
+		if($this->data_model->modifyAssistance($id_event, $user, $assistance)){
+			header('Location: ' . $_SERVER['HTTP_REFERER']);
+		}
+		else{
+			dangerView('No se pudo confirmar la asistencia al evento');
+		}
 	}
 	
 	public function admin_events($id_event = 0){
@@ -321,8 +340,9 @@ class Publication_controller extends CI_Controller{
 		$header_data = array('title' => 'Ver Evento', 'css_file_paths' => getCSS('comments'));
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
-		if($data_event = $this->data_model->getEvent($id_event)){
+		if($data_event = $this->data_model->getEvent($id_event, true)){
 			$this->load->view('view_event', array('event' => $data_event));
+			$this->show_voting($id_event);
 			$this->show_comments($id_event);
 		}
 		else{
@@ -378,6 +398,9 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('navbar');
 		if($data_boardgame = $this->data_model->getBoardgame($id_boardgame)){
 			$this->load->view('view_boardgame', array('data_boardgame' => $data_boardgame));
+			//Agrega el panel de Votación
+			$this->show_voting($id_boardgame);
+			//Agrega el panel de comentarios
 			$this->show_comments($id_boardgame);
 		}
 		else{

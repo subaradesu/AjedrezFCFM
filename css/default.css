@@ -100,3 +100,55 @@ textarea {
 .notification-badge {
 	background-color: #0000ff;
 }
+
+/* Personalizar panel de votación*/
+
+.vote-pane {
+	margin-bottom: 10px;
+}
+
+.thumbs-up-marked {
+	color: #ff8000;
+	text-decoration: #ff8000;
+}
+
+.thumbs-up-marked:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.thumbs-up-unmarked{
+	color: #b0b0b0;
+	text-decoration: grey;
+}
+
+.thumbs-up-unmarked:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.thumbs-down-marked{
+	color: #0000a0;
+	text-decoration: #0000a0;
+}
+
+.thumbs-down-marked:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
+}
+
+.thumbs-down-unmarked{
+	color: #b0b0b0;
+	text-decoration: grey;
+}
+
+.thumbs-down-unmarked:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
+}
+
+

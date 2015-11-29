@@ -106,19 +106,19 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	}
 	
 	/*Carga la notificación de éxito*/
-	function successView($heading, $message, $output = false){
+	function successView($heading, $message = '', $output = false){
 		$CI = &get_instance();
 		return $CI->load->view('simple_success', array('heading' => $heading, 'message' => $message, $output));
 	}
 	
 	/*Carga la notificación de peligro */
-	function dangerView($heading, $message, $output = false){
+	function dangerView($heading, $message = '', $output = false){
 		$CI = &get_instance();
 		return $CI->load->view('simple_danger', array('heading' => $heading, 'message' => $message, $output));
 	}
 	
 	/*Carga la notificación de Información*/
-	function infoView($heading, $message, $output = false){
+	function infoView($heading, $message = '', $output = false){
 		$CI = &get_instance();
 		return $CI->load->view('simple_info', array('heading' => $heading, 'message' => $message, $output));
 	}

@@ -44,11 +44,41 @@
 						<input type="password" class="form-control" id="password" name="password" placeholder="Ingresar Nueva Contraseña">
 					</div>
 				</div>
-					<div class="form-group">
+<!-- 				<div class="form-group"> -->
+<!-- 					<label class="control-label col-sm-2" for="about">Sobre mí:</label> -->
+<!-- 					<div class="col-sm-6"> -->
+<!-- 						<input type="text" class="form-control" id="password" name="about" placeholder="Cuentanos un poco sobre tí"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label class="control-label col-sm-2" for="location">Ubicación:</label> -->
+<!-- 					<div class="col-sm-6"> -->
+<!-- 						<input type="text" class="form-control" id="location" name="location" placeholder="Ubicación"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label class="control-label col-sm-2" for="bornDate">Fecha de Nacimiento:</label> -->
+<!-- 					<div class="col-sm-6"> -->
+<!-- 						<input type="text" class="form-control" id="bornDate" name="bornDate" placeholder="Fecha de Nacimiento"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label class="control-label col-sm-2" for="workplace">Lugar de Trabajo:</label> -->
+<!-- 					<div class="col-sm-6"> -->
+<!-- 						<input type="text" class="form-control" id="workplace" name="workplace" placeholder="Lugar de Trabajo"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-group"> -->
+<!-- 					<label class="control-label col-sm-2" for="contact">Información de Contacto:</label> -->
+<!-- 					<div class="col-sm-6"> -->
+<!-- 						<input type="text" class="form-control" id="contact" name="contact" placeholder="Contacto"> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-6">
 					<button type="submit" class="btn btn-default" name="submit" id="submit">Cambiar</button>
-			    </div>
-			  </div>
+			    	</div>
+				</div>
 			</form>
 		</div>
 	</div>

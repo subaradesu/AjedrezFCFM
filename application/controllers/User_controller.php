@@ -225,7 +225,7 @@ class User_controller extends CI_Controller{
 					break;
 				case 4:
 					//TODO: Ver Publicaciones
-					$data['profile_content'] = $this->load->view('simple_danger', array('heading' => '¡Lo sentimos!', 'message' => 'Por el momento esta sección no se encuentra implementada.'), TRUE);;
+					$data['profile_content'] = $this->load->view('user_publications', $this->data_model->getPublications($id_user), TRUE);
 					break;
 				case 5:
 					//TODO: Ver Estadísticas
@@ -289,7 +289,6 @@ class User_controller extends CI_Controller{
 		$header_data = array('title' => 'Ver Publicaciones', 'css_file_paths' => getCSS('default'));
 		$this->load->view('header', $header_data);
 		$this->load->view('navbar');
-		//echo anchor('main_controller/user_publications/'.$profile_data["username"],'Ver Publicaciones.');
 		//TODO: Cargar publicaciones del usuario, pasarlas a la vista. Si el usuario no existe mostrar algo.
 		if($action == 'delete' && $id_publication != 0){
 			if ($deleted = $this->data_model->deletePublication($id_publication)){

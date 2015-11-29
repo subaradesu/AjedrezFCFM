@@ -11,7 +11,17 @@
 							<?php echo $profile_data["first_name"].' '.$profile_data["last_name"];?>
 						</div>
 						<div class="profile-userAbout-description">
-							<?php echo $profile_data["username"];?>
+							<?php
+							if($profile_data["userStatus"]==3){
+								echo "Administrador";
+							}
+							elseif ($profile_data["userStatus"]==1){
+								echo "Usuario Activo";
+							}
+							elseif ($profile_data["userStatus"]==2){
+								echo "Usuario Baneado";
+							}
+							?>
 						</div>
 					</div>
 					<?php if(false) :?>

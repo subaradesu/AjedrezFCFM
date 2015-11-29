@@ -132,8 +132,8 @@ Class data_model extends CI_model{
 	function getPublications($id_user){
 		$result["events"] = $this->db->query("SELECT * FROM event, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=event.id_event;")->result_array();
 		$result["news"] = $this->db->query("SELECT * FROM news, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;")->result_array();
-		//$result["games"] = $this->db->query();
-		$result["comments"] = $this->db->query("SELECT * FROM ");
+		$result["games"] = $this->db->query("SELECT * FROM matchboard, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=matchboard.id_matchboard;")->result_array();
+		//$result["comments"] = $this->db->query("SELECT * FROM comment, userPublication WHERE userPublication.id_user='".$id_user."' AND userPublication.id_publication=news.id_new;")->result_array();
 		return $result;
 	}
 	
@@ -321,18 +321,86 @@ Class data_model extends CI_model{
 		return $this->db->trans_status();
 	}
 	
+	function modifyAssistance($id_event, $id_user, $assistance){
+		
+		if(count($event = $this->db->query("SELECT * FROM event WHERE id_event='".$id_event."';")->result_array()) > 0){
+			//public event
+			$event = $event[0];
+			
+			if($event["visibility"] == 'public'){
+				
+				//Si el usuario ya confirmó asistencia edito la entrada
+				if(count($this->db->query("SELECT * FROM invitedList WHERE id_event='".$id_event."' AND id_user='".$id_user."';")->result_array())){
+					return $this->db->simple_query("UPDATE invitedList SET assistance='".$assistance."' WHERE  id_event='".$id_event."' AND id_user='".$id_user."';");
+				}
+				//si no ha confirmado asistencia agrego la entrada
+				else{
+					
+					return $this->db->simple_query("INSERT INTO invitedList VALUES ('".$id_event."', '".$id_user."', '".$assistance."', '0');");
+				}
+			}
+			//private event
+			else{
+				//Si el usuario está invitado al evento
+				if($this->db->query("SELECT * FROM invitedList WHERE id_event='".$id_event."' AND id_user='".$id_user."';")){
+					return $this->db->simple_query("UPDATE invitedList SET assistance='".$assistance."' WHERE  id_event='".$id_event."' AND id_user='".$id_user."';");
+				}
+				//si no está invitado
+				else{	
+					return false;
+				}
+			}
+		}
+		//el evento no existe
+		return false;
+	}
+	
+	//retorna un arreglo con los asistentes al evento, en 0 los que asisten, en 1 los que no
+	function getAssistance($id_event){
+		$r = $this->db->query("SELECT assistance, COALESCE(COUNT(assistance),0) AS number FROM invitedList WHERE id_event='".$id_event."' GROUP BY assistance")->result_array();
+		
+		$result["confirmed"] = 0;
+		$result["unconfirmed"] = 0;
+		foreach($r as $group){
+			if($group["assistance"] == "confirmed"){
+				$result["confirmed"] = $group["number"];
+			}
+			if($group["assistance"] == "unconfirmed"){
+				$result["unconfirmed"] = $group["number"];
+			}
+		}
+		return $result;
+	}
+	
 	//retorna la información del evento si es que existe, si no retorna false
-	function getEvent($id_event){
-		$r = $this->db->query("SELECT * FROM event WHERE id_event='".$id_event."';")->result_array();
-		return count($r) > 0 ? $r[0] : false;
+	function getEvent($id_event, $user_list = false){
+		$r["event_data"] = $this->db->query("SELECT * FROM event WHERE id_event='".$id_event."';")->result_array();
+		if(count($r["event_data"]) < 1){
+			return false;
+		}
+		$r["event_data"] = $r["event_data"][0];
+		$r["comment_number"] = $this->countComments($id_event);
+		$r["assistance"] = $this->getAssistance($id_event);
+		if($user_list){
+			$r["user_list"] = $this->db->query("SELECT id_event, id_user, assistance, first_name, last_name FROM invitedList, user WHERE username = id_user AND id_event='".$id_event."';")->result_array();
+		}
+		return $r;
 	}
 	
 	//obtiene los eventos del usuario, si $queryType es invited retorna los eventos a los que el usuario fue invitado, si no, obtiene los eventos publicados por el usuario
 	function getEvents($id_user, $queryType = 'invited'){
 		if ($queryType == 'invited'){
-			$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM invitedList AS il, event WHERE il.id_user='".$id_user."' AND il.id_event=event.id_event AND event.status!='closed';")->result_array();
-			$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM event WHERE event.visibility='public' AND event.status!='closed';")->result_array();
-			return array_merge($result['private_events'], $result['public_events']);
+			$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM invitedList AS il, event WHERE event.visibility='private' AND il.id_user='".$id_user."' AND il.id_event=event.id_event;")->result_array();
+			$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM event WHERE event.visibility='public';")->result_array();
+			$array; 
+			foreach($result['private_events'] as $r){
+				$array[] = $this->getEvent($r["id_event"]);
+			}
+			foreach($result['public_events'] as $r){
+				$array[] = $this->getEvent($r["id_event"]);
+			}
+			return $array;
+			//return array_merge($result['private_events'], $result['public_events']);
 		}
 		return $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM userPublication AS up, event WHERE up.id_publication=event.id_event AND up.id_user='".$id_user."';")->result_array();
 	}
@@ -342,7 +410,7 @@ Class data_model extends CI_model{
 		$r = $this->db->query("SELECT * FROM comment WHERE commented_publication='".$id_publication."';")->result_array();
 		$count = count($r);
 		foreach ($r as $comment){
-			$count += countComments($comment["id_comment"]);
+			$count += $this->countComments($comment["id_comment"]);
 		}
 		return $count;
 	}
