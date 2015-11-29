@@ -56,7 +56,7 @@
 						<li class="disabled"><a>Preferencias</a></li>
 						<li class="disabled"><a>Historial</a></li>
 						<?php if($this->session->permission!=2) : ?>
-						
+						<!-- Sección de Usuarios -->
 						<li role="separator" class="divider"></li>
 						<li><?php
 							$badge = ($_SESSION["event_notifications"] > 0 ? ("<span class='badge notification-badge'>".$_SESSION["event_notifications"]."</span>") : '');
@@ -66,10 +66,10 @@
 						<?php endif;?>
 						
 						<?php if($this->session->isLogged && $this->session->permission==3) : ?>
-						
+						<!-- Sección de Administradores -->
 						<li role="separator" class="divider"></li>
 						<li><?php echo anchor("/user_controller/admin", "Administrar");?></li>
-<!-- 						<li>echo anchor("/user_controller/close", "Cerrar Acceso");</li> -->
+						<li><?php echo anchor("/publication_controller/transactions", "Ver Transacciones");?></li>
 						<?php endif;?>
 						
 					</ul>

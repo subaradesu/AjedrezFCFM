@@ -30,8 +30,6 @@ class User_controller extends CI_Controller{
 			$user = $this-> input ->post('user');
 			$pass = $this-> input ->post('pass');
 			if($logtry = $this->data_model->userLogin($user, $pass)){
-				
-				
 				$this->session->isLogged = 1;
 				$this->session->username = $logtry->username;
 				$this->session->sex = $logtry->sex;
@@ -39,10 +37,10 @@ class User_controller extends CI_Controller{
 				$this->session->last_name = $logtry->last_name;
 				$this->session->permission = $logtry->userStatus;
 				$this->session->last_log = $logtry->update_time;
-				//$this->data_model->updateEvents();
+				$this->data_model->updateDB();
 				$this->session->notifications = $this->data_model->getUserNotifications($this->session->username);
 				$this->session->event_notifications = $this->data_model->getEventNotifications($this->session->username);
-				
+
 				//TODO buscar como hacer variable global $nav_data
 // 				$nav_data = array(	'userLogged' => $_SESSION["isLogged"],
 // 									'username' => $_SESSION["username"],
@@ -121,7 +119,6 @@ class User_controller extends CI_Controller{
 			}
 			else{
 				//no pude agregar al usuario
-				//mensaje de qué pasó
 				$this->load->view('simple_danger',array('heading' => 'Ocurrio un error al crear la cuenta', 'message' => ' Inténtelo de nuevo mas tarde'));
 				$this->load->view('register_pane');
 			}
@@ -211,7 +208,7 @@ class User_controller extends CI_Controller{
 					}
 					//reviso si estoy tratando de actualizar
 					if($should_update && $update_data != null){
-						if($update = $this->data_model->updateProfileData($id_user, $update_data)){
+						if($this->data_model->updateProfileData($id_user, $update_data)){
 							$data['profile_content'] = $this->load->view('simple_success', array('heading' => 'Actualización realizada con éxito', 'message' => ''), TRUE);
 						}
 						else{

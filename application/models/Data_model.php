@@ -61,19 +61,27 @@ Class data_model extends CI_model{
 	
 	/* Retorna las notificaciones del usuario*/
 	public function getUserNotifications($id_user){
-		return 2;
+		return $this->getEventNotifications($id_user);
 	}
 	
+	/* Cierra el evento $id_event, retorna false si falla o $id_user no es el publicador del evento*/
+	public function closeEvent($id_event, $id_user){
+		if(count($this->db->query("SELECT * FROM userPublication AS up, event WHERE event.status='ended' AND up.id_publication = event.id_event AND up.id_user='".$id_user."' AND up.id_publication = '".$id_event."';"))){
+			return $this->db->simple_query("UPDATE event SET status='closed' WHERE id_event='".$id_event."';");
+		}
+		return false;
+	}
 	
+	/* Envía el mensaje de emisor al receptor*/
 	public function send_message($sender, $receiver, $content){
 		//TODO: usar esto pa mandar mensajes entre usuarios
 		return $this->db->simple_query("INSERT INTO privateMessage VALUES (null, 'holahola', 'user01', 'user02');");
 	}
 	
+	/* Publica la imagen en el evento*/
 	public function addEventPicture($id_publisher, $id_event, $title = '', $description = '', $image){
-		
 		//si el usuario no confirmó asistencia al evento
-		if(count($this->db->query("SELECT * FROM invitedList WHERE assistance != 'confirmed' AND id_event='".$id_event."' AND id_publisher='".$id_publisher."';")->result_array()) < 1)
+		if(count($this->db->query("SELECT * FROM invitedList WHERE assistance != 'confirmed' AND id_event='".$id_event."' AND id_user='".$id_publisher."';")->result_array()) < 1)
 			return false;
 		
 		//comenzar la transacción
@@ -129,10 +137,12 @@ Class data_model extends CI_model{
 		return $result;
 	}
 	
+	/*Borra la publicación $id_publication*/
 	function deletePublication($id_publication){
 		return $this->db->simple_query("DELETE FROM publication WHERE idPublication='".$id_publication."';");
 	}
 	
+	/*Crea un evento con los datos recibidos*/
 	function createEvent($publisher, $title, $start, $end, $location, $description, $visibility, $invited_list){
 		//comenzar transacción
 		$this->db->trans_start();
@@ -161,6 +171,7 @@ Class data_model extends CI_model{
 		return $this->db->trans_status();
 	}
 	
+	/*crea la partida en la base de datos*/
 	function createGame($publisher, $title, $white, $black, $origin, $content, $format, $filename, $stringpgn){
 		//comenzar transacción
 		$game_attr = array(
@@ -191,6 +202,7 @@ Class data_model extends CI_model{
 		return array("status" => $this->db->trans_status(), "id" => $id);
 	}
 	
+	//busca al usuario en la base de datos
 	function searchUser($search_term, $search_category){
 		$sql = $sql = "	SELECT username, first_name, last_name
 						FROM user
@@ -199,6 +211,7 @@ Class data_model extends CI_model{
 		return $this->db->query($sql)->result_array();
 	}
 	
+	//obtiene la información del usuario, distinta info basad en el parámetro info (las funciones de admin sacan más)
 	function getUsers($info = 'basic'){
 		if($info == 'admin'){
 			return $this->db->query("SELECT username, first_name, last_name, email, userStatus FROM user ORDER BY user.username ASC")->result_array();
@@ -206,15 +219,18 @@ Class data_model extends CI_model{
 		return $this->db->query("SELECT username,first_name, last_name FROM user;")->result_array();
 	}
 	
+	//obitne la información del usuario a partir de su id
 	function getUserInfo($id_user){
 		$r = $this->db->query("SELECT username,first_name, last_name,userStatus FROM user WHERE username='".$id_user."';")->result_array();
 		return count($r) > 0 ? $r[0] : false; 
 	}
 	
+	//obtiene la noticia a partir de su id
 	function getNew($id_new){
 		return $this->db->query("SELECT * FROM news WHERE id_new='".$id_new."'")->first_row('array');
 	}
 	
+	//obtiene la informacion de la partida a través de su id
 	function getBoardgame($idBoard){
 		$info =$this->db->query("SELECT * FROM matchboard WHERE matchboard_id=".$idBoard."")->first_row('array');
 		$user = $this->db->query("SELECT user_id FROM uploadsMatch WHERE matchboard_id=".$idBoard."")->first_row('array');
@@ -222,17 +238,22 @@ Class data_model extends CI_model{
 		return $info;
 	}
 	
+	//obtiene los comentarios en la publicación $id_publication
 	function getComments($id_publication){
 		return $this->db->query("SELECT * FROM comment, userPublication WHERE commented_publication='".$id_publication."' AND id_publication=id_comment;")->result_array();
 	}
 
+	//retorna todas las noticias existentes
 	function getNews(){
 		return $this->db->query("SELECT * FROM news;")->result_array();
 	}
+	
+	//retorna todas las partidas existentes
 	function getMatchboards(){
 		return $this->db->query("SELECT * FROM matchboard;")->result_array();
 	}
 	
+	//actualiza el perfil del usuario con los parámetros ingresados
 	function updateProfileData($id_user, $update_data){
 		if($update_data == null){
 			return false;
@@ -242,22 +263,35 @@ Class data_model extends CI_model{
 		return $this->db->simple_query($sql);
 	}
 
+	//actualiza los estados en la base de datos
+	function updateDB(){
+		//actualiza los estados de los eventos (si el evento ya pasó cambia su estado a 'closed'
+		$now = date_create()->format('Y-m-d H:i:s');
+		$this->db->trans_start();
+		$s = $this->db->query("SELECT * FROM event WHERE date_end<'".$now."';")->result_array();
+		foreach ($s as $event){
+			$this->db->query("UPDATE event SET status='ended' WHERE id_event='".$event["id_event"]."';");
+		}
+		//TODO: desbanear si ha pasado el tiempo de baneo.
+		$this->db->trans_complete();
+		return $this->db->trans_status();
+	}
 	
+	//retorna los datos del perfil del usuario id_user si existe, si no retorna false.
 	function getProfileData($id_user){
-		//retorno los datos del perfil del usuario id_user si existe, si no retorno 0.
 		$sql ="	SELECT username, first_name, last_name, sex, avatar, userStatus, email
 				FROM user
 				WHERE username = '".$id_user."'";
-		
 		$result = $this->db->query($sql);
-
-		return $result->num_rows() == 1? $result->first_row('array') : 0;
+		return $result->num_rows() == 1? $result->first_row('array') : false;
 	}
 	
+	//retorno la información opcional del perfil del usuario.
 	function getOptionalProfileData($id_user){
 		return $this->db->query("SELECT * FROM user_info WHERE user_id= '".$id_user."';");
 	}
 	
+	//cambia el estado del usuario, Se usa para el baneo y desbaneo de usuarios
 	function changeStatus($id_user, $new_status, $ban_date=''){
 		return $this->db->simple_query("UPDATE user SET userStatus='".$new_status."' WHERE user.username='".$id_user."'");
 		$this->db->trans_start();
@@ -286,16 +320,27 @@ Class data_model extends CI_model{
 		return count($r) > 0 ? $r[0] : false;
 	}
 	
-	function getEvents($id_user){
-		$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM invitedList AS il, event WHERE il.id_user='".$id_user."' AND il.id_event=event.id_event AND event.status!='closed';")->result_array();
-		$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM event WHERE event.visibility='public' AND event.status!='closed';")->result_array();
-		return array_merge($result['private_events'], $result['public_events']);
+	//obtiene los eventos del usuario, si $queryType es invited retorna los eventos a los que el usuario fue invitado, si no, obtiene los eventos publicados por el usuario
+	function getEvents($id_user, $queryType = 'invited'){
+		if ($queryType == 'invited'){
+			$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM invitedList AS il, event WHERE il.id_user='".$id_user."' AND il.id_event=event.id_event AND event.status!='closed';")->result_array();
+			$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM event WHERE event.visibility='public' AND event.status!='closed';")->result_array();
+			return array_merge($result['private_events'], $result['public_events']);
+		}
+		return $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM userPublication AS up, event WHERE up.id_publication=event.id_event AND up.id_user='".$id_user."';")->result_array();
 	}
 	
-	function countComments(){
-		
+	//retorna el total de comentarios en la publicación $id_publication
+	function countComments($id_publication){
+		$r = $this->db->query("SELECT * FROM comment WHERE commented_publication='".$id_publication."';")->result_array();
+		$count = count($r);
+		foreach ($r as $comment){
+			$count += countComments($comment["id_comment"]);
+		}
+		return $count;
 	}
 	
+	//Se encarga de logear al usuario, retorna true si el login es posible, false si no
 	function userLogin($username, $password){
 		$result;
 		//busco el registro en la base de datos
@@ -325,6 +370,7 @@ Class data_model extends CI_model{
 		return $result;
 	}
 	
+	//Realiza la operación de registrar un usuario con los datos solicitados
 	function userRegister($user, $pass, $first_name, $last_name, $email){
 		//comenzar transacción
 		$this->db->trans_start();
@@ -339,6 +385,44 @@ Class data_model extends CI_model{
 		
 		//falso si falló la transacción.
 		return $this -> db -> trans_status();
+	}
+	
+	// obtiene las últimas transacciones realizadas basándose en los parámetros recibidos
+	function getLastTransactions($transactionType, $autorFilter, $maxResults){
+		$sql;
+		switch($transactionType){
+			case 'comment':
+				$sql = "SELECT id_comment, id_user, publicationDate, commented_publication, content
+						FROM comment, publication, userPublication
+						WHERE comment.id_comment = publication.idPublication AND idPublication = id_publication
+						ORDER BY publicationDate DESC
+						LIMIT ".$maxResults.";";
+				break;
+			case 'news':
+				$sql = "SELECT id_new, id_user, publicationDate, title
+						FROM news, publication, userPublication
+						WHERE news.id_new = publication.idPublication AND idPublication = id_publication
+						ORDER BY publicationDate DESC
+						LIMIT ".$maxResults.";";
+				break;
+			case 'event':
+				$sql = "SELECT id_event, id_user, publicationDate, visibility, status, title
+						FROM event, publication, userPublication
+						WHERE event.id_event = publication.idPublication AND idPublication = id_publication
+						ORDER BY publicationDate 	DESC
+						LIMIT ".$maxResults.";";
+				break;
+			case 'matchboard':
+				$sql = "SELECT id_event, id_user, publicationDate, visibility, status
+						FROM event, publication, userPublication
+						WHERE event.id_event = publication.idPublication AND idPublication = id_publication
+						ORDER BY publicationDate 	DESC
+						LIMIT ".$maxResults.";";
+				break;
+			default:
+				$sql = "";
+		}
+		return $this->db->query($sql)->result_array();
 	}
 	
 }

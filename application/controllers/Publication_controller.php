@@ -72,7 +72,7 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
 	
-		//setea el mensaje de error y hace que se vea bonito
+		//mensaje de error de formulario y hace que se vea bonito
 		$this->form_validation->set_message('DATETIME_Check', 'El formato de fecha no coincide: %s');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>', '</div>');
 		
@@ -217,7 +217,7 @@ class Publication_controller extends CI_Controller{
 			$username = $_SESSION["username"];
 			$comment = $this->input->post('comment');
 			if($this->data_model->createComment($username, $id_publication, $comment)){
-				successView('El mensaje se agregó correctamente', 'Has click <a href="javascript:history.back(1)">aquí</a> para volver a la publicación.');
+				header('Location: ' . $_SERVER['HTTP_REFERER']);
 			}
 			else{
 				dangerView('El mensaje no se pudo agregar', 'Inténtalo de nuevo más tarde o contacta a los administradores para solucionar el problema.');
@@ -297,12 +297,22 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('footer');
 	}
 	
-	public function admin_events(){
+	public function admin_events($id_event = 0){
 		checkPermission(1);
+		$_SESSION["notifications"] = 0;
+		$_SESSION["event_notifications"] = 0;
 		$header_data = array('title' => 'Mis Eventos', 'css_file_paths' => getCSS('events'));
 		$this->load->view('header',$header_data);
 		$this->load->view('navbar');
-		$this->load->view('admin_events');
+		if ($id_event > 0){
+			if($this->data_model->closeEvent($id_event, $_SESSION["username"])){
+				successView('El Evento fue cerrado con éxito!', '');
+			}
+			else{
+				dangerView("El evento no se pudo cerrar!", "Es posible que no tengas los permisos para cerrar el evento, si crees que es un error contáctate con la adminsitración para solucioanrlo");
+			}
+		}
+		$this->load->view('admin_events', array('events' => $this->data_model->getEvents($_SESSION["username"],'published')));
 		$this->load->view('footer');
 	}
 	
@@ -317,6 +327,45 @@ class Publication_controller extends CI_Controller{
 		}
 		else{
 			$this->load->view('simple_danger', array('heading' => '¡El evento solicitado no existe!', 'message' => ''));
+		}
+		$this->load->view('footer');
+	}
+	
+	public function transactions(){
+		checkPermission(3);
+		$this->load->library('form_validation');
+		$header_data = array('title' => 'Ver Transacciones', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header',$header_data);
+		$this->load->view('navbar');
+		
+		$this->form_validation->set_rules('maxResults', 'Máximo número de resultados', 'required');
+		$this->form_validation->set_rules('transactionType', 'Tipo de Transacción', 'required');
+		
+		if($this->form_validation->run()){
+			$filter = '';
+			if(isset($_POST["filter"])){
+				$filter = $_POST["filter"];
+			}
+			$transactionType = $this->input->post('transactionType');
+			$maxResults = $this->input->post('maxResults');
+			//obtengo las últimas transacciones solicitadas
+			if(($r = $this->data_model->getLastTransactions($transactionType, $filter, $maxResults))){
+				if(count($r)>0){
+					$this->load->view('last_transactions', array('type' => $transactionType,'transactions' => $r));
+				}
+				else{
+					infoView('La búsqueda no produjo 0 resultados', 'Inténtalo de nuevo con otros parámetros');
+					$this->load->view('transaction_search');
+				}
+			}
+			else{
+				//no pude 
+				dangerView('Se produjo un error al solicitar las transacciones', 'Inténtalo de nuevo más tarde.');
+				$this->load->view('transaction_search');
+			}
+		}
+		else{
+			$this->load->view('transaction_search');
 		}
 		$this->load->view('footer');
 	}

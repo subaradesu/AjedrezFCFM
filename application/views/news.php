@@ -1,8 +1,8 @@
-		<div id="content">
+	<div id="content">
 		<div class=page-header>
 			<h1>Noticias:</h1>
 		</div>
-		<div class="container">
+		<div class="news-wrapper">
 			<table class="table table-hover">
 				<thead>
 					<tr>
