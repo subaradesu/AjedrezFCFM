@@ -107,12 +107,12 @@ Class data_model extends CI_model{
 	
 	//obtiene el puntaje de la publicación
 	public function getPublicationScore($id_publication){
-		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_publication = '".$id_publication."'")->result_array()[0]["score"];
+		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationKarma` WHERE id_publication = '".$id_publication."'")->result_array()[0]["score"];
 	}
 	
 	//obtiene el puntaje asignado por el usuario a la publicación
 	public function getUserPublicationVote($id_publication, $id_user){
-		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationkarma` WHERE id_user='".$id_user."' AND id_publication = '".$id_publication."'")->result_array()[0]["score"];
+		return $this->db->query("SELECT COALESCE(SUM(value), 0) as score FROM `publicationKarma` WHERE id_user='".$id_user."' AND id_publication = '".$id_publication."'")->result_array()[0]["score"];
 	}
 	
 	/*Actualiza el puntaje asignado por el usuario a la publicación*/
@@ -143,7 +143,7 @@ Class data_model extends CI_model{
 	}
 	
 	/*Crea un evento con los datos recibidos*/
-	function createEvent($publisher, $title, $start, $end, $location, $description, $visibility, $invited_list){
+	function createEvent($publisher, $title, $start, $end, $location, $description, $visibility, $invited_list, $category){
 		//comenzar transacción
 		$this->db->trans_start();
 		//Creo una nueva publicacion
@@ -156,8 +156,8 @@ Class data_model extends CI_model{
 		$this->db->query("	INSERT INTO userPublication (id_user, id_publication, last_changed)
 							VALUES ('".$publisher."', @publication_id, NOW());");
 		//inserto el evento con la id de publicación obtenida
-		$this->db->query("	INSERT INTO event (id_event, title, description, date_start, date_end, place, visibility)
-							VALUES (@publication_id, '".$title."', '".$description."', '".$start."', '".$end."', '".$location."', '".$visibility."');");
+		$this->db->query("	INSERT INTO event (id_event, title, description, date_start, date_end, place, visibility, idCategory)
+							VALUES (@publication_id, '".$title."', '".$description."', '".$start."', '".$end."', '".$location."', '".$visibility."', '".$category."');");
 		//creo la invitacion al evento para cada usuario invitado
 		if($visibility == 'private'){
 			foreach ($invited_list as $invited_user ){
@@ -384,14 +384,16 @@ Class data_model extends CI_model{
 		if($user_list){
 			$r["user_list"] = $this->db->query("SELECT id_event, id_user, assistance, first_name, last_name FROM invitedList, user WHERE username = id_user AND id_event='".$id_event."';")->result_array();
 		}
+		$cat_id = $r["event_data"]["idCategory"];
+		$r["event_data"]["category_name"] = $this->db->query("SELECT category_name FROM Category WHERE idCategory='".$cat_id."';")->result_array()["0"]["category_name"];
 		return $r;
 	}
 	
 	//obtiene los eventos del usuario, si $queryType es invited retorna los eventos a los que el usuario fue invitado, si no, obtiene los eventos publicados por el usuario
 	function getEvents($id_user, $queryType = 'invited'){
 		if ($queryType == 'invited'){
-			$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM invitedList AS il, event WHERE event.visibility='private' AND il.id_user='".$id_user."' AND il.id_event=event.id_event;")->result_array();
-			$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM event WHERE event.visibility='public';")->result_array();
+			$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status, idCategory FROM invitedList AS il, event WHERE event.visibility='private' AND il.id_user='".$id_user."' AND il.id_event=event.id_event;")->result_array();
+			$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status, idCategory FROM event WHERE event.visibility='public';")->result_array();
 			$array; 
 			foreach($result['private_events'] as $r){
 				$array[] = $this->getEvent($r["id_event"]);

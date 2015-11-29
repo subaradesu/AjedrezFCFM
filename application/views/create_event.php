@@ -52,7 +52,20 @@
 						<input type="radio" name="visibility" class="form-control" id="visibility" value="public" checked="checked" data-toggle="tooltip" title="Se notificará a todos los usuarios.">
 					</div>
 				</div>
-				
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="category">Categoría:<span class="red-text">*</span>:</label>
+					<div class="col-sm-8">
+						<select name="category" class="form-control" id="category">
+							<option value="1" name="internacional">Torneo Interno</option>
+							<option value="2" name="nacional">Torneo Externo</option>
+							<option value="3" name="universidad">Reunión</option>
+							<option value="4" name="facultad">TIF</option>
+							<option value="5" name="amistoso">JOE</option>
+							<option value="6" name="otro">Convivencia</option>
+							<option value="7" name="libro">"Hacer Presencia"</option>
+						</select>
+					</div>
+				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="invited[]">Invitados<span class="red-text"></span>:</label>
 					<div class="col-sm-8">

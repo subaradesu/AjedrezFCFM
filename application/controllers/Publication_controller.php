@@ -82,6 +82,7 @@ class Publication_controller extends CI_Controller{
 		$this->form_validation->set_rules('location', 'Ubicación', 'required');
 		$this->form_validation->set_rules('description', 'Descripción', 'required');
 		$this->form_validation->set_rules('visibility', 'Visibilidad', 'required');
+		$this->form_validation->set_rules('category', 'Categoría', 'required');
 		if($this->form_validation->run()){
 			$title = $this->input->post('title');
 			$start = $this->input->post('start');
@@ -90,7 +91,8 @@ class Publication_controller extends CI_Controller{
 			$description = $this->input->post('description');
 			$visibility = $this->input->post('visibility');
 			$invited_list = $this->input->post('invited');
-			if($publish_try = $this->data_model->createEvent($_SESSION["username"],$title, $start, $end, $location, $description, $visibility, $invited_list)){
+			$category = $this->input->post('category');
+			if($publish_try = $this->data_model->createEvent($_SESSION["username"],$title, $start, $end, $location, $description, $visibility, $invited_list, $category)){
 				$this->load->view('simple_success', array ('heading' => '¡El evento fue creado con éxito!', 'message' => 'Los usuarios invitados recibirán una notificación'));
 			}
 			else{

@@ -1,4 +1,4 @@
-				
+
 	<div id="content">
 		<div class=page-header>
 			<h1><?php echo $event["event_data"]["title"];?></h1>
@@ -9,6 +9,7 @@
 			<p><strong>Desde: </strong><?php echo $event["event_data"]["date_start"];?></p>
 			<p><strong>Hasta: </strong><?php echo $event["event_data"]["date_end"];?></p>
 			<p><strong>En: </strong><?php echo $event["event_data"]["place"];?></p>
+			<p><strong>Categoría: </strong><?php echo $event["event_data"]["category_name"];?></p>
 		</div>
 		<div class=page-header>
 			<?php if($event["event_data"]["visibility"] == 'private') :?>
@@ -52,7 +53,7 @@
 				</tbody>
 			</table>
 		</div>
-		<?php if ($event["event_data"]["status"] == closed) : ?>
+		<?php if ($event["event_data"]["status"] == "closed") : ?>
 		<div>
 		</div>
 		<?php endif;?>
