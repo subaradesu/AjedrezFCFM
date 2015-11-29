@@ -9,6 +9,10 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 		return base_url().'img/news_cover/'.$coverFilename;
 	}
 	
+	function getEventImagePath($filename){
+		return base_url().'img/event/'.$filename;
+	}
+	
 	function prepareHTMLFromText($str){
 		return str_replace('\r\n','<br>',$str);
 	}

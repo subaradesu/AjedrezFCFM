@@ -9,14 +9,13 @@
 			<div class="col-sm-12">
 				<ul class="event-list">
 					<?php foreach ($events as $event): ?>
-					
 					<li>
-						<?php $d = $event["event_data"]["date_start"];?>
+						<?php $d = date_create_from_format('Y-m-d H:i:s', $event["event_data"]["date_start"]);?>
 						<time datetime="2014-07-20 2000">
-							<span class="day"><?php echo $d;?></span>
-							<span class="month"><?php echo $d;?></span>
-							<span class="year"><?php echo $d;?></span>
-							<span class="time"><?php echo $d;?></span>
+							<span class="day"><?php echo $d->format('d');?></span>
+							<span class="month"><?php echo $d->format('M');?></span>
+							<span class="year"><?php echo $d->format('Y');?></span>
+							<span class="time"><?php echo $d->format('H:i a');?></span>
 						</time>
 					
 						<?php echo img('/img/avatar/avatar0.jpg', false, array('class' => 'event_cover'));?>

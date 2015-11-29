@@ -1,5 +1,10 @@
 
+	<ul class="nav nav-pills">
+			<li class="active"><a href="#">Ver Evento</a></li>
+			<li><?php echo anchor('publication_controller/event_images/'.$event["event_data"]["id_event"], 'Ver Imagenes');?></li>
+	</ul>
 	<div id="content">
+		
 		<div class=page-header>
 			<h1><?php echo $event["event_data"]["title"];?></h1>
 		</div>
@@ -33,7 +38,13 @@
 					</tr>
 				</thead>
 				<tbody>
+					<?php $Iassisted = false;?>
 					<?php foreach ($event["user_list"] as $u) :?>
+						<?php
+						if (isset($_SESSION["username"]) && $_SESSION["username"]==$u["id_user"]){
+							$Iassisted = true;
+						}
+						?>
 					<tr>
 						<th><?php echo anchor('/user_controller/user_profile/'.$u["id_user"], $u["first_name"].' '.$u["last_name"]);?></th>
 						<th><?php echo $u["assistance"];?></th>
@@ -53,8 +64,28 @@
 				</tbody>
 			</table>
 		</div>
-		<?php if ($event["event_data"]["status"] == "closed") : ?>
+		<?php if ($event["event_data"]["status"] == 'closed' && $Iassisted)  : ?>
+		<p>Hola! Este evento ya fue dado por cerrado y como asististe a él puedes agregar imagenes!</p> 
 		<div>
+			<?php echo form_open_multipart('publication_controller/event_images/', array('class' => 'form-horizontal'));?>
+				<?php echo form_hidden('event', $event["event_data"]["id_event"]);?>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="title">Título<span class="red-text">*</span>:</label>
+					<div class="col-sm-8">
+						<input type="text" name="title" class="form-control" id="title" placeholder="Un lindo título para la imagen." required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="image">Imagen<span class="red-text">*</span>:</label>
+					<input type="file" name="image" class="col-sm-8" id="image" required>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-default">Publicar Imagen</button>
+					</div>
+				</div>
+			</form>
 		</div>
+		
 		<?php endif;?>
 	</div>
