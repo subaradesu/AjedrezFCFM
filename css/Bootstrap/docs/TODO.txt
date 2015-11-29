@@ -1,4 +1,0 @@
-Login:
-	Verificar nombre de usuario y contraseña.
-	Enlace a la página de registro.
-	Si baneado, "excluir del sitio".

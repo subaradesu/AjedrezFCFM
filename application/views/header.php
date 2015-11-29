@@ -11,9 +11,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
 	<!-- Usar css sin adjunto en el proyecto-->
-	<link rel="stylesheet" href="<?php echo base_url().'css/Bootstrap/dist/css/bootstrap.min.css'?>">
-	<script src="<?php echo base_url().'css/Bootstrap/js/tests/vendor/jquery.min.js'?>"></script>
-	<script src="<?php echo base_url().'css/Bootstrap/dist/js/bootstrap.min.js'?>"></script>
+	<link rel="stylesheet" href="<?php echo base_url().'css/Bootstrap/css/bootstrap.min.css'?>">
+	<script src="<?php echo base_url().'css/Bootstrap/js/jquery.min.js'?>"></script>
+	<script src="<?php echo base_url().'css/Bootstrap/js/bootstrap.min.js'?>"></script>
 	
 	<?php foreach ($css_file_paths as $css) : ?>
 
