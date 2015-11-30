@@ -153,7 +153,7 @@ class User_controller extends CI_Controller{
 			switch ($profile_section){
 				case 1:
 					//TODO: Mostrar información del perfil
-					$data['profile_content'] = $this->load->view('profile_overview', NULL, TRUE);
+					$data['profile_content'] = $this->load->view('profile_overview', $profile_data, TRUE);
 					break;
 				case 2:
 					//TODO: Editar Información Perfil

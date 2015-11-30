@@ -305,7 +305,15 @@ class Publication_controller extends CI_Controller{
 		$this->load->view('my_events',array('events' => $this->data_model->getEvents($_SESSION["username"])));
 		$this->load->view('footer');
 	}
-	
+	public function my_events_by_category($idCategory = 0){
+		checkPermission(1);
+		$header_data = array('title' => 'Mis Eventos', 'css_file_paths' => getCSS('events'));
+		$this->load->view('header',$header_data);
+		$this->load->view('navbar');
+		$this->load->view('my_events',array('events' => $this->data_model->getEventsByCategory($_SESSION["username"], $idCategory)));
+		$this->load->view('footer');
+	}
+
 	public function event_assistance($id_event, $assistance){
 		checkPermission(1);
 		$user = $_SESSION["username"];

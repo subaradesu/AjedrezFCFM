@@ -1,10 +1,42 @@
-	
+	<script type="text/javascript">
+		function category_select(){
+		f = document.getElementById("cat");
+		if(f.value == 0){
+			window.location = "<?php echo site_url().'/publication_controller/my_events/';?>";
+		}
+		else {
+			window.location = "<?php echo site_url().'/publication_controller/my_events_by_category/';?>"+f.value;	
+		}
+	};
+	</script>
+	<?php 
+		$categories = $events["categories"];
+		unset($events["categories"]);
+		if(isset($events["selected"])){
+			$cat_id = $events["selected"];
+			
+		}
+		else{
+			$cat_id=0;
+		}
+		unset($events["selected"]);
+	?>
 	<div id="content">
 		<?php //TODO: Hacer la vista más bonita?>
 		<div class=page-header>
 			<h1>Mis Eventos:</h1>
+			<div>
+				<select name="cat" class="form-control" id="cat" onchange="javascript:category_select();">
+					<option value="0" name="All">Todas las Categorías visibles por el usuario</option>
+					<?php foreach ($categories as $i => $category):
+						if($cat_id == $category["idCategory"])
+							echo '<option value="'.$category["idCategory"].'" name="'.$category["category_name"].'" selected>'.$category["category_name"].' ['.$category["quantity"].']</option>';
+						else
+							echo '<option value="'.$category["idCategory"].'" name="'.$category["category_name"].'">'.$category["category_name"].' ['.$category["quantity"].']</option>';
+					endforeach;?>
+				</select>
+			</div>
 		</div>
-		
 		<div class="row">
 			<div class="col-sm-12">
 				<ul class="event-list">

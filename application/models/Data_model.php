@@ -409,12 +409,32 @@ Class data_model extends CI_model{
 			foreach($result['public_events'] as $r){
 				$array[] = $this->getEvent($r["id_event"]);
 			}
+			$array["categories"] = $this->db->query("SELECT ALL Category.idCategory, Category.category_name, COUNT(e1.id_event) AS quantity FROM Category, (SELECT DISTINCT event.id_event, idCategory FROM event, invitedList AS il WHERE event.visibility='public' OR (event.id_event=il.id_event AND il.id_user='".$id_user."')) AS e1 WHERE Category.idCategory = e1.idCategory GROUP BY Category.category_name ORDER BY Category.idCategory;")->result_array();
 			return $array;
 			//return array_merge($result['private_events'], $result['public_events']);
 		}
 		return $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM userPublication AS up, event WHERE up.id_publication=event.id_event AND up.id_user='".$id_user."';")->result_array();
 	}
-	
+	//obtiene los eventos que son visibles para el usuario, según categoría
+	function getEventsByCategory($id_user, $idCategory = 0){
+		if ($idCategory != 0){
+			$result['private_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status, idCategory FROM invitedList AS il, event WHERE event.visibility='private' AND il.id_user='".$id_user."' AND il.id_event=event.id_event AND event.idCategory='".$idCategory."';")->result_array();
+			$result['public_events'] = $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status, idCategory FROM event WHERE event.visibility='public' AND event.idCategory='".$idCategory."';")->result_array();
+			$array; 
+			foreach($result['private_events'] as $r){
+				$array[] = $this->getEvent($r["id_event"]);
+			}
+			foreach($result['public_events'] as $r){
+				$array[] = $this->getEvent($r["id_event"]);
+			}
+			$array["categories"] = $this->db->query("SELECT ALL Category.idCategory, Category.category_name, COUNT(e1.id_event) AS quantity FROM Category, (SELECT DISTINCT event.id_event, idCategory FROM event, invitedList AS il WHERE event.visibility='public' OR (event.id_event=il.id_event AND il.id_user='".$id_user."')) AS e1 WHERE Category.idCategory = e1.idCategory GROUP BY Category.category_name ORDER BY Category.idCategory;")->result_array();
+			$array["selected"] = $idCategory;
+			return $array;
+			//return array_merge($result['private_events'], $result['public_events']);
+		}
+		return $this->db->query("SELECT event.id_event AS id_event, title, description, date_start, date_end, place, status FROM userPublication AS up, event WHERE up.id_publication=event.id_event AND up.id_user='".$id_user."';")->result_array();
+	}
+
 	//retorna el total de comentarios en la publicación $id_publication
 	function countComments($id_publication){
 		$r = $this->db->query("SELECT * FROM comment WHERE commented_publication='".$id_publication."';")->result_array();
