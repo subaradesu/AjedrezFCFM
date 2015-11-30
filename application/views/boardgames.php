@@ -10,12 +10,25 @@
 	};
 	</script>
 	<?php 
+		function reorder($n){
+			foreach ($n as $m){
+				$array[$m["match_origin"]] = $m["quantity"];
+			}
+			return $array;
+		}
 		if(isset($boardgames["selected"])){
 			$origin_id = $boardgames["selected"];
 		}
 		else{
 			$origin_id=-1;
 		}
+		if(isset($boardgames["categories"])){
+			$categories = reorder($boardgames["categories"]);
+		}
+		else{
+			$categories=array(0,0,0,0,0,0,0);
+		}
+		unset($boardgames["categories"]);
 		unset($boardgames["selected"]);
 		$types = array(
 			0 => "Partida didáctica (Libro)",
@@ -32,10 +45,12 @@
 			<select name="origin" class="form-control" id="origin" onchange="javascript:origin_select();">
 				<option value="-1" name="All">Todas las Categorías visibles por el usuario</option>
 				<?php foreach ($types as $i => $category):
+					$quantity = 0;
+					if(isset($categories[$i])) $quantity=$categories[$i];
 					if($origin_id == $i)
-						echo '<option value="'.$i.'" name="'.$category.'" selected>'.$category.'</option>';
+						echo '<option value="'.$i.'" name="'.$category.'" selected>'.$category.' ['.$quantity.']</option>';
 						else
-							echo '<option value="'.$i.'" name="'.$category.'">'.$category.'</option>';
+							echo '<option value="'.$i.'" name="'.$category.'">'.$category.' ['.$quantity.']</option>';
 					endforeach;?>
 				</select>
 		</div>

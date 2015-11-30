@@ -270,11 +270,14 @@ Class data_model extends CI_model{
 	
 	//retorna todas las partidas existentes
 	function getMatchboards(){
-		return $this->db->query("SELECT * FROM matchboard;")->result_array();
+		$array = $this->db->query("SELECT * FROM matchboard;")->result_array();
+		$array["categories"] = $this->db->query("SELECT matchboard.match_origin, COUNT(matchboard.id_matchboard) AS quantity FROM matchboard GROUP BY matchboard.match_origin ORDER BY matchboard.match_origin;")->result_array();
+		return $array;
 	}
 	function getMatchboardsByOrigin($origin = -1){
 		if($origin!=-1){
 			$array = $this->db->query("SELECT * FROM matchboard WHERE matchboard.match_origin =".$origin.";")->result_array();
+			$array["categories"] = $this->db->query("SELECT matchboard.match_origin, COUNT(matchboard.id_matchboard) AS quantity FROM matchboard GROUP BY matchboard.match_origin ORDER BY matchboard.match_origin;")->result_array();
 			$array["selected"] = $origin;
 			return $array;
 		}
