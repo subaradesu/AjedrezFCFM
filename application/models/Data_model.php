@@ -272,7 +272,15 @@ Class data_model extends CI_model{
 	function getMatchboards(){
 		return $this->db->query("SELECT * FROM matchboard;")->result_array();
 	}
-	
+	function getMatchboardsByOrigin($origin = -1){
+		if($origin!=-1){
+			$array = $this->db->query("SELECT * FROM matchboard WHERE matchboard.match_origin =".$origin.";")->result_array();
+			$array["selected"] = $origin;
+			return $array;
+		}
+		else
+			return $this->db->query("SELECT * FROM matchboard;")->result_array();
+	}
 	//actualiza el perfil del usuario con los parámetros ingresados
 	function updateProfileData($id_user, $update_data){
 		if($update_data == null){

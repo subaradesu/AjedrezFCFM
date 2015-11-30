@@ -52,7 +52,14 @@ class Main_controller extends CI_Controller{
 		$this->load->view('boardgames',array('boardgames' => $this->data_model->getMatchboards()));
 		$this->load->view('footer');
 	}
-
+	public function boardgames_by_origin($origin = -1){
+		checkPermission(0);
+		$header_data = array('title' => 'Partidas', 'css_file_paths' => getCSS('default'));
+		$this->load->view('header', $header_data);
+		$this->load->view('navbar');
+		$this->load->view('boardgames',array('boardgames' => $this->data_model->getMatchboardsByOrigin($origin)));
+		$this->load->view('footer');
+	}
 	public function about(){
 		checkPermission(0);
 		$header_data = array('title' => 'Historia', 'css_file_paths' => getCSS('default'));

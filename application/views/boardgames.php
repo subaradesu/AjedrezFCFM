@@ -1,6 +1,43 @@
+	<script type="text/javascript">
+		function origin_select(){
+		f = document.getElementById("origin");
+		if(f.value == -1){
+			window.location = "<?php echo site_url().'/main_controller/boardgames/';?>";
+		}
+		else {
+			window.location = "<?php echo site_url().'/main_controller/boardgames_by_origin/';?>"+f.value;	
+		}
+	};
+	</script>
+	<?php 
+		if(isset($boardgames["selected"])){
+			$origin_id = $boardgames["selected"];
+		}
+		else{
+			$origin_id=-1;
+		}
+		unset($boardgames["selected"]);
+		$types = array(
+			0 => "Partida didáctica (Libro)",
+			1 => "Campeonato Internacional",
+			2 => "Campeonato Nacional",
+			3 => "TIF Interfacultades",
+			4 => "Torneo FCFM",
+			5 => "Amistoso",
+			6 => "Otro");
+	?>
 		<div id="content">
 		<div class=page-header>
 			<h1>Partidas Publicadas:</h1>
+			<select name="origin" class="form-control" id="origin" onchange="javascript:origin_select();">
+				<option value="-1" name="All">Todas las Categorías visibles por el usuario</option>
+				<?php foreach ($types as $i => $category):
+					if($origin_id == $i)
+						echo '<option value="'.$i.'" name="'.$category.'" selected>'.$category.'</option>';
+						else
+							echo '<option value="'.$i.'" name="'.$category.'">'.$category.'</option>';
+					endforeach;?>
+				</select>
 		</div>
 		<div class="container">
 			<table class="table table-hover">

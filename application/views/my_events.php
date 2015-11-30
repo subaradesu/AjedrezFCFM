@@ -13,8 +13,7 @@
 		$categories = $events["categories"];
 		unset($events["categories"]);
 		if(isset($events["selected"])){
-			$cat_id = $events["selected"];
-			
+			$cat_id = $events["selected"];			
 		}
 		else{
 			$cat_id=0;
