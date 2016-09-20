@@ -1,0 +1,87 @@
+@CHARSET "ISO-8859-1";
+
+/*CSS comentarios*/
+
+.form-comment {
+	margin-bottom: 10px;
+}
+
+.post-comments {
+  padding-bottom: 9px;
+  margin: 5px 0 5px;
+}
+
+.comments-nav {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+}
+
+.post-comments .comment-meta {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 5px;
+}
+
+.post-comments .media {
+  /*border-left: 1px dotted #000;
+  border-bottom: 1px dotted #000;*/
+  margin-bottom: 5px;
+  padding-left: 10px;
+}
+
+.post-comments .media-heading {
+  font-size: 12px;
+  color: grey;
+}
+
+.post-comments .comment-meta a {
+  font-size: 12px;
+  color: grey;
+  font-weight: bolder;
+  margin-right: 5px;
+}
+
+/*Colores Flechitas de +1 -1*/
+
+.flechita-up-mark {
+	color: #ff8000;
+	text-decoration: #ff8000;
+}
+
+.flechita-up-mark:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.flechita-up-unmark{
+	color: grey;
+	text-decoration: grey;
+}
+
+.flechita-up-unmark:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.flechita-down-mark{
+	color: #0000a0;
+	text-decoration: #0000a0;
+}
+
+.flechita-down-mark:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
+}
+
+.flechita-down-unmark{
+	color: grey;
+	text-decoration: grey;
+}
+
+.flechita-down-unmark:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
+}

@@ -1,0 +1,154 @@
+@CHARSET "UTF-8";
+
+/*general style*/
+
+
+
+body {
+	height: 100%;
+	background: #f5f5f5;
+}
+
+html {
+	position: relative;
+	height: 100%;
+}
+
+textarea {
+	resize: vertical;
+}
+
+.push {
+	height: 30px;
+}
+
+.footer {
+	height: 30px;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+}
+.nav li a{
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.navbar .container{
+	width: auto;
+}
+
+.IKUSABA {
+	min-height: 100%;
+    height: auto !important;
+	height: 100%;
+	margin: 0 auto -30px;
+ 	background: white;
+}
+
+.red-text{
+	color: #ff0000;
+}
+
+.news-image{
+	/*TODO: Make it responsive*/
+	width: 100%;
+}
+
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+  height: 500px;
+  margin-bottom: 60px;
+}
+
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+  z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel .item {
+  height: 500px;
+  background-color: #777;
+}
+
+/* Customize file buttons */
+
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+    }
+    
+/* Personalizar las badges (el circulito mágico que tiene el número de notificaciones)*/
+
+.notification-badge {
+	background-color: #0000ff;
+}
+
+/* Personalizar panel de votación*/
+
+.vote-pane {
+	margin-bottom: 10px;
+}
+
+.thumbs-up-marked {
+	color: #ff8000;
+	text-decoration: #ff8000;
+}
+
+.thumbs-up-marked:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.thumbs-up-unmarked{
+	color: #b0b0b0;
+	text-decoration: grey;
+}
+
+.thumbs-up-unmarked:hover{
+	color: #ff8080;
+	text-decoration: #ff8080;
+	cursor:pointer;
+}
+
+.thumbs-down-marked{
+	color: #0000a0;
+	text-decoration: #0000a0;
+}
+
+.thumbs-down-marked:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
+}
+
+.thumbs-down-unmarked{
+	color: #b0b0b0;
+	text-decoration: grey;
+}
+
+.thumbs-down-unmarked:hover{
+	color: #0000a0;
+	text-decoration: #0000a0;
+	cursor:pointer;
+}
+
+
